@@ -6,5 +6,7 @@ from SourceForge site: https://sourceforge.net/projects/tcnopen/
 
 # Licenses
 TRDP: MPLv2.0 http://www.mozilla.org/MPL/2.0/
+
 TRDPSpy: GPL http://www.gnu.org/licenses/gpl.html
+
 TCNOpen Web Site http://www.tcnopen.eu/
