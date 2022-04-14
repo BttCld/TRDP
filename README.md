@@ -1,7 +1,7 @@
 # TRDP
 TCNOpen 2.1.0.0 UNOFFICIAL PRIVATE fork that I currently use as a backup to add my point of view and features
 
-#Original project
+# Original project
 from SourceForge site: https://sourceforge.net/projects/tcnopen/
 
 # Licenses
