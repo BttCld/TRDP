@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\vos\common\vos_mem.c">
+      <Filter>vos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\vos\windows\vos_sock.c">
+      <Filter>vos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\vos\windows\vos_thread.c">
+      <Filter>vos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\vos\common\vos_utils.c">
+      <Filter>vos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tau_ctrl.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tau_dnr.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tau_marshall.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tau_tti.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tau_xml.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\trdp_xml.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\trdp_utils.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\trdp_stats.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\trdp_pdindex.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\trdp_pdcom.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\trdp_mdcom.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tlc_if.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tlm_if.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tlp_if.c">
+      <Filter>common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\vos\api\vos_mem.h">
+      <Filter>vos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\vos\windows\vos_private.h">
+      <Filter>vos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\vos\api\vos_shared_mem.h">
+      <Filter>vos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\vos\api\vos_sock.h">
+      <Filter>vos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\vos\api\vos_thread.h">
+      <Filter>vos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\vos\api\vos_types.h">
+      <Filter>vos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\vos\api\vos_utils.h">
+      <Filter>vos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\iec61375-2-3.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\tau_ctrl.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\tau_ctrl_types.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\tau_dnr.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\tau_dnr_types.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\tau_cstinfo.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\tau_marshall.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\tau_tti.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\tau_tti_types.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\trdp_if_light.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\trdp_types.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\trdp_tsn_def.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\tau_xml.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\api\trdp_serviceRegistry.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\trdp_xml.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\trdp_utils.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\trdp_stats.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\trdp_private.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\trdp_pdindex.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\trdp_pdcom.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\trdp_mdcom.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\tlc_if.h">
+      <Filter>common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="api">
+      <UniqueIdentifier>{5b8a45b9-bdfc-4e1c-8b63-aae124626fdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{9b3b1246-596e-4ed0-b6f2-444fd16b5512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vos">
+      <UniqueIdentifier>{0f65ed8d-2ab8-42a8-85e0-bd52b20c04df}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
