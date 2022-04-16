@@ -877,8 +877,8 @@ EXT_DECL TRDP_ERR_T tlp_put (
                              const UINT8*             pData,
                                    UINT32             dataSize)
 {
-    PD_ELE_T    *pElement   = (PD_ELE_T *)pubHandle;
-    TRDP_ERR_T  ret         = TRDP_NO_ERR;
+    PD_ELE_T*  pElement = (PD_ELE_T*)pubHandle;
+    TRDP_ERR_T ret      = TRDP_NO_ERR;
 
     if (pElement == NULL)
     {

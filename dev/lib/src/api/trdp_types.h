@@ -1,4 +1,4 @@
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**
  * @file            trdp_types.h
  *
@@ -106,9 +106,9 @@ extern "C" {
  * TYPEDEFS
  */
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**                          TRDP general type definitions.                                                           */
-/**********************************************************************************************************************/
+/****************************************************************************************/
 
 /* for example: IP-Addr 10.0.8.35 translated to (10 * << 24) + (0 * << 16) + (8 << 8) + 35 */
 typedef VOS_IP4_ADDR_T TRDP_IP_ADDR_T;
@@ -182,9 +182,9 @@ typedef VOS_TIMEVAL_T TRDP_TIME_T;
  */
 typedef VOS_FDS_T TRDP_FDS_T;
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**                          TRDP data transfer type definitions.                                                     */
-/**********************************************************************************************************************/
+/****************************************************************************************/
 
 /** Reply status messages    */
 typedef enum
@@ -320,9 +320,9 @@ typedef struct
 } TRDP_COM_PARAM_T, TRDP_SEND_PARAM_T;
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**                          TRDP dataset description definitions.                                                    */
-/**********************************************************************************************************************/
+/****************************************************************************************/
 
 /**    Dataset element definition    */
 typedef enum
@@ -384,13 +384,13 @@ typedef struct
 } TRDP_COMID_DSID_MAP_T;
 
 /**     Array of pointers to dataset  */
-typedef TRDP_DATASET_T *pTRDP_DATASET_T;
-typedef pTRDP_DATASET_T *apTRDP_DATASET_T;
-typedef apTRDP_DATASET_T *papTRDP_DATASET_T;
+typedef TRDP_DATASET_T*   pTRDP_DATASET_T;
+typedef pTRDP_DATASET_T*  apTRDP_DATASET_T;
+typedef apTRDP_DATASET_T* papTRDP_DATASET_T;
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**                          TRDP statistics type definitions.                                                        */
-/**********************************************************************************************************************/
+/****************************************************************************************/
 
 /** Statistical data
  * regarding the former info provided via SNMP the following information was left out/can be implemented additionally using MD:
@@ -530,26 +530,26 @@ typedef struct
 #endif
 
 
-typedef struct TRDP_SESSION *TRDP_APP_SESSION_T;
-typedef struct PD_ELE *TRDP_PUB_T;
-typedef struct PD_ELE *TRDP_SUB_T;
-typedef struct MD_LIS_ELE *TRDP_LIS_T;
+typedef struct TRDP_SESSION* TRDP_APP_SESSION_T;
+typedef struct PD_ELE*       TRDP_PUB_T;
+typedef struct PD_ELE*       TRDP_SUB_T;
+typedef struct MD_LIS_ELE*   TRDP_LIS_T;
 
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**                          TRDP configuration type definitions.                                                     */
-/**********************************************************************************************************************/
+/****************************************************************************************/
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**    Callback function definition for error/debug output, reuse of the VOS defined function.
  */
 
 typedef VOS_PRINT_DBG_T TRDP_PRINT_DBG_T;
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Categories for logging, reuse of the VOS definition
  */
 
@@ -557,7 +557,7 @@ typedef VOS_LOG_T TRDP_LOG_T;
 
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Function type for marshalling .
  *  The function must know about the dataset's alignment etc.
  *
@@ -585,7 +585,7 @@ typedef TRDP_ERR_T (*TRDP_MARSHALL_T)(
     TRDP_DATASET_T  * *ppCachedDS);
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**    Function type for unmarshalling.
  * The function must know about the dataset's alignment etc.
  *
@@ -613,17 +613,17 @@ typedef TRDP_ERR_T (*TRDP_UNMARSHALL_T)(
     TRDP_DATASET_T  * *ppCachedDS);
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Marshaling/unmarshalling configuration    */
 typedef struct
 {
-    TRDP_MARSHALL_T     pfCbMarshall;           /**< Pointer to marshall callback function      */
-    TRDP_UNMARSHALL_T   pfCbUnmarshall;         /**< Pointer to unmarshall callback function    */
-    void                *pRefCon;               /**< Pointer to user context for call back      */
+    TRDP_MARSHALL_T   pfCbMarshall;    /**< Pointer to marshall callback function      */
+    TRDP_UNMARSHALL_T pfCbUnmarshall;  /**< Pointer to unmarshall callback function    */
+    void*             pRefCon;         /**< Pointer to user context for call back      */
 } TRDP_MARSHALL_CONFIG_T;
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**    Callback for receiving indications, timeouts, releases, responses.
  *
  *  @param[in]    pRefCon       pointer to user context
@@ -633,28 +633,28 @@ typedef struct
  *  @param[in]    dataSize      size of received data pointer to received data
  */
 typedef void (*TRDP_PD_CALLBACK_T)(
-    void                    *pRefCon,
-    TRDP_APP_SESSION_T      appHandle,
-    const TRDP_PD_INFO_T    *pMsg,
-    UINT8                   *pData,
-    UINT32                  dataSize);
+                                         void*              pRefCon,
+                                         TRDP_APP_SESSION_T appHandle,
+                                   const TRDP_PD_INFO_T*    pMsg,
+                                         UINT8*             pData,
+                                         UINT32             dataSize);
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Default PD configuration    */
 typedef struct
 {
-    TRDP_PD_CALLBACK_T  pfCbFunction;           /**< Pointer to PD callback function            */
-    void                *pRefCon;               /**< Pointer to user context for call back      */
-    TRDP_SEND_PARAM_T   sendParam;              /**< Default send parameters                    */
-    TRDP_FLAGS_T        flags;                  /**< Default flags for PD packets               */
-    UINT32              timeout;                /**< Default timeout in us                      */
-    TRDP_TO_BEHAVIOR_T  toBehavior;             /**< Default timeout behavior                  */
-    UINT16              port;                   /**< Port to be used for PD communication (default: 17224)      */
+    TRDP_PD_CALLBACK_T  pfCbFunction; /**< Pointer to PD callback function            */
+    void                *pRefCon;     /**< Pointer to user context for call back      */
+    TRDP_SEND_PARAM_T   sendParam;    /**< Default send parameters                    */
+    TRDP_FLAGS_T        flags;        /**< Default flags for PD packets               */
+    UINT32              timeout;      /**< Default timeout in us                      */
+    TRDP_TO_BEHAVIOR_T  toBehavior;   /**< Default timeout behavior                   */
+    UINT16              port;         /**< Port to be used for PD communication (default: 17224)      */
 } TRDP_PD_CONFIG_T;
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /**    Callback for receiving indications, timeouts, releases, responses.
  *
  *  @param[in]    appHandle     handle returned also by tlc_init
@@ -671,7 +671,7 @@ typedef void (*TRDP_MD_CALLBACK_T)(
     UINT32                  dataSize);
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Default MD configuration
  */
 typedef struct
@@ -691,7 +691,7 @@ typedef struct
 
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Enumeration type for memory pre-fragmentation, reuse of VOS definition.
  */
 
@@ -705,7 +705,7 @@ typedef struct
 
 
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Various flags/general TRDP options for library initialization
  */
 
@@ -728,7 +728,7 @@ typedef struct
 
 typedef UINT8 TRDP_OPTION_T;
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Various flags/general TRDP options for library initialization
  */
 typedef struct
@@ -741,7 +741,7 @@ typedef struct
     TRDP_OPTION_T       options;        /**< TRDP options */
 } TRDP_PROCESS_CONFIG_T;
 
-/**********************************************************************************************************************/
+/****************************************************************************************/
 /** Settings for pre-allocation of index tables for application session initialization
  */
 typedef struct

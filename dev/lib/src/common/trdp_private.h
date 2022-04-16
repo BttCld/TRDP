@@ -433,17 +433,17 @@ typedef struct TRDP_SESSION
     TRDP_MEM_CONFIG_T       memConfig;          /**< Internal memory handling configuration                 */
     TRDP_OPTION_T           option;             /**< Stack behavior options                                 */
     TRDP_SOCKETS_T          ifacePD[TRDP_MAX_PD_SOCKET_CNT];  /**< Collection of sockets to use               */
-    PD_ELE_T                *pSndQueue;         /**< pointer to first element of send queue                 */
-    PD_ELE_T                *pRcvQueue;         /**< pointer to first element of rcv queue                  */
-    PD_PACKET_T             *pNewFrame;         /**< pointer to received PD frame                           */
-    TRDP_PR_SEQ_CNT_LIST_T  *pSeqCntList4PDReq; /**< pointer to list of sequence counters for PR per comId  */
+    PD_ELE_T*               pSndQueue;         /**< pointer to first element of send queue                 */
+    PD_ELE_T*               pRcvQueue;         /**< pointer to first element of rcv queue                  */
+    PD_PACKET_T*            pNewFrame;         /**< pointer to received PD frame                           */
+    TRDP_PR_SEQ_CNT_LIST_T* pSeqCntList4PDReq; /**< pointer to list of sequence counters for PR per comId  */
     TRDP_TIME_T             initTime;           /**< initialization time of session                         */
     TRDP_STATISTICS_T       stats;              /**< statistics of this session                             */
-#ifdef HIGH_PERF_INDEXED
-    TRDP_HP_SLOTS_T         *pSlot;             /**< pointer to a struct holding a list of slots for
+   #ifdef HIGH_PERF_INDEXED
+    TRDP_HP_SLOTS_T*        pSlot;             /**< pointer to a struct holding a list of slots for
                                                                         high speed access to PD telegrams   */
-#endif
-#if MD_SUPPORT
+   #endif
+   #if MD_SUPPORT
     VOS_MUTEX_T             mutexMD;            /**< protect the message data handling                      */
     TRDP_SOCKETS_T          ifaceMD[TRDP_MAX_MD_SOCKET_CNT];  /**< Collection of sockets to use             */
     struct TAU_TTDB         *pTTDB;             /**< session related TTDB data                              */
@@ -455,7 +455,7 @@ typedef struct TRDP_SESSION
     MD_ELE_T                *pMDRcvQueue;       /**< pointer to first element of recv MD queue (replier)    */
     MD_ELE_T                *pMDRcvEle;         /**< pointer to received MD element                         */
     MD_ELE_T                *uncompletedTCP[VOS_MAX_SOCKET_CNT];     /**< uncompleted TCP messages buffer   */
-#endif
+   #endif
 } TRDP_SESSION_T, *TRDP_SESSION_PT;
 
 

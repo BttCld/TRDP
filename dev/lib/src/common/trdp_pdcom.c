@@ -568,9 +568,9 @@ TRDP_ERR_T  trdp_pdSendElement (
  *  @retval         TRDP_IO_ERR         socket I/O error
  */
 TRDP_ERR_T  trdp_pdSendQueued (
-    TRDP_SESSION_PT appHandle)
+                               TRDP_SESSION_PT appHandle)
 {
-    PD_ELE_T    *iterPD = appHandle->pSndQueue;
+    PD_ELE_T*   iterPD = appHandle->pSndQueue;
     TRDP_TIME_T now;
     TRDP_ERR_T  err = TRDP_NO_ERR;
 
@@ -594,18 +594,19 @@ TRDP_ERR_T  trdp_pdSendQueued (
          due to sent?
          or is it a PD Request or a requested packet (PULL) ?
          */
-        if ((timerisset(&iterPD->interval) &&                   /*  Request for immediate sending   */
-             !timercmp(&iterPD->timeToGo, &now, >)) ||
-            (iterPD->privFlags & TRDP_REQ_2B_SENT))
+        if (  (timerisset(&iterPD->interval)                    /*  Request for immediate sending   */
+            &&(!timercmp(&iterPD->timeToGo, &now, >)))
+            ||(iterPD->privFlags & TRDP_REQ_2B_SENT))
         {
             /* send only if there is valid data */
             if (!(iterPD->privFlags & TRDP_INVALID_DATA))
             {
-                if ((iterPD->privFlags & TRDP_REQ_2B_SENT) &&
-                    (iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PD)))       /*  PULL packet?  */
+                if (  (iterPD->privFlags & TRDP_REQ_2B_SENT)
+                    &&(iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PD))) /*  PULL packet?  */
                 {
                     iterPD->pFrame->frameHead.msgType = vos_htons(TRDP_MSG_PP);
                 }
+
                 /*  Update the sequence counter and re-compute CRC    */
                 trdp_pdUpdate(iterPD);
 
@@ -651,6 +652,7 @@ TRDP_ERR_T  trdp_pdSendQueued (
                                              iterPD->pFrame->data,
                                              vos_ntohl(iterPD->pFrame->frameHead.datasetLength));
                     }
+
                     /* We pass the error to the application, but we keep on going    */
                     result = trdp_pdSend(appHandle->ifacePD[iterPD->socketIdx].sock, iterPD, appHandle->pdDefault.port);
                     if (result == TRDP_NO_ERR)
@@ -665,8 +667,8 @@ TRDP_ERR_T  trdp_pdSendQueued (
                 }
             }
 
-            if ((iterPD->privFlags & TRDP_REQ_2B_SENT) &&
-                (iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PP)))       /*  PULL packet?  */
+            if (  (iterPD->privFlags & TRDP_REQ_2B_SENT)
+                &&(iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PP)))       /*  PULL packet?  */
             {
                 /* Do not reset timer, but restore msgType */
                 iterPD->pFrame->frameHead.msgType = vos_htons(TRDP_MSG_PD);
@@ -692,11 +694,14 @@ TRDP_ERR_T  trdp_pdSendQueued (
             /* remove one shot messages after they have been sent */
             if (iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PR))    /* Ticket #172: remove element */
             {
-                PD_ELE_T *pTemp;
+                PD_ELE_T* pTemp;
+
                 /* Decrease the socket ref */
                 trdp_releaseSocket(appHandle->ifacePD, iterPD->socketIdx, 0u, FALSE, VOS_INADDR_ANY);
+
                 /* Save next element */
                 pTemp = iterPD->pNext;
+
                 /* Remove current element */
                 trdp_queueDelElement(&appHandle->pSndQueue, iterPD);
                 iterPD->magic = 0u;
@@ -704,6 +709,7 @@ TRDP_ERR_T  trdp_pdSendQueued (
                 {
                     vos_memFree(iterPD->pSeqCntList);
                 }
+
                 vos_memFree(iterPD->pFrame);
                 vos_memFree(iterPD);
 
@@ -736,8 +742,8 @@ TRDP_ERR_T  trdp_pdSendQueued (
  *  @retval         TRDP_TOPOCOUNT_ERR  invalid topocount
  */
 TRDP_ERR_T  trdp_pdReceive (
-    TRDP_SESSION_PT appHandle,
-    SOCKET          sock)
+                            TRDP_SESSION_PT appHandle,
+                            SOCKET          sock)
 {
     PD_HEADER_T         *pNewFrameHead      = &appHandle->pNewFrame->frameHead;
     PD_ELE_T            *pExistingElement   = NULL;
@@ -749,9 +755,9 @@ TRDP_ERR_T  trdp_pdReceive (
     TRDP_ADDRESSES_T    subAddresses    = { 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u};
     UINT32              srcIfAddr = 0u;
     TRDP_MSG_T          msgType;
-#ifdef TSN_SUPPORT
+   #ifdef TSN_SUPPORT
     PD2_HEADER_T        *pTSNFrameHead = (PD2_HEADER_T *) pNewFrameHead;
-#endif
+   #endif
 
     /*  Get the packet from the wire:  */
     err = (TRDP_ERR_T) vos_sockReceiveUDP(sock,
@@ -793,7 +799,7 @@ TRDP_ERR_T  trdp_pdReceive (
             return err;
     }
 
-#ifdef TSN_SUPPORT
+   #ifdef TSN_SUPPORT
     if (TRUE == isTSN)
     {
         /*  Compute the subscription handle */
@@ -804,7 +810,7 @@ TRDP_ERR_T  trdp_pdReceive (
         msgType = pTSNFrameHead->msgType;
     }
     else    /* no PULL on TSN */
-#endif
+   #endif
     {
         /* First check incoming packet's topoCounts against session topoCounts */
         /* First subscriber check from Table A.5:
@@ -829,7 +835,7 @@ TRDP_ERR_T  trdp_pdReceive (
     }
 
     /*  Examine subscription queue, are we interested in this PD?   */
-#ifdef HIGH_PERF_INDEXED
+   #ifdef HIGH_PERF_INDEXED
     if ((appHandle->pSlot == NULL) ||
         (appHandle->pSlot->noOfRxEntries == 0))
     {
@@ -842,9 +848,9 @@ TRDP_ERR_T  trdp_pdReceive (
         /*  This is the fast, indexed access to our subscriptions!   */
         pExistingElement = trdp_indexedFindSubAddr(appHandle, &subAddresses);
     }
-#else
+   #else
     pExistingElement = trdp_queueFindSubAddr(appHandle->pRcvQueue, &subAddresses);
-#endif
+   #endif
 
     if (pExistingElement == NULL)
     {
@@ -907,7 +913,7 @@ TRDP_ERR_T  trdp_pdReceive (
             pExistingElement->curSeqCnt = vos_ntohl(pNewFrameHead->sequenceCounter);
 
             /*  This might have not been set!   */
-#ifdef TSN_SUPPORT
+           #ifdef TSN_SUPPORT
             if (TRUE == isTSN)
             {
                 pExistingElement->dataSize = vos_ntohs(pTSNFrameHead->datasetLength);
@@ -915,7 +921,7 @@ TRDP_ERR_T  trdp_pdReceive (
                 informUser = TRUE;
             }
             else
-#endif
+           #endif
             {
                 pExistingElement->dataSize = vos_ntohl(pNewFrameHead->datasetLength);
                 pExistingElement->grossSize = trdp_packetSizePD(pExistingElement->dataSize);
@@ -1057,7 +1063,7 @@ TRDP_ERR_T  trdp_pdReceive (
             theMessage.pUserRef     = pExistingElement->pUserRef; /* User reference given with the local subscribe? */
             theMessage.resultCode   = err;
 
-#ifdef TSN_SUPPORT
+           #ifdef TSN_SUPPORT
             if (TRUE == isTSN)
             {
                 theMessage.etbTopoCnt   = 0u;
@@ -1074,7 +1080,7 @@ TRDP_ERR_T  trdp_pdReceive (
                                                                   .datasetLength));
             }
             else
-#endif
+           #endif
             {
                 theMessage.etbTopoCnt   = vos_ntohl(pExistingElement->pFrame->frameHead.etbTopoCnt);
                 theMessage.opTrnTopoCnt = vos_ntohl(pExistingElement->pFrame->frameHead.opTrnTopoCnt);

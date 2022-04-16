@@ -149,7 +149,7 @@ typedef struct
 
 typedef struct
 {
-	TRDP_URI_USER_T eventName;  /**< Event Name */
+   TRDP_URI_USER_T eventName;  /**< Event Name */
     UINT32          comId;      /**< ComId of telegram used for event */
     UINT16          eventId;    /**< Event identifier */
     BOOL8           usesPd;     /**< TRUE: Uses PD, FALSE: uses MD. default: PD */
@@ -157,7 +157,7 @@ typedef struct
 
 typedef struct
 {
-	TRDP_URI_USER_T fieldName;  /**< Field Name */
+   TRDP_URI_USER_T fieldName;  /**< Field Name */
     UINT32          comId;      /**< ComId of telegram used for field */
     UINT16          fieldId;    /**< Field identifier */
 }TRDP_FIELD_T;
@@ -173,7 +173,7 @@ typedef struct
 
 typedef struct
 {
-	TRDP_URI_USER_T instanceName;   /**< Instance Name */
+   TRDP_URI_USER_T instanceName;   /**< Instance Name */
     TRDP_URI_T      dstUri;         /**< Destination URI of the instance */
     UINT8           instanceId;     /**< Instance identifier */
 }TRDP_INSTANCE_T;
@@ -215,7 +215,7 @@ typedef struct
 
 /** Control for debug output format on application level.
  */
-    
+
 #define TRDP_DBG_DEFAULT    0       /**< Printout default  */
 #define TRDP_DBG_OFF        0x01    /**< Printout off  */
 #define TRDP_DBG_ERR        0x02    /**< Printout error */
@@ -375,11 +375,11 @@ EXT_DECL TRDP_ERR_T tau_readXmlInterfaceConfig (
  */
 
 EXT_DECL TRDP_ERR_T tau_readXmlDatasetConfig (
-    const TRDP_XML_DOC_HANDLE_T *pDocHnd,
-    UINT32                      *pNumComId,
-    TRDP_COMID_DSID_MAP_T       * *ppComIdDsIdMap,
-    UINT32                      *pNumDataset,
-    papTRDP_DATASET_T           papDataset);
+                                              const TRDP_XML_DOC_HANDLE_T*  pDocHnd,
+                                                    UINT32*                 pNumComId,
+                                                    TRDP_COMID_DSID_MAP_T** ppComIdDsIdMap,
+                                                    UINT32*                 pNumDataset,
+                                                    papTRDP_DATASET_T       papDataset);
 
 /**********************************************************************************************************************/
 /**    Function to free the memory for the DataSet configuration
@@ -396,10 +396,10 @@ EXT_DECL TRDP_ERR_T tau_readXmlDatasetConfig (
  *
  */
 EXT_DECL void tau_freeXmlDatasetConfig (
-    UINT32                  numComId,
-    TRDP_COMID_DSID_MAP_T   *pComIdDsIdMap,
-    UINT32                  numDataset,
-    TRDP_DATASET_T          * *ppDataset);
+                                        UINT32                 numComId,
+                                        TRDP_COMID_DSID_MAP_T* pComIdDsIdMap,
+                                        UINT32                 numDataset,
+                                        TRDP_DATASET_T**       ppDataset);
 
 /**********************************************************************************************************************/
 /**    Free array of telegram configurations allocated by tau_readXmlInterfaceConfig
@@ -409,8 +409,8 @@ EXT_DECL void tau_freeXmlDatasetConfig (
  *
  */
 EXT_DECL void tau_freeTelegrams (
-    UINT32                      numExchgPar,
-    TRDP_EXCHG_PAR_T            *pExchgPar);
+                                 UINT32            numExchgPar,
+                                 TRDP_EXCHG_PAR_T* pExchgPar);
 
 /**********************************************************************************************************************/
 /**    Function to read the TRDP device service definitions out of the XML configuration file.
@@ -426,9 +426,9 @@ EXT_DECL void tau_freeTelegrams (
  *
  */
 EXT_DECL TRDP_ERR_T tau_readXmlServiceConfig (
-    const TRDP_XML_DOC_HANDLE_T *pDocHnd,
-    UINT32                      *pNumServiceDefs,
-    TRDP_SERVICE_DEF_T          **ppServiceDefs);
+                                              const TRDP_XML_DOC_HANDLE_T* pDocHnd,
+                                                    UINT32*                pNumServiceDefs,
+                                                    TRDP_SERVICE_DEF_T**   ppServiceDefs);
 
 /**********************************************************************************************************************/
 /**    Function to read the TRDP mapped devices out of the XML configuration file.
@@ -443,10 +443,10 @@ EXT_DECL TRDP_ERR_T tau_readXmlServiceConfig (
  *  @retval         TRDP_PARAM_ERR    File not existing
  *
  */
-EXT_DECL TRDP_ERR_T tau_readXmlMappedDevices(
-    const TRDP_XML_DOC_HANDLE_T *pDocHnd,
-    UINT32                      *pNumProcConfig,
-    TRDP_PROCESS_CONFIG_T       **ppProcessConfig);
+EXT_DECL TRDP_ERR_T tau_readXmlMappedDevices (
+                                              const TRDP_XML_DOC_HANDLE_T*  pDocHnd,
+                                                    UINT32*                 pNumProcConfig,
+                                                    TRDP_PROCESS_CONFIG_T** ppProcessConfig);
 
 /**********************************************************************************************************************/
 /**    Function to read the TRDP mapped device configuration parameters for a particular host out of
@@ -462,11 +462,11 @@ EXT_DECL TRDP_ERR_T tau_readXmlMappedDevices(
  *  @retval         TRDP_PARAM_ERR    File not existing
  *
  */
-EXT_DECL TRDP_ERR_T tau_readXmlMappedDeviceConfig(
-    const TRDP_XML_DOC_HANDLE_T *pDocHnd,
-    const CHAR8                 *pHostname,
-    UINT32                      *pNumIfConfig,
-    TRDP_IF_CONFIG_T            **ppIfConfig);
+EXT_DECL TRDP_ERR_T tau_readXmlMappedDeviceConfig (
+                                                   const TRDP_XML_DOC_HANDLE_T* pDocHnd,
+                                                   const CHAR8*                 pHostname,
+                                                         UINT32*                pNumIfConfig,
+                                                         TRDP_IF_CONFIG_T**     ppIfConfig);
 
 /**********************************************************************************************************************/
 /**    Read the interface relevant mapped telegram parameters for a particular host and it's interface
@@ -484,12 +484,12 @@ EXT_DECL TRDP_ERR_T tau_readXmlMappedDeviceConfig(
  *  @retval         TRDP_PARAM_ERR    File not existing
  *
  */
-EXT_DECL TRDP_ERR_T tau_readXmlMappedInterfaceConfig(
-    const TRDP_XML_DOC_HANDLE_T *pDocHnd,
-    const CHAR8                 *pHostname,
-    const CHAR8                 *pIfName,
-    UINT32                      *pNumExchgPar,
-    TRDP_EXCHG_PAR_T            * *ppExchgPar);
+EXT_DECL TRDP_ERR_T tau_readXmlMappedInterfaceConfig (
+                                                      const TRDP_XML_DOC_HANDLE_T* pDocHnd,
+                                                      const CHAR8*                 pHostname,
+                                                      const CHAR8*                 pIfName,
+                                                            UINT32*                pNumExchgPar,
+                                                            TRDP_EXCHG_PAR_T**     ppExchgPar);
 
 #ifdef __cplusplus
 }
