@@ -24,6 +24,7 @@
     <Keyword>TRDPProj</Keyword>
     <ProjectName>TRDP</ProjectName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <IgnoreWarnIntDirInTempDetected>true</IgnoreWarnIntDirInTempDetected>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -67,25 +68,25 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\out\</OutDir>
-    <IntDir>R:\$(SolutionName)\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i32d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\out\</OutDir>
-    <IntDir>R:\$(SolutionName)\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i64d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\out\</OutDir>
-    <IntDir>R:\$(SolutionName)\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\out\</OutDir>
-    <IntDir>R:\$(SolutionName)\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

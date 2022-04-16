@@ -1,2 +1,6 @@
 dev/lib/out/*
 dev/lib/prj/vs/.vs
+*.exe
+*.pdb
+*.VC.*
+*.suo
