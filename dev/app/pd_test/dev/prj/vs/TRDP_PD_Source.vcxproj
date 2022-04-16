@@ -26,7 +26,7 @@
     <ClInclude Include="..\..\src\getopt.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\lib\prj\vs\TRDP.vcxproj">
+    <ProjectReference Include="..\..\..\..\..\lib\dev\prj\vs\TRDP.vcxproj">
       <Project>{ae986d59-880c-499f-abbf-fbbfde093a3b}</Project>
     </ProjectReference>
   </ItemGroup>
@@ -85,25 +85,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\run\</OutDir>
+    <OutDir>..\..\..\run\</OutDir>
     <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i32d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\run\</OutDir>
+    <OutDir>..\..\..\run\</OutDir>
     <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\run\</OutDir>
+    <OutDir>..\..\..\run\</OutDir>
     <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i64d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\run\</OutDir>
+    <OutDir>..\..\..\run\</OutDir>
     <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i64</TargetName>
   </PropertyGroup>
@@ -113,7 +113,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SOURCE;MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\..\lib\src\vos\api;..\..\..\..\lib\src\api;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\lib\dev\src\vos\api;..\..\..\..\..\lib\dev\src\api;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SOURCE;MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\..\lib\src\vos\api;..\..\..\..\lib\src\api;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\lib\dev\src\vos\api;..\..\..\..\..\lib\dev\src\api;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,7 +143,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SOURCE;MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\..\lib\src\vos\api;..\..\..\..\lib\src\api;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\lib\dev\src\vos\api;..\..\..\..\..\lib\dev\src\api;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,7 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SOURCE;MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\..\lib\src\vos\api;..\..\..\..\lib\src\api;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\lib\dev\src\vos\api;..\..\..\..\..\lib\dev\src\api;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
