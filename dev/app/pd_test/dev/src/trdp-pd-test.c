@@ -78,24 +78,24 @@ static const char* types[] =
 
 typedef struct
 {
-   Type type;                      /* port type */
-   TRDP_ERR_T err;                 /* put/get status */
-   TRDP_PUB_T ph;                  /* publish handle */
-   TRDP_SUB_T sh;                  /* subscribe handle */
-   UINT32 comid;                   /* comid            */
-   UINT32 repid;                   /* reply comid (for PULL requests) */
-   UINT32 size;                    /* size                            */
-   TRDP_IP_ADDR_T src;             /* source ip address               */
-   TRDP_IP_ADDR_T dst;             /* destination ip address          */
-   TRDP_IP_ADDR_T rep;             /* reply ip address (for PULL requests) */
-   UINT32 cycle;                   /* cycle                                */
-   UINT32 timeout;                 /* timeout (for SINK ports)             */
-   unsigned char data[TRDP_MAX_PD_DATA_SIZE];       /* data buffer                          */
-   int link;                       /* index of linked port (echo or subscribe) */
+   Type           type;                             /* port type */
+   TRDP_ERR_T     err;                              /* put/get status */
+   TRDP_PUB_T     ph;                               /* publish handle */
+   TRDP_SUB_T     sh;                               /* subscribe handle */
+   UINT32         comid;                            /* comid            */
+   UINT32         repid;                            /* reply comid (for PULL requests) */
+   UINT32         size;                             /* size                            */
+   TRDP_IP_ADDR_T src;                              /* source ip address               */
+   TRDP_IP_ADDR_T dst;                              /* destination ip address          */
+   TRDP_IP_ADDR_T rep;                              /* reply ip address (for PULL requests) */
+   UINT32         cycle;                            /* cycle                                */
+   UINT32         timeout;                          /* timeout (for SINK ports)             */
+   unsigned       char data[TRDP_MAX_PD_DATA_SIZE]; /* data buffer                          */
+   int            link;                             /* index of linked port (echo or subscribe) */
 } Port;
 
-int size[3] = {0, 256, TRDP_MAX_PD_DATA_SIZE};     /* small/medium/big dataset */
-int period[4] = {100, 250, 500, 1000};      /* fast/slow cycle          */
+int size[3] = {0, 256, TRDP_MAX_PD_DATA_SIZE}; /* small/medium/big dataset */
+int period[4] = {100, 250, 500, 1000};         /* msec */
 unsigned cycle = 0;
 
 Port ports[64];                     /* array of ports          */
@@ -119,18 +119,15 @@ void gen_push_ports_slave(UINT32 comid, UINT32 echoid);
 #if SOURCE_EN
 void gen_push_ports_master (UINT32 comid, UINT32 echoid)
 {
-   Port src, snk;
-   int num = nports;
+   Port    src;
+   int     num = nports;
    UINT32  a, sz, per;
 
    printf("- generating PUSH ports (master side) ... ");
 
    memset(&src, 0, sizeof(src));
-   memset(&snk, 0, sizeof(snk));
-
-   src.type = PORT_PUSH;
-   snk.type = PORT_SINK_PUSH;
-   snk.timeout = 4000000;         /* 4 secs timeout*/
+   
+   src.type = PORT_PUSH;   
 
   #if 0
    /* for unicast/multicast address */
@@ -205,7 +202,7 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
    {
       /* for all dataset sizes */
       //for (sz = 1; sz < 3; ++sz)
-      sz = 1; // only 256 byte
+      sz = 1; // only 256
       {
          /* for all cycle periods */
          //for (per = 0; per < 2; ++per)
@@ -213,24 +210,38 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
          {
             /* comid  */
             src.comid = comid + 100u * a + 40 * (per + 1) + 3 * (sz + 1);
-            snk.comid = echoid + 100u * a + 40 * (per + 1) + 3 * (sz + 1);
+            
             /* dataset size */
-            src.size = snk.size = (UINT32)size[sz];
+            src.size = (UINT32)size[sz];
+            
             /* period [usec] */
-            src.cycle = (UINT32)1000u * (UINT32)period[per]; // only 1 sec
+            src.cycle = (UINT32)1000u * (UINT32)period[per];
+
             /* addresses */
-
-            {   /* multicast address */
-               src.dst = snk.dst = mcast;
-               src.src = srcip;
-               snk.src = dstip;
-            }
-
+            src.dst  = mcast;
+            src.src  = srcip;               
             src.link = -1;
+
             /* add ports to config */
             ports[nports++] = src;
-           #if 0
-            ports[nports++] = snk;
+
+           #if SOURCE_ECHO_EN
+            {
+               Port snk;
+
+               memset(&snk, 0, sizeof(snk));
+               snk.type    = PORT_SINK;
+               snk.timeout = 4000000;         /* 4 secs timeout*/
+
+               // ATTENZIONE si usa comid del source mentre esempio usava quello di input
+               snk.comid = src.comid;
+
+               snk.size  = src.size;
+               snk.dst   = src.dst;
+               snk.src   = dstip;
+
+               ports[nports++] = snk;
+            }
            #endif
          }
       }
@@ -327,29 +338,36 @@ void gen_push_ports_slave (UINT32 comid, UINT32 echoid)
   #if MULTICAST_EN
    //for (a = 0; a < 2; ++a)
    a = 1; // multicast
-   {   /* for all dataset sizes */
-      for (sz = 1; sz < 3; ++sz)
-      {   /* for all cycle periods */
-         for (per = 0; per < 2; ++per)
-         {   /* comid  */
-            src.comid = echoid + 100 * a + 40 * (per + 1) + 3 * (sz + 1);
-            snk.comid = comid + 100 * a + 40 * (per + 1) + 3 * (sz + 1);
+   {
+      /* for all dataset sizes */
+      //for (sz = 1; sz < 3; ++sz)
+      sz = 1;
+      {
+         /* for all cycle periods */
+         //for (per = 0; per < 2; ++per)
+         per = 3;
+         {
+            /* comid  */
+            //src.comid = echoid + 100 * a + 40 * (per + 1) + 3 * (sz + 1);
+            snk.comid = comid  + 100 * a + 40 * (per + 1) + 3 * (sz + 1);
             /* dataset size */
-            src.size = snk.size = (UINT32)size[sz];
+            snk.size = (UINT32)size[sz];
+            //src.size = (UINT32)size[sz];
             /* period [usec] */
-            src.cycle = (UINT32)(1000 * period[per]);
+            //src.cycle = (UINT32)(1000 * period[per]);
             /* addresses */
 
             {   /* multicast address */
-               src.dst = snk.dst = mcast;
-               src.src = srcip;
+               //src.dst = mcast;
+               snk.dst = mcast;
+               //src.src = srcip;
                snk.src = dstip;
             }
 
             /* add ports to config */
             ports[nports++] = snk;
-            src.link = nports - 1;
-            ports[nports++] = src;
+            //src.link = nports - 1;
+            //ports[nports++] = src;
          }
       }
    }
@@ -884,10 +902,10 @@ static void process_data()
    int i;
    unsigned n;
    TRDP_COM_PARAM_T comPrams = TRDP_PD_DEFAULT_SEND_PARAM;
-#if PORT_FLAGS == TRDP_FLAGS_TSN
+  #if PORT_FLAGS == TRDP_FLAGS_TSN
    comPrams.vlan = 1;
    comPrams.tsn = TRUE;
-#endif
+  #endif
 
     /* get terminal size */
    if (_get_term_size(&_w, &_h) == 0)
@@ -1036,13 +1054,12 @@ static void poll_data()
 
 static FILE* pLogFile;
 
-static void printLog(
-   void* pRefCon,
-   VOS_LOG_T    category,
-   const CHAR8* pTime,
-   const CHAR8* pFile,
-   UINT16       line,
-   const CHAR8* pMsgStr)
+static void printLog (void* pRefCon,
+                      VOS_LOG_T    category,
+                      const CHAR8* pTime,
+                      const CHAR8* pFile,
+                      UINT16       line,
+                      const CHAR8* pMsgStr)
 {
    const CHAR8* pFileName;
 
@@ -1081,27 +1098,13 @@ int main(int argc, char* argv[])
       printf("  <remoteip> .. remote peer IP address (ie. 10.2.24.2)\n");
       printf("  <mcast>    .. multicast group address (ie. 239.2.24.1)\n");
       printf("  <logfile>  .. file name for logging (ie. test.txt)\n");
-   #ifdef SIM
-      printf("  <prefix>  .. instance prefix in simulation mode (ie. CCU1)\n");
-   #endif
+
       return 1;
    }
 
    srcip = vos_dottedIP(argv[1]);
    dstip = vos_dottedIP(argv[2]);
    mcast = vos_dottedIP(argv[3]);
-
-#ifdef SIM
-   if (argc < 6)
-   {
-      printf("In simulation mode an extra last argument is required <Unike thread name>\n");
-      return 1;
-   }
-   vos_setTimeSyncPrefix(argv[5]);
-
-   if (!SimSetHostIp(argv[1]))
-      printf("Failed to set sim host IP.");
-#endif
 
    if (!srcip || !dstip || (mcast >> 28) != 0xE)
    {
@@ -1128,9 +1131,7 @@ int main(int argc, char* argv[])
       printf("tlc_init() failed, err: %d\n", err);
       return 1;
    }
-#ifdef SIM
-   vos_threadRegister("main", TRUE);
-#endif
+
    pdcfg.pfCbFunction = NULL;
    pdcfg.pRefCon = NULL;
    pdcfg.sendParam.qos = 5;

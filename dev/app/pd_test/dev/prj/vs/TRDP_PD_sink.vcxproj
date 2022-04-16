@@ -18,35 +18,47 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\getopt.c" />
+    <ClCompile Include="..\..\src\trdp-pd-test.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\getopt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\lib\dev\prj\vs\TRDP.vcxproj">
+      <Project>{ae986d59-880c-499f-abbf-fbbfde093a3b}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{ae986d59-880c-499f-abbf-fbbfde093a3b}</ProjectGuid>
-    <RootNamespace>TRDP</RootNamespace>
+    <ProjectGuid>{903f23b1-736a-4613-9a66-754fc792a0af}</ProjectGuid>
+    <RootNamespace>TRDPPDsink</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -72,25 +84,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\..\out\</OutDir>
+    <OutDir>..\..\..\run\</OutDir>
     <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i32d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\..\out\</OutDir>
+    <OutDir>..\..\..\run\</OutDir>
     <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\..\out\</OutDir>
+    <OutDir>..\..\..\run\</OutDir>
     <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i64d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\..\out\</OutDir>
+    <OutDir>..\..\..\run\</OutDir>
     <IntDir>R:\build\$(SolutionName)\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_i64</TargetName>
   </PropertyGroup>
@@ -98,33 +110,27 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SINK;MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\src\common;..\..\src\api;..\..\src\vos\api;..\..\src\vos\windows;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4068</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>..\..\..\..\..\lib\dev\src\vos\api;..\..\..\..\..\lib\dev\src\api;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>
-      </SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SINK;MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\src\common;..\..\src\api;..\..\src\vos\api;..\..\src\vos\windows;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4068</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>..\..\..\..\..\lib\dev\src\vos\api;..\..\..\..\..\lib\dev\src\api;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>
-      </SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,15 +140,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SINK;MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN64;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\src\common;..\..\src\api;..\..\src\vos\api;..\..\src\vos\windows;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4068</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>..\..\..\..\..\lib\dev\src\vos\api;..\..\..\..\..\lib\dev\src\api;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>
-      </SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -152,71 +155,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>SINK;MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>MD_SUPPORT=1;L_ENDIAN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN64;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\src\common;..\..\src\api;..\..\src\vos\api;..\..\src\vos\windows;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4068</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>..\..\..\..\..\lib\dev\src\vos\api;..\..\..\..\..\lib\dev\src\api;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>
-      </SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\common\tau_ctrl.c" />
-    <ClCompile Include="..\..\src\common\tau_dnr.c" />
-    <ClCompile Include="..\..\src\common\tau_marshall.c" />
-    <ClCompile Include="..\..\src\common\tau_tti.c" />
-    <ClCompile Include="..\..\src\common\tau_xml.c" />
-    <ClCompile Include="..\..\src\common\tlc_if.c" />
-    <ClCompile Include="..\..\src\common\tlm_if.c" />
-    <ClCompile Include="..\..\src\common\tlp_if.c" />
-    <ClCompile Include="..\..\src\common\trdp_mdcom.c" />
-    <ClCompile Include="..\..\src\common\trdp_pdcom.c" />
-    <ClCompile Include="..\..\src\common\trdp_pdindex.c" />
-    <ClCompile Include="..\..\src\common\trdp_stats.c" />
-    <ClCompile Include="..\..\src\common\trdp_utils.c" />
-    <ClCompile Include="..\..\src\common\trdp_xml.c" />
-    <ClCompile Include="..\..\src\vos\common\vos_mem.c" />
-    <ClCompile Include="..\..\src\vos\common\vos_utils.c" />
-    <ClCompile Include="..\..\src\vos\windows\vos_sock.c" />
-    <ClCompile Include="..\..\src\vos\windows\vos_thread.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\api\iec61375-2-3.h" />
-    <ClInclude Include="..\..\src\api\tau_ctrl.h" />
-    <ClInclude Include="..\..\src\api\tau_ctrl_types.h" />
-    <ClInclude Include="..\..\src\api\tau_dnr.h" />
-    <ClInclude Include="..\..\src\api\tau_dnr_types.h" />
-    <ClInclude Include="..\..\src\api\tau_tti.h" />
-    <ClInclude Include="..\..\src\api\tau_tti_types.h" />
-    <ClInclude Include="..\..\src\api\trdp_serviceRegistry.h" />
-    <ClInclude Include="..\..\src\api\trdp_tsn_def.h" />
-    <ClInclude Include="..\..\src\api\tau_marshall.h" />
-    <ClInclude Include="..\..\src\api\tau_xml.h" />
-    <ClInclude Include="..\..\src\api\trdp_if_light.h" />
-    <ClInclude Include="..\..\src\api\trdp_types.h" />
-    <ClInclude Include="..\..\src\common\tau_cstinfo.h" />
-    <ClInclude Include="..\..\src\common\tlc_if.h" />
-    <ClInclude Include="..\..\src\common\trdp_mdcom.h" />
-    <ClInclude Include="..\..\src\common\trdp_pdcom.h" />
-    <ClInclude Include="..\..\src\common\trdp_pdindex.h" />
-    <ClInclude Include="..\..\src\common\trdp_private.h" />
-    <ClInclude Include="..\..\src\common\trdp_stats.h" />
-    <ClInclude Include="..\..\src\common\trdp_utils.h" />
-    <ClInclude Include="..\..\src\common\trdp_xml.h" />
-    <ClInclude Include="..\..\src\vos\api\vos_shared_mem.h" />
-    <ClInclude Include="..\..\src\vos\api\vos_mem.h" />
-    <ClInclude Include="..\..\src\vos\api\vos_sock.h" />
-    <ClInclude Include="..\..\src\vos\api\vos_thread.h" />
-    <ClInclude Include="..\..\src\vos\api\vos_types.h" />
-    <ClInclude Include="..\..\src\vos\api\vos_utils.h" />
-    <ClInclude Include="..\..\src\vos\windows\vos_private.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
