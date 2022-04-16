@@ -39,11 +39,18 @@
 
 #include "vos_thread.h"
 
-
 #define UNICAST_EN   0
 #define MULTICAST_EN 1
-#define SINK_EN      0
+#ifdef SOURCE
 #define SOURCE_EN    1
+#else
+#define SOURCE_EN    0
+#endif
+#ifdef SINK
+#define SINK_EN      1
+#else
+#define SINK_EN      0
+#endif
 
 /* --- globals ---------------------------------------------------------------*/
 
@@ -88,7 +95,7 @@ typedef struct
 } Port;
 
 int size[3] = {0, 256, TRDP_MAX_PD_DATA_SIZE};     /* small/medium/big dataset */
-int period[2] = {100, 250};      /* fast/slow cycle          */
+int period[4] = {100, 250, 500, 1000};      /* fast/slow cycle          */
 unsigned cycle = 0;
 
 Port ports[64];                     /* array of ports          */
@@ -195,17 +202,22 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
    /* for unicast/multicast address */
    //for (a = 0; a < 2; ++a)
    a = 1;  // multicast
-   {   /* for all dataset sizes */
-      for (sz = 1; sz < 3; ++sz)
-      {   /* for all cycle periods */
-         for (per = 0; per < 2; ++per)
-         {   /* comid  */
+   {
+      /* for all dataset sizes */
+      //for (sz = 1; sz < 3; ++sz)
+      sz = 1; // only 256 byte
+      {
+         /* for all cycle periods */
+         //for (per = 0; per < 2; ++per)
+         per = 3;
+         {
+            /* comid  */
             src.comid = comid + 100u * a + 40 * (per + 1) + 3 * (sz + 1);
             snk.comid = echoid + 100u * a + 40 * (per + 1) + 3 * (sz + 1);
             /* dataset size */
             src.size = snk.size = (UINT32)size[sz];
             /* period [usec] */
-            src.cycle = (UINT32)1000u * (UINT32)period[per];
+            src.cycle = (UINT32)1000u * (UINT32)period[per]; // only 1 sec
             /* addresses */
 
             {   /* multicast address */
@@ -468,10 +480,10 @@ static void setup_ports()
    {
       Port* p = &ports[i];
       TRDP_COM_PARAM_T comPrams = TRDP_PD_DEFAULT_SEND_PARAM;
-   #if PORT_FLAGS == TRDP_FLAGS_TSN
+     #if PORT_FLAGS == TRDP_FLAGS_TSN
       comPrams.vlan = 1;
       comPrams.tsn = TRUE;
-   #endif
+     #endif
 
       printf("  %3d: <%d> / %s / %4d / %3d ... ",
              i, p->comid, types[p->type], p->size, p->cycle / 1000);

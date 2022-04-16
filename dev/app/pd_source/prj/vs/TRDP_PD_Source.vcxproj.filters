@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\src\getopt.c">
-      <Filter>utils</Filter>
-    </ClCompile>
+    <Filter Include="main">
+      <UniqueIdentifier>{5567d443-44ac-4391-b06b-53934cfc2bc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{95d22235-0abb-4cf3-9cdd-e8187f3099b1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="..\..\src\trdp-pd-test.c">
       <Filter>main</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="main">
-      <UniqueIdentifier>{7ae59e9c-3da4-4ad7-baf5-f6a1a615d37c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="utils">
-      <UniqueIdentifier>{1af5929c-d9ce-409a-baee-67fd0f58941a}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="..\..\src\getopt.c">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\getopt.h">

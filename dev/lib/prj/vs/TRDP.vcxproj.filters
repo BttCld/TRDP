@@ -147,13 +147,13 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="api">
-      <UniqueIdentifier>{5b8a45b9-bdfc-4e1c-8b63-aae124626fdb}</UniqueIdentifier>
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
     </Filter>
     <Filter Include="common">
-      <UniqueIdentifier>{9b3b1246-596e-4ed0-b6f2-444fd16b5512}</UniqueIdentifier>
+      <UniqueIdentifier>{6a36eeb5-6b16-4b03-8ddd-f756abce6672}</UniqueIdentifier>
     </Filter>
     <Filter Include="vos">
-      <UniqueIdentifier>{0f65ed8d-2ab8-42a8-85e0-bd52b20c04df}</UniqueIdentifier>
+      <UniqueIdentifier>{be5003ea-2db9-43e3-bd58-9891f98d6d05}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
