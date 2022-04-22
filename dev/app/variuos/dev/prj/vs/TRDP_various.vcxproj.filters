@@ -9,28 +9,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\trdp_pd_sink.c">
+    <ClCompile Include="..\..\src\subTest.c">
       <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\getopt.c">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\consolle.c">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\common.c">
-      <Filter>main</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\getopt.h">
       <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\consolle.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\common.h">
-      <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

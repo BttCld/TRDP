@@ -41,11 +41,13 @@
 
 #define UNICAST_EN   0
 #define MULTICAST_EN 1
+
 #ifdef SOURCE
 #define SOURCE_EN    1
 #else
 #define SOURCE_EN    0
 #endif
+
 #ifdef SINK
 #define SINK_EN      1
 #else
@@ -73,7 +75,7 @@ typedef enum
    PORT_SINK_PUSH,                 /* incoming port for pushed messages (TSN suppport)*/
 } Type;
 
-static const char* types[] =
+static const char* _types[] =
 {"Pd ->", "Pp ->", "Pr ->", "   <-", "   <-"};
 
 typedef struct
@@ -94,12 +96,12 @@ typedef struct
    int            link;                             /* index of linked port (echo or subscribe) */
 } Port;
 
-int size[3] = {0, 256, TRDP_MAX_PD_DATA_SIZE}; /* small/medium/big dataset */
-int period[4] = {100, 250, 500, 1000};         /* msec */
-unsigned cycle = 0;
+int      _size[3]   = {0, 256, TRDP_MAX_PD_DATA_SIZE}; /* small/medium/big dataset */
+int      _period[4] = {100, 250, 500, 1000}  ;         /* msec */
+unsigned _uiCycle   = 0;
 
-Port ports[64];                     /* array of ports          */
-int nports = 0;                     /* number of ports         */
+Port     _vPorts[64];                                  /* array of ports          */
+unsigned _uiNports = 0;                                /* number of ports         */
 
 #ifdef TSN_SUPPORT
 #define PORT_FLAGS TRDP_FLAGS_TSN
@@ -120,7 +122,7 @@ void gen_push_ports_slave(UINT32 comid, UINT32 echoid);
 void gen_push_ports_master (UINT32 comid, UINT32 echoid)
 {
    Port    src;
-   int     num = nports;
+   int     num = _uiNports;
    UINT32  a, sz, per;
 
    printf("- generating PUSH ports (master side) ... ");
@@ -157,8 +159,8 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
             }
             src.link = -1;
             /* add ports to config */
-            ports[nports++] = src;
-            ports[nports++] = snk;
+            _vPorts[_uiNports++] = src;
+            _vPorts[_uiNports++] = snk;
          }
       }
    }
@@ -188,8 +190,8 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
 
             src.link = -1;
             /* add ports to config */
-            ports[nports++] = src;
-            ports[nports++] = snk;
+            _vPorts[_uiNports++] = src;
+            _vPorts[_uiNports++] = snk;
          }
       }
    }
@@ -212,10 +214,10 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
             src.comid = comid + 100u * a + 40 * (per + 1) + 3 * (sz + 1);
             
             /* dataset size */
-            src.size = (UINT32)size[sz];
+            src.size = (UINT32)_size[sz];
             
             /* period [usec] */
-            src.cycle = (UINT32)1000u * (UINT32)period[per];
+            src.cycle = (UINT32)1000u * (UINT32)_period[per];
 
             /* addresses */
             src.dst  = mcast;
@@ -223,7 +225,7 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
             src.link = -1;
 
             /* add ports to config */
-            ports[nports++] = src;
+            _vPorts[_uiNports++] = src;
 
            #if SOURCE_ECHO_EN
             {
@@ -240,7 +242,7 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
                snk.dst   = src.dst;
                snk.src   = dstip;
 
-               ports[nports++] = snk;
+               _vPorts[_uiNports++] = snk;
             }
            #endif
          }
@@ -250,7 +252,7 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
  #endif
 
 
-   printf("%u ports created\n", nports - num);
+   printf("%u ports created\n", _uiNports - num);
 }
 #endif
 
@@ -258,7 +260,7 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
 void gen_push_ports_slave (UINT32 comid, UINT32 echoid)
 {
    Port src, snk;
-   int num = nports;
+   int num = _uiNports;
    UINT32 a, sz, per;
 
    printf("- generating PUSH ports (slave side) ... ");
@@ -297,9 +299,9 @@ void gen_push_ports_slave (UINT32 comid, UINT32 echoid)
                snk.src = dstip;
             }
             /* add ports to config */
-            ports[nports++] = snk;
-            src.link = nports - 1;
-            ports[nports++] = src;
+            _vPorts[_uiNports++] = snk;
+            src.link = _uiNports - 1;
+            _vPorts[_uiNports++] = src;
          }
       }
    }
@@ -327,9 +329,9 @@ void gen_push_ports_slave (UINT32 comid, UINT32 echoid)
             }
 
             /* add ports to config */
-            ports[nports++] = snk;
-            src.link = nports - 1;
-            ports[nports++] = src;
+            _vPorts[_uiNports++] = snk;
+            src.link = _uiNports - 1;
+            _vPorts[_uiNports++] = src;
          }
       }
    }
@@ -351,7 +353,7 @@ void gen_push_ports_slave (UINT32 comid, UINT32 echoid)
             //src.comid = echoid + 100 * a + 40 * (per + 1) + 3 * (sz + 1);
             snk.comid = comid  + 100 * a + 40 * (per + 1) + 3 * (sz + 1);
             /* dataset size */
-            snk.size = (UINT32)size[sz];
+            snk.size = (UINT32)_size[sz];
             //src.size = (UINT32)size[sz];
             /* period [usec] */
             //src.cycle = (UINT32)(1000 * period[per]);
@@ -365,16 +367,16 @@ void gen_push_ports_slave (UINT32 comid, UINT32 echoid)
             }
 
             /* add ports to config */
-            ports[nports++] = snk;
-            //src.link = nports - 1;
-            //ports[nports++] = src;
+            _vPorts[_uiNports++] = snk;
+            //src.link = _uiNports - 1;
+            //_vPorts[_uiNports++] = src;
          }
       }
    }
   #endif
  #endif
 
-   printf("%u ports created\n", nports - num);
+   printf("%u ports created\n", _uiNports - num);
 }
 #endif
 
@@ -384,7 +386,7 @@ void gen_push_ports_slave (UINT32 comid, UINT32 echoid)
 static void gen_pull_ports_master(UINT32 reqid, UINT32 repid)
 {
    Port req, rep;
-   int num = nports;
+   int num = _uiNports;
    UINT32  a, sz;
 
    printf("- generating PULL ports (master side) ... ");
@@ -425,13 +427,13 @@ static void gen_pull_ports_master(UINT32 reqid, UINT32 repid)
             rep.src = dstip;
          }
          /* add ports to config */
-         ports[nports++] = rep;
-         req.link = nports - 1;
-         ports[nports++] = req;
+         _vPorts[_uiNports++] = rep;
+         req.link = _uiNports - 1;
+         _vPorts[_uiNports++] = req;
       }
    }
 
-   printf("%u ports created\n", nports - num);
+   printf("%u ports created\n", _uiNports - num);
 }
 #endif
 
@@ -439,7 +441,7 @@ static void gen_pull_ports_master(UINT32 reqid, UINT32 repid)
 void gen_pull_ports_slave(UINT32 reqid, UINT32 repid)
 {
    Port req, rep;
-   int num = nports;
+   int num = _uiNports;
    UINT32 a, sz;
 
    printf("- generating PULL ports (slave side) ... ");
@@ -477,13 +479,13 @@ void gen_pull_ports_slave(UINT32 reqid, UINT32 repid)
             rep.dst = 0;
          }
          /* add ports to config */
-         ports[nports++] = req;
-         rep.link = nports - 1;
-         ports[nports++] = rep;
+         _vPorts[_uiNports++] = req;
+         rep.link = _uiNports - 1;
+         _vPorts[_uiNports++] = rep;
       }
    }
 
-   printf("%u ports created\n", nports - num);
+   printf("%u ports created\n", _uiNports - num);
 }
 #endif
 
@@ -491,12 +493,13 @@ void gen_pull_ports_slave(UINT32 reqid, UINT32 repid)
 
 static void setup_ports()
 {
-   int i;
+   unsigned i;
+
    printf("- setup ports:\n");
    /* setup ports one-by-one */
-   for (i = 0; i < nports; ++i)
+   for (i = 0; i < _uiNports; ++i)
    {
-      Port* p = &ports[i];
+      Port* p = &_vPorts[i];
       TRDP_COM_PARAM_T comPrams = TRDP_PD_DEFAULT_SEND_PARAM;
      #if PORT_FLAGS == TRDP_FLAGS_TSN
       comPrams.vlan = 1;
@@ -504,7 +507,7 @@ static void setup_ports()
      #endif
 
       printf("  %3d: <%d> / %s / %4d / %3d ... ",
-             i, p->comid, types[p->type], p->size, p->cycle / 1000);
+             i, p->comid, _types[p->type], p->size, p->cycle / 1000);
 
          /* depending on port type */
       switch (p->type)
@@ -557,7 +560,7 @@ static void setup_ports()
 
          case PORT_REQUEST:
             p->err = tlp_request(apph,               /* session handle */
-                                 ports[p->link].sh,  /* related subscribe handle */
+                                 _vPorts[p->link].sh,  /* related subscribe handle */
                                  0u,                 /* serviceId        */
                                  p->comid,           /* comid          */
                                  0,                  /* topo counter   */
@@ -899,7 +902,7 @@ static void process_data()
 {
    static int w = 80;
    int _w, _h;
-   int i;
+   unsigned i;
    unsigned n;
    TRDP_COM_PARAM_T comPrams = TRDP_PD_DEFAULT_SEND_PARAM;
   #if PORT_FLAGS == TRDP_FLAGS_TSN
@@ -907,10 +910,12 @@ static void process_data()
    comPrams.tsn = TRUE;
   #endif
 
+  //#if SOURCE_EN
+  #if 1
     /* get terminal size */
    if (_get_term_size(&_w, &_h) == 0)
    {   /* changed width? */
-      if (_w != w || !cycle)
+      if (_w != w || !_uiCycle)
          clear_screen();
       else
          cursor_home();
@@ -918,22 +923,22 @@ static void process_data()
    }
    else
    {
-      if (!cycle)
+      if (!_uiCycle)
          clear_screen();
       else
          cursor_home();
    }
 
    /* go through ports one-by-one */
-   for (i = 0; i < nports; ++i)
+   for (i = 0; i < _uiNports; ++i)
    {
-      Port* p = &ports[i];
+      Port* p = &_vPorts[i];
       /* write port data */
       if (p->type == PORT_PUSH || p->type == PORT_PULL)
       {
          if (p->link == -1)
          {   /* data generator */
-            unsigned o = cycle % 128;
+            unsigned o = _uiCycle % 128;
             memset(p->data, '_', p->size);
             if (o < p->size)
             {
@@ -944,12 +949,12 @@ static void process_data()
                         (p->src >> 8) & 0xff, p->src & 0xff,
                         (p->dst >> 24) & 0xff, (p->dst >> 16) & 0xff,
                         (p->dst >> 8) & 0xff, p->dst & 0xff,
-                        p->cycle / 1000, p->size, cycle);
+                        p->cycle / 1000, p->size, _uiCycle);
             }
          }
          else
          {   /* echo data from incoming port, replace all '_' by '~' */
-            unsigned char* src = ports[p->link].data;
+            unsigned char* src = _vPorts[p->link].data;
             unsigned char* dst = p->data;
             for (n = p->size; n; --n, ++src, ++dst)
                *dst = (*src == '_') ? '~' : *src;
@@ -970,7 +975,7 @@ static void process_data()
       }
       else if (p->type == PORT_REQUEST)
       {
-         unsigned o = cycle % 128;
+         unsigned o = _uiCycle % 128;
          memset(p->data, '_', p->size);
          if (o < p->size)
          {
@@ -980,10 +985,10 @@ static void process_data()
                      (p->src >> 8) & 0xff, p->src & 0xff,
                      (p->dst >> 24) & 0xff, (p->dst >> 16) & 0xff,
                      (p->dst >> 8) & 0xff, p->dst & 0xff,
-                     p->cycle / 1000, p->size, cycle);
+                     p->cycle / 1000, p->size, _uiCycle);
          }
 
-         p->err = tlp_request(apph, ports[p->link].sh, 0u, p->comid, 0u, 0u,
+         p->err = tlp_request(apph, _vPorts[p->link].sh, 0u, p->comid, 0u, 0u,
                               p->src, p->dst, 0, PORT_FLAGS, &comPrams, p->data, p->size,
                               p->repid, p->rep);
       }
@@ -996,7 +1001,7 @@ static void process_data()
          _set_color_default();
       printf("%5d ", p->comid);
       _set_color_default();
-      printf("%s [", types[p->type]);
+      printf("%s [", _types[p->type]);
 
       if (p->err == TRDP_NO_ERR)
       {
@@ -1020,6 +1025,7 @@ static void process_data()
          int n = printf(" -- %s", get_result_string(p->err));
          while (n++ < w - 19) putchar(' ');
       }
+
       putchar(']'); fflush(stdout);
       if (p->err != TRDP_NO_ERR)
          _set_color_red();
@@ -1028,8 +1034,15 @@ static void process_data()
       printf(" %3d\n", p->err);
       _set_color_default();
    }
-   /* increment cycle counter  */
-   ++cycle;
+   /* increment _uiCycle counter  */
+   ++_uiCycle;
+
+  #else  // SINK I suppose
+   for (i = 0; i < _uiNports; ++i)
+   {
+   }
+  #endif
+
 }
 
 /* --- poll received data ----------------------------------------------------*/
@@ -1037,12 +1050,12 @@ static void process_data()
 static void poll_data()
 {
    TRDP_PD_INFO_T pdi;
-   int i;
+   unsigned i;
 
    /* go through ports one-by-one */
-   for (i = 0; i < nports; ++i)
+   for (i = 0; i < _uiNports; ++i)
    {
-      Port* p = &ports[i];
+      Port* p = &_vPorts[i];
       UINT32 size = p->size;
       if (p->type == PORT_SINK || p->type == PORT_SINK_PUSH)
       {

@@ -19,10 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\common.c" />
+    <ClCompile Include="..\..\src\consolle.c" />
     <ClCompile Include="..\..\src\getopt.c" />
-    <ClCompile Include="..\..\src\trdp-pd-test.c" />
+    <ClCompile Include="..\..\src\trdp_pd_source.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\common.h" />
+    <ClInclude Include="..\..\src\consolle.h" />
     <ClInclude Include="..\..\src\getopt.h" />
   </ItemGroup>
   <ItemGroup>

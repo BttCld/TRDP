@@ -12,18 +12,18 @@
  *
  * @author          Armin-H. Weiss (initial version)
  *
- * @remarks This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
+ * @remarks This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  *          If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *          Copyright Bombardier Transportation Inc. or its subsidiaries and others, 2014. All rights reserved.
  */
- /*
- * $Id: tau_tti.h 1916 2019-06-19 14:37:27Z bloehr $
- *
- *
- *      BL 2019-05-15: Ticket #254 API of TTI to get OwnOpCstNo and OwnTrnCstNo
- *      BL 2018-08-07: Ticket #183 tau_getOwnIds moved here
- *      BL 2016-02-18: Ticket #7: Add train topology information support
- */
+/*
+* $Id: tau_tti.h 1916 2019-06-19 14:37:27Z bloehr $
+*
+*
+*      BL 2019-05-15: Ticket #254 API of TTI to get OwnOpCstNo and OwnTrnCstNo
+*      BL 2018-08-07: Ticket #183 tau_getOwnIds moved here
+*      BL 2016-02-18: Ticket #7: Add train topology information support
+*/
 
 #ifndef TAU_TTI_H
 #define TAU_TTI_H
@@ -96,11 +96,10 @@ extern "C" {
  *  @retval         TRDP_INIT_ERR   initialisation error
  *
  */
-EXT_DECL TRDP_ERR_T tau_initTTIaccess (
-    TRDP_APP_SESSION_T  appHandle,
-    VOS_SEMA_T          userAction,
-    TRDP_IP_ADDR_T      ecspIpAddr,
-    CHAR8               *hostsFileName);
+EXT_DECL TRDP_ERR_T tau_initTTIaccess (TRDP_APP_SESSION_T appHandle,
+                                       VOS_SEMA_T         userAction,
+                                       TRDP_IP_ADDR_T     ecspIpAddr,
+                                       CHAR8*             hostsFileName);
 
 /**********************************************************************************************************************/
 /**    Function to terminate TTI access
@@ -110,8 +109,7 @@ EXT_DECL TRDP_ERR_T tau_initTTIaccess (
  *  @retval         none
  *
  */
-EXT_DECL void tau_deInitTTI (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL void tau_deInitTTI (TRDP_APP_SESSION_T appHandle);
 
 /**********************************************************************************************************************/
 /**    Function to retrieve the operational train directory state.
@@ -125,10 +123,9 @@ EXT_DECL void tau_deInitTTI (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getOpTrDirectory (
-    TRDP_APP_SESSION_T          appHandle,
-    TRDP_OP_TRAIN_DIR_STATE_T   *pOpTrnDirState,
-    TRDP_OP_TRAIN_DIR_T         *pOpTrnDir);
+EXT_DECL TRDP_ERR_T tau_getOpTrDirectory (TRDP_APP_SESSION_T         appHandle,
+                                          TRDP_OP_TRAIN_DIR_STATE_T* pOpTrnDirState,
+                                          TRDP_OP_TRAIN_DIR_T*       pOpTrnDir);
 
 
 /**********************************************************************************************************************/
@@ -144,8 +141,8 @@ EXT_DECL TRDP_ERR_T tau_getOpTrDirectory (
  *
  */
 EXT_DECL TRDP_ERR_T tau_getOpTrnDirectoryStatusInfo (
-    TRDP_APP_SESSION_T              appHandle,
-    TRDP_OP_TRAIN_DIR_STATUS_INFO_T *pOpTrnDirStatusInfo);
+                                    TRDP_APP_SESSION_T               appHandle,
+                                    TRDP_OP_TRAIN_DIR_STATUS_INFO_T* pOpTrnDirStatusInfo);
 
 /**********************************************************************************************************************/
 /**    Function to retrieve the train directory.
@@ -159,9 +156,8 @@ EXT_DECL TRDP_ERR_T tau_getOpTrnDirectoryStatusInfo (
  *  @retval         TRDP_NODATA_ERR Try later
  *
  */
-EXT_DECL TRDP_ERR_T tau_getTrDirectory (
-    TRDP_APP_SESSION_T              appHandle,
-    TRDP_TRAIN_DIR_T                *pTrnDir);
+EXT_DECL TRDP_ERR_T tau_getTrDirectory (TRDP_APP_SESSION_T appHandle,
+                                        TRDP_TRAIN_DIR_T*  pTrnDir);
 
 
 /**********************************************************************************************************************/
@@ -176,10 +172,9 @@ EXT_DECL TRDP_ERR_T tau_getTrDirectory (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getStaticCstInfo (
-    TRDP_APP_SESSION_T                      appHandle,
-    TRDP_CONSIST_INFO_T                    *pCstInfo,
-    TRDP_UUID_T                      const  cstUUID);
+EXT_DECL TRDP_ERR_T tau_getStaticCstInfo (TRDP_APP_SESSION_T   appHandle,
+                                          TRDP_CONSIST_INFO_T* pCstInfo,
+                                          TRDP_UUID_T          const cstUUID);
 
 
 /**********************************************************************************************************************/
@@ -196,12 +191,11 @@ EXT_DECL TRDP_ERR_T tau_getStaticCstInfo (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getTTI (
-    TRDP_APP_SESSION_T                 appHandle,
-    TRDP_OP_TRAIN_DIR_STATE_T   *pOpTrnDirState,
-    TRDP_OP_TRAIN_DIR_T         *pOpTrnDir,
-    TRDP_TRAIN_DIR_T            *pTrnDir,
-    TRDP_TRAIN_NET_DIR_T        *pTrnNetDir);
+EXT_DECL TRDP_ERR_T tau_getTTI (TRDP_APP_SESSION_T         appHandle,
+                                TRDP_OP_TRAIN_DIR_STATE_T* pOpTrnDirState,
+                                TRDP_OP_TRAIN_DIR_T*       pOpTrnDir,
+                                TRDP_TRAIN_DIR_T*          pTrnDir,
+                                TRDP_TRAIN_NET_DIR_T*      pTrnNetDir);
 
 
 /**********************************************************************************************************************/
@@ -215,9 +209,8 @@ EXT_DECL TRDP_ERR_T tau_getTTI (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getTrnCstCnt (
-    TRDP_APP_SESSION_T   appHandle,
-    UINT16              *pTrnCstCnt);
+EXT_DECL TRDP_ERR_T tau_getTrnCstCnt (TRDP_APP_SESSION_T appHandle,
+                                      UINT16*            pTrnCstCnt);
 
 
 /**********************************************************************************************************************/
@@ -231,9 +224,8 @@ EXT_DECL TRDP_ERR_T tau_getTrnCstCnt (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getTrnVehCnt (
-    TRDP_APP_SESSION_T   appHandle,
-    UINT16              *pTrnVehCnt);
+EXT_DECL TRDP_ERR_T tau_getTrnVehCnt (TRDP_APP_SESSION_T appHandle,
+                                      UINT16*            pTrnVehCnt);
 
 
 /**********************************************************************************************************************/
@@ -248,10 +240,9 @@ EXT_DECL TRDP_ERR_T tau_getTrnVehCnt (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getCstVehCnt (
-    TRDP_APP_SESSION_T   appHandle,
-    UINT16              *pCstVehCnt,
-    const TRDP_LABEL_T   pCstLabel);
+EXT_DECL TRDP_ERR_T tau_getCstVehCnt (TRDP_APP_SESSION_T appHandle,
+                                      UINT16*            pCstVehCnt,
+                                      const TRDP_LABEL_T pCstLabel);
 
 
 /**********************************************************************************************************************/
@@ -266,10 +257,9 @@ EXT_DECL TRDP_ERR_T tau_getCstVehCnt (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getCstFctCnt (
-    TRDP_APP_SESSION_T   appHandle,
-    UINT16              *pCstFctCnt,
-    const TRDP_LABEL_T   pCstLabel);
+EXT_DECL TRDP_ERR_T tau_getCstFctCnt (TRDP_APP_SESSION_T appHandle,
+                                      UINT16*            pCstFctCnt,
+                                      const TRDP_LABEL_T pCstLabel);
 
 
 /* ---------------------------------------------------------------------------- */
@@ -288,11 +278,10 @@ EXT_DECL TRDP_ERR_T tau_getCstFctCnt (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getCstFctInfo (
-    TRDP_APP_SESSION_T      appHandle,
-    TRDP_FUNCTION_INFO_T   *pFctInfo,
-    const TRDP_LABEL_T      pCstLabel,
-    UINT16                  maxFctCnt);
+EXT_DECL TRDP_ERR_T tau_getCstFctInfo (TRDP_APP_SESSION_T    appHandle,
+                                       TRDP_FUNCTION_INFO_T* pFctInfo,
+                                       const TRDP_LABEL_T    pCstLabel,
+                                       UINT16                maxFctCnt);
 
 
 /**********************************************************************************************************************/
@@ -300,7 +289,7 @@ EXT_DECL TRDP_ERR_T tau_getCstFctInfo (
  *
  *
  *  @param[in]      appHandle       Handle returned by tlc_openSession().
- *  @param[out]     pVehInfo        Pointer to the vehicle info to be returned. 
+ *  @param[out]     pVehInfo        Pointer to the vehicle info to be returned.
  *  @param[in]      pVehLabel       Pointer to a vehicle label. NULL means own vehicle  if cstLabel refers to own consist.
  *  @param[in]      pCstLabel       Pointer to a consist label. NULL means own consist.
  *
@@ -308,11 +297,10 @@ EXT_DECL TRDP_ERR_T tau_getCstFctInfo (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getVehInfo (
-    TRDP_APP_SESSION_T      appHandle,
-    TRDP_VEHICLE_INFO_T    *pVehInfo,
-    const TRDP_LABEL_T      pVehLabel,
-    const TRDP_LABEL_T      pCstLabel);
+EXT_DECL TRDP_ERR_T tau_getVehInfo (TRDP_APP_SESSION_T   appHandle,
+                                    TRDP_VEHICLE_INFO_T* pVehInfo,
+                                    const TRDP_LABEL_T   pVehLabel,
+                                    const TRDP_LABEL_T   pCstLabel);
 
 
 /**********************************************************************************************************************/
@@ -327,10 +315,9 @@ EXT_DECL TRDP_ERR_T tau_getVehInfo (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getCstInfo (
-    TRDP_APP_SESSION_T      appHandle,
-    TRDP_CONSIST_INFO_T    *pCstInfo,
-    const TRDP_LABEL_T      pCstLabel);
+EXT_DECL TRDP_ERR_T tau_getCstInfo (TRDP_APP_SESSION_T   appHandle,
+                                    TRDP_CONSIST_INFO_T* pCstInfo,
+                                    const TRDP_LABEL_T   pCstLabel);
 
 
 /* ---------------------------------------------------------------------------- */
@@ -355,12 +342,11 @@ EXT_DECL TRDP_ERR_T tau_getCstInfo (
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_getVehOrient (
-    TRDP_APP_SESSION_T   appHandle,
-    UINT8               *pVehOrient,
-    UINT8               *pCstOrient,
-    TRDP_LABEL_T        pVehLabel,
-    TRDP_LABEL_T        pCstLabel);
+EXT_DECL TRDP_ERR_T tau_getVehOrient (TRDP_APP_SESSION_T appHandle,
+                                      UINT8*             pVehOrient,
+                                      UINT8*             pCstOrient,
+                                      TRDP_LABEL_T       pVehLabel,
+                                      TRDP_LABEL_T       pCstLabel);
 
 /**********************************************************************************************************************/
 /**    Who am I ?.
@@ -377,11 +363,10 @@ EXT_DECL TRDP_ERR_T tau_getVehOrient (
  *  @retval         TRDP_NODATA_ERR Data currently not available, call again
  *
  */
-EXT_DECL TRDP_ERR_T tau_getOwnIds (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_LABEL_T        *pDevId,
-    TRDP_LABEL_T        *pVehId,
-    TRDP_LABEL_T        *pCstId);
+EXT_DECL TRDP_ERR_T tau_getOwnIds (TRDP_APP_SESSION_T  appHandle,
+                                   TRDP_LABEL_T*       pDevId,
+                                   TRDP_LABEL_T*       pVehId,
+                                   TRDP_LABEL_T*       pCstId);
 
 /**********************************************************************************************************************/
 /** Get own operational consist number.
@@ -391,8 +376,7 @@ EXT_DECL TRDP_ERR_T tau_getOwnIds (
  *  @retval         ownOpCstNo          own operational consist number value
  *                  0                   on error
  */
-EXT_DECL UINT8 tau_getOwnOpCstNo (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL UINT8 tau_getOwnOpCstNo (TRDP_APP_SESSION_T appHandle);
 
 /**********************************************************************************************************************/
 /** Get own train consist number.
@@ -402,8 +386,7 @@ EXT_DECL UINT8 tau_getOwnOpCstNo (
  *  @retval         ownTrnCstNo         own train consist number value
  *                  0                   on error
  */
-EXT_DECL UINT8 tau_getOwnTrnCstNo (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL UINT8 tau_getOwnTrnCstNo (TRDP_APP_SESSION_T appHandle);
 
 #ifdef __cplusplus
 }

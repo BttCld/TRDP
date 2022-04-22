@@ -69,358 +69,320 @@ extern "C" {
 /***********************************************************************************************************************
  * PROTOTYPES
  */
-EXT_DECL TRDP_ERR_T tlc_init (
-    const TRDP_PRINT_DBG_T  pPrintDebugString,
-    void                    *pRefCon,
-    const TRDP_MEM_CONFIG_T *pMemConfig);
+EXT_DECL TRDP_ERR_T tlc_init (const TRDP_PRINT_DBG_T   pPrintDebugString,
+                                    void*              pRefCon,
+                              const TRDP_MEM_CONFIG_T* pMemConfig);
 
-EXT_DECL TRDP_ERR_T tlc_openSession (
-    TRDP_APP_SESSION_T              *pAppHandle,
-    TRDP_IP_ADDR_T                  ownIpAddr,
-    TRDP_IP_ADDR_T                  leaderIpAddr,
-    const TRDP_MARSHALL_CONFIG_T    *pMarshall,
-    const TRDP_PD_CONFIG_T          *pPdDefault,
-    const TRDP_MD_CONFIG_T          *pMdDefault,
-    const TRDP_PROCESS_CONFIG_T     *pProcessConfig);
+EXT_DECL TRDP_ERR_T tlc_openSession (      TRDP_APP_SESSION_T*     pAppHandle,
+                                           TRDP_IP_ADDR_T          ownIpAddr,
+                                           TRDP_IP_ADDR_T          leaderIpAddr,
+                                     const TRDP_MARSHALL_CONFIG_T* pMarshall,
+                                     const TRDP_PD_CONFIG_T*       pPdDefault,
+                                     const TRDP_MD_CONFIG_T*       pMdDefault,
+                                     const TRDP_PROCESS_CONFIG_T*  pProcessConfig);
 
-EXT_DECL TRDP_ERR_T tlc_reinitSession (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL TRDP_ERR_T tlc_reinitSession (TRDP_APP_SESSION_T appHandle);
 
-EXT_DECL TRDP_ERR_T tlc_configSession (
-    TRDP_APP_SESSION_T              appHandle,
-    const TRDP_MARSHALL_CONFIG_T    *pMarshall,
-    const TRDP_PD_CONFIG_T          *pPdDefault,
-    const TRDP_MD_CONFIG_T          *pMdDefault,
-    const TRDP_PROCESS_CONFIG_T     *pProcessConfig);
+EXT_DECL TRDP_ERR_T tlc_configSession (      TRDP_APP_SESSION_T      appHandle,
+                                       const TRDP_MARSHALL_CONFIG_T* pMarshall,
+                                       const TRDP_PD_CONFIG_T*       pPdDefault,
+                                       const TRDP_MD_CONFIG_T*       pMdDefault,
+                                       const TRDP_PROCESS_CONFIG_T*  pProcessConfig);
 
-EXT_DECL TRDP_ERR_T tlc_updateSession (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL TRDP_ERR_T tlc_updateSession (TRDP_APP_SESSION_T appHandle);
 
-EXT_DECL TRDP_ERR_T tlc_presetIndexSession (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_IDX_TABLE_T    *pIndexTableSizes);
+EXT_DECL TRDP_ERR_T tlc_presetIndexSession (TRDP_APP_SESSION_T appHandle,
+                                            TRDP_IDX_TABLE_T*  pIndexTableSizes);
 
-EXT_DECL TRDP_ERR_T tlc_closeSession (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL TRDP_ERR_T tlc_closeSession (TRDP_APP_SESSION_T appHandle);
 
 EXT_DECL TRDP_ERR_T tlc_terminate (void);
 
-EXT_DECL TRDP_ERR_T tlc_setETBTopoCount (
-    TRDP_APP_SESSION_T  appHandle,
-    UINT32              etbTopoCnt);
+EXT_DECL TRDP_ERR_T tlc_setETBTopoCount (TRDP_APP_SESSION_T appHandle,
+                                         UINT32             etbTopoCnt);
 
-EXT_DECL UINT32     tlc_getETBTopoCount (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL UINT32     tlc_getETBTopoCount (TRDP_APP_SESSION_T appHandle);
 
-EXT_DECL TRDP_ERR_T tlc_setOpTrainTopoCount (
-    TRDP_APP_SESSION_T  appHandle,
-    UINT32              opTrnTopoCnt);
+EXT_DECL TRDP_ERR_T tlc_setOpTrainTopoCount (TRDP_APP_SESSION_T appHandle,
+                                             UINT32             opTrnTopoCnt);
 
-EXT_DECL UINT32     tlc_getOpTrainTopoCount (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL UINT32     tlc_getOpTrainTopoCount (TRDP_APP_SESSION_T appHandle);
 
-EXT_DECL TRDP_ERR_T tlc_getInterval (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_TIME_T         *pInterval,
-    TRDP_FDS_T          *pFileDesc,
-    INT32               *pNoDesc);
+#ifdef HIGH_PERF_INDEXED
+// "#### tlc_getInterval() is not supported when using HIGH_PERF_INDEXED!  ####\n");
+// "#### Use tlp_getInterval()/tlm_getInterval() instead!                  ####\n");
+#else
+EXT_DECL TRDP_ERR_T tlc_getInterval (TRDP_APP_SESSION_T appHandle,
+                                     TRDP_TIME_T*       pInterval,
+                                     TRDP_FDS_T*        pFileDesc,
+                                     INT32*             pNoDesc);
+#endif
 
-EXT_DECL TRDP_ERR_T tlc_process (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_FDS_T          *pRfds,
-    INT32               *pCount);
+#ifdef HIGH_PERF_INDEXED
+// "#### tlc_process() is not supported when using HIGH_PERF_INDEXED!    ####\n");
+// "#### Use tlp_processSend/tlp_processReceive()/tlm_process() instead! ####\n");
+#else
+EXT_DECL TRDP_ERR_T tlc_process (TRDP_APP_SESSION_T appHandle,
+                                 TRDP_FDS_T*        pRfds,
+                                 INT32*             pCount);
+#endif
 
-EXT_DECL TRDP_IP_ADDR_T tlc_getOwnIpAddress (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL TRDP_IP_ADDR_T tlc_getOwnIpAddress (TRDP_APP_SESSION_T appHandle);
 
-EXT_DECL TRDP_ERR_T     tlp_getInterval (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_TIME_T         *pInterval,
-    TRDP_FDS_T          *pFileDesc,
-    INT32               *pNoDesc);
+EXT_DECL TRDP_ERR_T     tlp_getInterval (TRDP_APP_SESSION_T appHandle,
+                                         TRDP_TIME_T*       pInterval,
+                                         TRDP_FDS_T*        pFileDesc,
+                                         INT32*             pNoDesc);
 
-EXT_DECL TRDP_ERR_T tlp_processSend (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL TRDP_ERR_T tlp_processSend (TRDP_APP_SESSION_T appHandle);
 
-EXT_DECL TRDP_ERR_T tlp_processReceive (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_FDS_T          *pRfds,
-    INT32               *pCount);
+EXT_DECL TRDP_ERR_T tlp_processReceive (TRDP_APP_SESSION_T appHandle,
+                                        TRDP_FDS_T*        pRfds,
+                                        INT32*             pCount);
 
-EXT_DECL TRDP_ERR_T tlp_publish (
-    TRDP_APP_SESSION_T      appHandle,
-    TRDP_PUB_T              *pPubHandle,
-    const void              *pUserRef,
-    TRDP_PD_CALLBACK_T      pfCbFunction,
-    UINT32                  serviceId,
-    UINT32                  comId,
-    UINT32                  etbTopoCnt,
-    UINT32                  opTrnTopoCnt,
-    TRDP_IP_ADDR_T          srcIpAddr,
-    TRDP_IP_ADDR_T          destIpAddr,
-    UINT32                  interval,
-    UINT32                  redId,
-    TRDP_FLAGS_T            pktFlags,
-    const TRDP_SEND_PARAM_T *pSendParam,
-    const UINT8             *pData,
-    UINT32                  dataSize);
+EXT_DECL TRDP_ERR_T tlp_publish (      TRDP_APP_SESSION_T appHandle,
+                                       TRDP_PUB_T*        pPubHandle,
+                                 const void*              pUserRef,
+                                       TRDP_PD_CALLBACK_T pfCbFunction,
+                                       UINT32             serviceId,
+                                       UINT32             comId,
+                                       UINT32             etbTopoCnt,
+                                       UINT32             opTrnTopoCnt,
+                                       TRDP_IP_ADDR_T     srcIpAddr,
+                                       TRDP_IP_ADDR_T     destIpAddr,
+                                       UINT32             interval,
+                                       UINT32             redId,
+                                       TRDP_FLAGS_T       pktFlags,
+                                 const TRDP_SEND_PARAM_T* pSendParam,
+                                 const UINT8*             pData,
+                                       UINT32             dataSize);
 
-EXT_DECL TRDP_ERR_T tlp_republish (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_PUB_T          pubHandle,
-    UINT32              etbTopoCnt,
-    UINT32              opTrnTopoCnt,
-    TRDP_IP_ADDR_T      srcIpAddr,
-    TRDP_IP_ADDR_T      destIpAddr);
+EXT_DECL TRDP_ERR_T tlp_republish (TRDP_APP_SESSION_T appHandle,
+                                   TRDP_PUB_T         pubHandle,
+                                   UINT32             etbTopoCnt,
+                                   UINT32             opTrnTopoCnt,
+                                   TRDP_IP_ADDR_T     srcIpAddr,
+                                   TRDP_IP_ADDR_T     destIpAddr);
 
 
-EXT_DECL TRDP_ERR_T tlp_unpublish (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_PUB_T          pubHandle);
+EXT_DECL TRDP_ERR_T tlp_unpublish (TRDP_APP_SESSION_T appHandle,
+                                   TRDP_PUB_T         pubHandle);
 
 
-EXT_DECL TRDP_ERR_T tlp_put (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_PUB_T          pubHandle,
-    const UINT8         *pData,
-    UINT32              dataSize);
+EXT_DECL TRDP_ERR_T tlp_put (      TRDP_APP_SESSION_T appHandle,
+                                   TRDP_PUB_T         pubHandle,
+                             const UINT8*             pData,
+                                   UINT32             dataSize);
 
-EXT_DECL TRDP_ERR_T tlp_putImmediate (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_PUB_T          pubHandle,
-    const UINT8         *pData,
-    UINT32              dataSize,
-    VOS_TIMEVAL_T       *pTxTime);
+EXT_DECL TRDP_ERR_T tlp_putImmediate (      TRDP_APP_SESSION_T appHandle,
+                                            TRDP_PUB_T         pubHandle,
+                                      const UINT8*             pData,
+                                            UINT32             dataSize,
+                                            VOS_TIMEVAL_T*     pTxTime);
 
-EXT_DECL TRDP_ERR_T tlp_setRedundant (
-    TRDP_APP_SESSION_T  appHandle,
-    UINT32              redId,
-    BOOL8               leader
-    );
+EXT_DECL TRDP_ERR_T tlp_setRedundant (TRDP_APP_SESSION_T appHandle,
+                                      UINT32             redId,
+                                      BOOL8              leader
+);
 
-EXT_DECL TRDP_ERR_T tlp_getRedundant (
-    TRDP_APP_SESSION_T  appHandle,
-    UINT32              redId,
-    BOOL8               *pLeader
-    );
+EXT_DECL TRDP_ERR_T tlp_getRedundant (TRDP_APP_SESSION_T appHandle,
+                                      UINT32             redId,
+                                      BOOL8*             pLeader
+);
 
-EXT_DECL TRDP_ERR_T tlp_request (
-    TRDP_APP_SESSION_T      appHandle,
-    TRDP_SUB_T              subHandle,
-    UINT32                  serviceId,
-    UINT32                  comId,
-    UINT32                  etbTopoCnt,
-    UINT32                  opTrnTopoCnt,
-    TRDP_IP_ADDR_T          srcIpAddr,
-    TRDP_IP_ADDR_T          destIpAddr,
-    UINT32                  redId,
-    TRDP_FLAGS_T            pktFlags,
-    const TRDP_SEND_PARAM_T *pSendParam,
-    const UINT8             *pData,
-    UINT32                  dataSize,
-    UINT32                  replyComId,
-    TRDP_IP_ADDR_T          replyIpAddr);
+EXT_DECL TRDP_ERR_T tlp_request (      TRDP_APP_SESSION_T appHandle,
+                                       TRDP_SUB_T         subHandle,
+                                       UINT32             serviceId,
+                                       UINT32             comId,
+                                       UINT32             etbTopoCnt,
+                                       UINT32             opTrnTopoCnt,
+                                       TRDP_IP_ADDR_T     srcIpAddr,
+                                       TRDP_IP_ADDR_T     destIpAddr,
+                                       UINT32             redId,
+                                       TRDP_FLAGS_T       pktFlags,
+                                 const TRDP_SEND_PARAM_T* pSendParam,
+                                 const UINT8*             pData,
+                                       UINT32             dataSize,
+                                       UINT32             replyComId,
+                                       TRDP_IP_ADDR_T     replyIpAddr);
 
-EXT_DECL TRDP_ERR_T tlp_subscribe (
-    TRDP_APP_SESSION_T      appHandle,
-    TRDP_SUB_T              *pSubHandle,
-    const void              *pUserRef,
-    TRDP_PD_CALLBACK_T      pfCbFunction,
-    UINT32                  serviceId,
-    UINT32                  comId,
-    UINT32                  etbTopoCnt,
-    UINT32                  opTrnTopoCnt,
-    TRDP_IP_ADDR_T          srcIpAddr1,
-    TRDP_IP_ADDR_T          srcIpAddr2,
-    TRDP_IP_ADDR_T          destIpAddr,
-    TRDP_FLAGS_T            pktFlags,
-    const TRDP_COM_PARAM_T  *pRecParams,
-    UINT32                  timeout,
-    TRDP_TO_BEHAVIOR_T      toBehavior);
+EXT_DECL TRDP_ERR_T tlp_subscribe (      TRDP_APP_SESSION_T appHandle,
+                                         TRDP_SUB_T*        pSubHandle,
+                                   const void*              pUserRef,
+                                         TRDP_PD_CALLBACK_T pfCbFunction,
+                                         UINT32             serviceId,
+                                         UINT32             comId,
+                                         UINT32             etbTopoCnt,
+                                         UINT32             opTrnTopoCnt,
+                                         TRDP_IP_ADDR_T     srcIpAddr1,
+                                         TRDP_IP_ADDR_T     srcIpAddr2,
+                                         TRDP_IP_ADDR_T     destIpAddr,
+                                         TRDP_FLAGS_T       pktFlags,
+                                   const TRDP_COM_PARAM_T*  pRecParams,
+                                         UINT32             timeout,
+                                         TRDP_TO_BEHAVIOR_T toBehavior);
 
 
-EXT_DECL TRDP_ERR_T tlp_resubscribe (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_SUB_T          subHandle,
-    UINT32              etbTopoCnt,
-    UINT32              opTrnTopoCnt,
-    TRDP_IP_ADDR_T      srcIpAddr1,
-    TRDP_IP_ADDR_T      srcIpAddr2,
-    TRDP_IP_ADDR_T      destIpAddr);
+EXT_DECL TRDP_ERR_T tlp_resubscribe (TRDP_APP_SESSION_T appHandle,
+                                     TRDP_SUB_T         subHandle,
+                                     UINT32             etbTopoCnt,
+                                     UINT32             opTrnTopoCnt,
+                                     TRDP_IP_ADDR_T     srcIpAddr1,
+                                     TRDP_IP_ADDR_T     srcIpAddr2,
+                                     TRDP_IP_ADDR_T     destIpAddr);
 
 
-EXT_DECL TRDP_ERR_T tlp_unsubscribe (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_SUB_T          subHandle);
+EXT_DECL TRDP_ERR_T tlp_unsubscribe (TRDP_APP_SESSION_T appHandle,
+                                     TRDP_SUB_T         subHandle);
 
 
-EXT_DECL TRDP_ERR_T tlp_get (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_SUB_T          subHandle,
-    TRDP_PD_INFO_T      *pPdInfo,
-    UINT8               *pData,
-    UINT32              *pDataSize);
+EXT_DECL TRDP_ERR_T tlp_get (TRDP_APP_SESSION_T appHandle,
+                             TRDP_SUB_T         subHandle,
+                             TRDP_PD_INFO_T*    pPdInfo,
+                             UINT8*             pData,
+                             UINT32*            pDataSize);
 
 #if MD_SUPPORT
 
-EXT_DECL TRDP_ERR_T tlm_process (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_FDS_T          *pRfds,
-    INT32               *pCount);
+EXT_DECL TRDP_ERR_T tlm_process (TRDP_APP_SESSION_T appHandle,
+                                 TRDP_FDS_T*        pRfds,
+                                 INT32*             pCount);
 
-EXT_DECL TRDP_ERR_T tlm_getInterval (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_TIME_T         *pInterval,
-    TRDP_FDS_T          *pFileDesc,
-    INT32               *pNoDesc);
+EXT_DECL TRDP_ERR_T tlm_getInterval (TRDP_APP_SESSION_T appHandle,
+                                     TRDP_TIME_T*       pInterval,
+                                     TRDP_FDS_T*        pFileDesc,
+                                     INT32*             pNoDesc);
 
-EXT_DECL TRDP_ERR_T tlm_notify (
-    TRDP_APP_SESSION_T      appHandle,
-    const void              *pUserRef,
-    TRDP_MD_CALLBACK_T      pfCbFunction,
-    UINT32                  comId,
-    UINT32                  etbTopoCnt,
-    UINT32                  opTrnTopoCnt,
-    TRDP_IP_ADDR_T          srcIpAddr,
-    TRDP_IP_ADDR_T          destIpAddr,
-    TRDP_FLAGS_T            pktFlags,
-    const TRDP_SEND_PARAM_T *pSendParam,
-    const UINT8             *pData,
-    UINT32                  dataSize,
-    const TRDP_URI_USER_T   srcURI,
-    const TRDP_URI_USER_T   destURI);
+EXT_DECL TRDP_ERR_T tlm_notify (      TRDP_APP_SESSION_T appHandle,
+                                const void*              pUserRef,
+                                      TRDP_MD_CALLBACK_T pfCbFunction,
+                                      UINT32             comId,
+                                      UINT32             etbTopoCnt,
+                                      UINT32             opTrnTopoCnt,
+                                      TRDP_IP_ADDR_T     srcIpAddr,
+                                      TRDP_IP_ADDR_T     destIpAddr,
+                                      TRDP_FLAGS_T       pktFlags,
+                                const TRDP_SEND_PARAM_T* pSendParam,
+                                const UINT8*             pData,
+                                      UINT32             dataSize,
+                                const TRDP_URI_USER_T    srcURI,
+                                const TRDP_URI_USER_T    destURI);
 
 
-EXT_DECL TRDP_ERR_T tlm_request (
-    TRDP_APP_SESSION_T      appHandle,
-    const void              *pUserRef,
-    TRDP_MD_CALLBACK_T      pfCbFunction,
-    TRDP_UUID_T             *pSessionId,
-    UINT32                  comId,
-    UINT32                  etbTopoCnt,
-    UINT32                  opTrnTopoCnt,
-    TRDP_IP_ADDR_T          srcIpAddr,
-    TRDP_IP_ADDR_T          destIpAddr,
-    TRDP_FLAGS_T            pktFlags,
-    UINT32                  numReplies,
-    UINT32                  replyTimeout,
-    const TRDP_SEND_PARAM_T *pSendParam,
-    const UINT8             *pData,
-    UINT32                  dataSize,
-    const TRDP_URI_USER_T   srcURI,
-    const TRDP_URI_USER_T   destURI);
+EXT_DECL TRDP_ERR_T tlm_request (      TRDP_APP_SESSION_T appHandle,
+                                 const void*              pUserRef,
+                                       TRDP_MD_CALLBACK_T pfCbFunction,
+                                       TRDP_UUID_T*       pSessionId,
+                                       UINT32             comId,
+                                       UINT32             etbTopoCnt,
+                                       UINT32             opTrnTopoCnt,
+                                       TRDP_IP_ADDR_T     srcIpAddr,
+                                       TRDP_IP_ADDR_T     destIpAddr,
+                                       TRDP_FLAGS_T       pktFlags,
+                                       UINT32             numReplies,
+                                       UINT32             replyTimeout,
+                                 const TRDP_SEND_PARAM_T* pSendParam,
+                                 const UINT8*             pData,
+                                       UINT32             dataSize,
+                                 const TRDP_URI_USER_T    srcURI,
+                                 const TRDP_URI_USER_T    destURI);
 
 
-EXT_DECL TRDP_ERR_T tlm_confirm (
-    TRDP_APP_SESSION_T      appHandle,
-    const TRDP_UUID_T       *pSessionId,
-    UINT16                  userStatus,
-    const TRDP_SEND_PARAM_T *pSendParam);
+EXT_DECL TRDP_ERR_T tlm_confirm (      TRDP_APP_SESSION_T appHandle,
+                                 const TRDP_UUID_T*       pSessionId,
+                                       UINT16             userStatus,
+                                 const TRDP_SEND_PARAM_T* pSendParam);
 
 
-EXT_DECL TRDP_ERR_T tlm_abortSession (
-    TRDP_APP_SESSION_T  appHandle,
-    const TRDP_UUID_T   *pSessionId);
+EXT_DECL TRDP_ERR_T tlm_abortSession (      TRDP_APP_SESSION_T appHandle,
+                                      const TRDP_UUID_T*       pSessionId);
 
 
-EXT_DECL TRDP_ERR_T tlm_addListener (
-    TRDP_APP_SESSION_T      appHandle,
-    TRDP_LIS_T              *pListenHandle,
-    const void              *pUserRef,
-    TRDP_MD_CALLBACK_T      pfCbFunction,
-    BOOL8                   comIdListener,
-    UINT32                  comId,
-    UINT32                  etbTopoCnt,
-    UINT32                  opTrnTopoCnt,
-    TRDP_IP_ADDR_T          srcIpAddr1,
-    TRDP_IP_ADDR_T          srcIpAddr2,
-    TRDP_IP_ADDR_T          mcDestIpAddr,
-    TRDP_FLAGS_T            pktFlags,
-    const TRDP_URI_USER_T   srcURI,
-    const TRDP_URI_USER_T   destURI);
+EXT_DECL TRDP_ERR_T tlm_addListener (      TRDP_APP_SESSION_T appHandle,
+                                           TRDP_LIS_T*        pListenHandle,
+                                     const void*              pUserRef,
+                                           TRDP_MD_CALLBACK_T pfCbFunction,
+                                           BOOL8              comIdListener,
+                                           UINT32             comId,
+                                           UINT32             etbTopoCnt,
+                                           UINT32             opTrnTopoCnt,
+                                           TRDP_IP_ADDR_T     srcIpAddr1,
+                                           TRDP_IP_ADDR_T     srcIpAddr2,
+                                           TRDP_IP_ADDR_T     mcDestIpAddr,
+                                           TRDP_FLAGS_T       pktFlags,
+                                     const TRDP_URI_USER_T    srcURI,
+                                     const TRDP_URI_USER_T    destURI);
 
-EXT_DECL TRDP_ERR_T tlm_readdListener (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_LIS_T          listenHandle,
-    UINT32              etbTopoCnt,
-    UINT32              opTrnTopoCnt,
-    TRDP_IP_ADDR_T      srcIpAddr,
-    TRDP_IP_ADDR_T      srcIpAddr2,
-    TRDP_IP_ADDR_T      mcDestIpAddr);
+EXT_DECL TRDP_ERR_T tlm_readdListener (TRDP_APP_SESSION_T appHandle,
+                                       TRDP_LIS_T         listenHandle,
+                                       UINT32             etbTopoCnt,
+                                       UINT32             opTrnTopoCnt,
+                                       TRDP_IP_ADDR_T     srcIpAddr,
+                                       TRDP_IP_ADDR_T     srcIpAddr2,
+                                       TRDP_IP_ADDR_T     mcDestIpAddr);
 
 
-EXT_DECL TRDP_ERR_T tlm_delListener (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_LIS_T          listenHandle);
+EXT_DECL TRDP_ERR_T tlm_delListener (TRDP_APP_SESSION_T appHandle,
+                                     TRDP_LIS_T         listenHandle);
 
-EXT_DECL TRDP_ERR_T tlm_reply (
-    TRDP_APP_SESSION_T      appHandle,
-    const TRDP_UUID_T       *pSessionId,
-    UINT32                  comId,
-    UINT32                  userStatus,
-    const TRDP_SEND_PARAM_T *pSendParam,
-    const UINT8             *pData,
-    UINT32                  dataSize,
-    const TRDP_URI_USER_T   srcURI);
+EXT_DECL TRDP_ERR_T tlm_reply (      TRDP_APP_SESSION_T appHandle,
+                               const TRDP_UUID_T*       pSessionId,
+                                     UINT32             comId,
+                                     UINT32             userStatus,
+                               const TRDP_SEND_PARAM_T* pSendParam,
+                               const UINT8*             pData,
+                                     UINT32             dataSize,
+                               const TRDP_URI_USER_T    srcURI);
 
-EXT_DECL TRDP_ERR_T tlm_replyQuery (
-    TRDP_APP_SESSION_T      appHandle,
-    const TRDP_UUID_T       *pSessionId,
-    UINT32                  comId,
-    UINT32                  userStatus,
-    UINT32                  confirmTimeout,
-    const TRDP_SEND_PARAM_T *pSendParam,
-    const UINT8             *pData,
-    UINT32                  dataSize,
-    const TRDP_URI_USER_T   srcURI);
+EXT_DECL TRDP_ERR_T tlm_replyQuery (      TRDP_APP_SESSION_T appHandle,
+                                    const TRDP_UUID_T*       pSessionId,
+                                          UINT32             comId,
+                                          UINT32             userStatus,
+                                          UINT32             confirmTimeout,
+                                    const TRDP_SEND_PARAM_T* pSendParam,
+                                    const UINT8*             pData,
+                                          UINT32             dataSize,
+                                    const TRDP_URI_USER_T    srcURI);
 
 #endif /* MD_SUPPORT    */
 
-EXT_DECL const CHAR8 *tlc_getVersionString (
-    void);
+EXT_DECL const CHAR8* tlc_getVersionString (void);
 
-EXT_DECL const TRDP_VERSION_T *tlc_getVersion (void);
+EXT_DECL const TRDP_VERSION_T* tlc_getVersion (void);
 
-EXT_DECL TRDP_ERR_T tlc_getStatistics (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_STATISTICS_T   *pStatistics);
+EXT_DECL TRDP_ERR_T tlc_getStatistics (TRDP_APP_SESSION_T appHandle,
+                                       TRDP_STATISTICS_T* pStatistics);
 
-EXT_DECL TRDP_ERR_T tlc_getSubsStatistics (
-    TRDP_APP_SESSION_T      appHandle,
-    UINT16                  *pNumSubs,
-    TRDP_SUBS_STATISTICS_T  *pStatistics);
+EXT_DECL TRDP_ERR_T tlc_getSubsStatistics (TRDP_APP_SESSION_T      appHandle,
+                                           UINT16*                 pNumSubs,
+                                           TRDP_SUBS_STATISTICS_T* pStatistics);
 
-EXT_DECL TRDP_ERR_T tlc_getPubStatistics (
-    TRDP_APP_SESSION_T      appHandle,
-    UINT16                  *pNumPub,
-    TRDP_PUB_STATISTICS_T   *pStatistics);
+EXT_DECL TRDP_ERR_T tlc_getPubStatistics (TRDP_APP_SESSION_T     appHandle,
+                                          UINT16*                pNumPub,
+                                          TRDP_PUB_STATISTICS_T* pStatistics);
+
 
 #if MD_SUPPORT
-EXT_DECL TRDP_ERR_T tlc_getUdpListStatistics (
-    TRDP_APP_SESSION_T      appHandle,
-    UINT16                  *pNumList,
-    TRDP_LIST_STATISTICS_T  *pStatistics);
+EXT_DECL TRDP_ERR_T tlc_getUdpListStatistics (TRDP_APP_SESSION_T      appHandle,
+                                              UINT16*                 pNumList,
+                                              TRDP_LIST_STATISTICS_T* pStatistics);
 
 
-EXT_DECL TRDP_ERR_T tlc_getTcpListStatistics (
-    TRDP_APP_SESSION_T      appHandle,
-    UINT16                  *pNumList,
-    TRDP_LIST_STATISTICS_T  *pStatistics);
-
+EXT_DECL TRDP_ERR_T tlc_getTcpListStatistics (TRDP_APP_SESSION_T      appHandle,
+                                              UINT16*                 pNumList,
+                                              TRDP_LIST_STATISTICS_T* pStatistics);
 #endif /* MD_SUPPORT    */
 
-EXT_DECL TRDP_ERR_T tlc_getRedStatistics (
-    TRDP_APP_SESSION_T      appHandle,
-    UINT16                  *pNumRed,
-    TRDP_RED_STATISTICS_T   *pStatistics);
 
-EXT_DECL TRDP_ERR_T tlc_getJoinStatistics (
-    TRDP_APP_SESSION_T  appHandle,
-    UINT16              *pNumJoin,
-    UINT32              *pIpAddr);
+EXT_DECL TRDP_ERR_T tlc_getRedStatistics (TRDP_APP_SESSION_T     appHandle,
+                                          UINT16*                pNumRed,
+                                          TRDP_RED_STATISTICS_T* pStatistics);
 
-EXT_DECL TRDP_ERR_T tlc_resetStatistics (
-    TRDP_APP_SESSION_T appHandle);
+EXT_DECL TRDP_ERR_T tlc_getJoinStatistics (TRDP_APP_SESSION_T appHandle,
+                                           UINT16*            pNumJoin,
+                                           UINT32*            pIpAddr);
+
+EXT_DECL TRDP_ERR_T tlc_resetStatistics (TRDP_APP_SESSION_T appHandle);
 
 #ifdef __cplusplus
 }

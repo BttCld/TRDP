@@ -247,25 +247,24 @@ TRDP_IP_ADDR_T trdp_getOwnIP ()
  *   Globals
  */
 
-INT32 trdp_getCurrentMaxSocketCnt (
- TRDP_SOCK_TYPE_T   type)
+INT32 trdp_getCurrentMaxSocketCnt (TRDP_SOCK_TYPE_T type)
 {
-    switch (type)
-    {
-        case  TRDP_SOCK_PD:
-        case  TRDP_SOCK_PD_TSN:
-            return sCurrentMaxPDSocketCnt;
-        case  TRDP_SOCK_MD_TCP:
-        case  TRDP_SOCK_MD_UDP:
-        default:
-            break;
-    }
-    return sCurrentMaxMDSocketCnt;
+   switch (type)
+   {
+      case  TRDP_SOCK_PD:
+      case  TRDP_SOCK_PD_TSN:
+         return sCurrentMaxPDSocketCnt;
+
+      case  TRDP_SOCK_MD_TCP:
+      case  TRDP_SOCK_MD_UDP:
+      default:
+         break;
+   }
+
+   return sCurrentMaxMDSocketCnt;
 }
 
-void trdp_setCurrentMaxSocketCnt (
-    TRDP_SOCK_TYPE_T    type,
-    INT32               currentMaxSocketCnt)
+void trdp_setCurrentMaxSocketCnt (TRDP_SOCK_TYPE_T    type, INT32 currentMaxSocketCnt)
 {
     switch (type)
     {
@@ -290,9 +289,7 @@ void trdp_setCurrentMaxSocketCnt (
  *  @retval         multi cast group if unused
  *                  VOS_INADDR_ANY if used
  */
-TRDP_IP_ADDR_T trdp_findMCjoins (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_IP_ADDR_T      mcGroup)
+TRDP_IP_ADDR_T trdp_findMCjoins (TRDP_APP_SESSION_T appHandle, TRDP_IP_ADDR_T mcGroup)
 {
     int         used = FALSE;
     PD_ELE_T    *pIter;
@@ -330,8 +327,7 @@ TRDP_IP_ADDR_T trdp_findMCjoins (
  *  @retval         packet size         the size of the complete packet to
  *                                      be sent or received
  */
-UINT32 trdp_packetSizePD (
-                          UINT32 dataSize)
+UINT32 trdp_packetSizePD (UINT32 dataSize)
 {
     UINT32 packetSize = sizeof(PD_HEADER_T) + dataSize;
 
@@ -387,8 +383,7 @@ UINT32 trdp_packetSizePD2 (
  *  @retval         packet size         the size of the complete packet to
  *                                      be sent or received
  */
-UINT32 trdp_packetSizeMD (
-    UINT32 dataSize)
+UINT32 trdp_packetSizeMD (UINT32 dataSize)
 {
     UINT32 packetSize = sizeof(MD_HEADER_T) + dataSize;
 
@@ -415,9 +410,7 @@ UINT32 trdp_packetSizeMD (
  *  @retval         != NULL         pointer to PD element
  *  @retval         NULL            No PD element found
  */
-PD_ELE_T *trdp_queueFindComId (
-    PD_ELE_T    *pHead,
-    UINT32      comId)
+PD_ELE_T *trdp_queueFindComId (PD_ELE_T* pHead, UINT32 comId)
 {
     PD_ELE_T *iterPD;
 
@@ -446,11 +439,9 @@ PD_ELE_T *trdp_queueFindComId (
  *  @retval         != NULL         pointer to PD element
  *  @retval         NULL            No PD element found
  */
-PD_ELE_T *trdp_queueFindPubAddr (
-    PD_ELE_T            *pHead,
-    TRDP_ADDRESSES_T    *addr)
+PD_ELE_T *trdp_queueFindPubAddr (PD_ELE_T* pHead, TRDP_ADDRESSES_T* addr)
 {
-    PD_ELE_T *iterPD;
+    PD_ELE_T* iterPD;
 
     if (pHead == NULL || addr == NULL)
     {
@@ -460,7 +451,7 @@ PD_ELE_T *trdp_queueFindPubAddr (
     for (iterPD = pHead; iterPD != NULL; iterPD = iterPD->pNext)
     {
         /*  We match if src/dst/mc/service address is zero or matches */
-        if ((iterPD->addr.comId == addr->comId)
+        if (   (iterPD->addr.comId == addr->comId)
             && ((iterPD->addr.srcIpAddr == 0) || (iterPD->addr.srcIpAddr == addr->srcIpAddr))
             && ((iterPD->addr.destIpAddr == 0) || (iterPD->addr.destIpAddr == addr->destIpAddr))
             && ((iterPD->addr.mcGroup == 0) || (iterPD->addr.mcGroup == addr->mcGroup))
@@ -482,11 +473,9 @@ PD_ELE_T *trdp_queueFindPubAddr (
  *  @retval         != NULL         pointer to PD element
  *  @retval         NULL            No PD element found
  */
-PD_ELE_T *trdp_queueFindSubAddr (
-    PD_ELE_T            *pHead,
-    TRDP_ADDRESSES_T    *addr)
+PD_ELE_T* trdp_queueFindSubAddr (PD_ELE_T* pHead, TRDP_ADDRESSES_T* addr)
 {
-    return trdp_findSubAddr (pHead, addr, 0u);
+   return trdp_findSubAddr(pHead, addr, 0u);
 }
 
 /**********************************************************************************************************************/
@@ -501,16 +490,15 @@ PD_ELE_T *trdp_queueFindSubAddr (
  *  @retval         != NULL         pointer to PD element
  *  @retval         NULL            No PD element found
  */
-PD_ELE_T *trdp_idxfindSubAddr (
-    PD_ELE_T            *array[],
-    UINT32              startIdx,
-    UINT32              maxIdx,
-    TRDP_ADDRESSES_T    *addr,
-    UINT32              comId)
+PD_ELE_T* trdp_idxfindSubAddr (PD_ELE_T*         array[],
+                               UINT32            startIdx,
+                               UINT32            maxIdx,
+                               TRDP_ADDRESSES_T* addr,
+                               UINT32            comId)
 {
-    PD_ELE_T    *iterPD;
-    PD_ELE_T    *pFirstMatchedPD = NULL;
-    UINT32      idx;
+    PD_ELE_T* iterPD;
+    PD_ELE_T* pFirstMatchedPD = NULL;
+    UINT32    idx;
 
     if ((array == NULL) || (addr == NULL) ||
         (startIdx >= maxIdx))
@@ -572,59 +560,60 @@ PD_ELE_T *trdp_idxfindSubAddr (
  *  @retval         != NULL         pointer to PD element
  *  @retval         NULL            No PD element found
  */
-PD_ELE_T *trdp_findSubAddr (
-    PD_ELE_T            *pHead,
-    TRDP_ADDRESSES_T    *addr,
-    UINT32              comId)
+PD_ELE_T* trdp_findSubAddr (PD_ELE_T* pHead, TRDP_ADDRESSES_T* addr, UINT32 comId)
 {
-    PD_ELE_T    *iterPD;
-    PD_ELE_T    *pFirstMatchedPD = NULL;
+   PD_ELE_T* iterPD;
+   PD_ELE_T* pFirstMatchedPD = NULL;
 
-    if (pHead == NULL || addr == NULL)
-    {
-        return NULL;
-    }
+   if (pHead == NULL || addr == NULL)
+   {
+      return NULL;
+   }
 
-    for (iterPD = pHead; iterPD != NULL; iterPD = iterPD->pNext)
-    {
-        /* watch a comId change (needed for indexed search) */
-        if ((comId != 0u) && (iterPD->addr.comId != comId))
-        {
-            break;
-        }
-        /*  We match if src/dst/mc address is zero or matches */
-       /* if ((iterPD->addr.comId == addr->comId)
-              && SOA_SAME_SERVICEID_OR0(addr->serviceId, iterPD->addr.serviceId)) */
-        if (SAME_SERVICE_COM_ID(iterPD->addr, *addr)) /*lint !e506 meant to be true, if service support is off */
-        {
-            /* if srcIP filter matches AND destIP matches THEN this is a direct hit */
-            if ((iterPD->addr.srcIpAddr == addr->srcIpAddr) &&
-                ((iterPD->addr.destIpAddr == addr->destIpAddr)))
+   for (iterPD = pHead; iterPD != NULL; iterPD = iterPD->pNext)
+   {
+      /* watch a comId change (needed for indexed search) */
+      if ((comId != 0u) && (iterPD->addr.comId != comId))
+      {
+         break;
+      }
+      /*  We match if src/dst/mc address is zero or matches */
+      /* if ((iterPD->addr.comId == addr->comId)
+             && SOA_SAME_SERVICEID_OR0(addr->serviceId, iterPD->addr.serviceId)) */
+      if (SAME_SERVICE_COM_ID(iterPD->addr, *addr)) /*lint !e506 meant to be true, if service support is off */
+      {
+         /* if srcIP filter matches AND destIP matches THEN this is a direct hit */
+         if (   (iterPD->addr.srcIpAddr  == addr->srcIpAddr)
+             && (iterPD->addr.destIpAddr == addr->destIpAddr))
+         {
+            return iterPD;  /* we cannot find a better match */
+         }
+
+         if (   (   (iterPD->addr.srcIpAddr  == VOS_INADDR_ANY)
+                 || (iterPD->addr.srcIpAddr  == addr->srcIpAddr))
+             && (   (iterPD->addr.destIpAddr == VOS_INADDR_ANY)
+                 || (addr->destIpAddr        == VOS_INADDR_ANY)
+                 || (iterPD->addr.destIpAddr == addr->destIpAddr)))
+         {
+            pFirstMatchedPD = iterPD;
+         }
+
+         /* Check for IP range */
+         if (iterPD->addr.srcIpAddr2 != VOS_INADDR_ANY)
+         {
+            if (   (addr->srcIpAddr >= iterPD->addr.srcIpAddr)
+                && (addr->srcIpAddr <= iterPD->addr.srcIpAddr2)
+                && (   (iterPD->addr.destIpAddr == VOS_INADDR_ANY)
+                    || (addr->destIpAddr        == VOS_INADDR_ANY)
+                    || (iterPD->addr.destIpAddr == addr->destIpAddr)))
             {
-                return iterPD;  /* we cannot find a better match */
+               return iterPD;
             }
+         }
+      }
+   }
 
-            if (((iterPD->addr.srcIpAddr == VOS_INADDR_ANY) || (iterPD->addr.srcIpAddr == addr->srcIpAddr))
-                && ((iterPD->addr.destIpAddr == VOS_INADDR_ANY) || (addr->destIpAddr == VOS_INADDR_ANY) ||
-                    (iterPD->addr.destIpAddr == addr->destIpAddr)))
-            {
-                pFirstMatchedPD = iterPD;
-            }
-
-            /* Check for IP range */
-            if (iterPD->addr.srcIpAddr2 != VOS_INADDR_ANY)
-            {
-                if ((addr->srcIpAddr >= iterPD->addr.srcIpAddr) &&
-                    (addr->srcIpAddr <= iterPD->addr.srcIpAddr2) &&
-                    ((iterPD->addr.destIpAddr == VOS_INADDR_ANY) || (addr->destIpAddr == VOS_INADDR_ANY) ||
-                     (iterPD->addr.destIpAddr == addr->destIpAddr)))
-                {
-                    return iterPD;
-                }
-            }
-        }
-    }
-    return pFirstMatchedPD;
+   return pFirstMatchedPD;
 }
 
 
@@ -637,11 +626,9 @@ PD_ELE_T *trdp_findSubAddr (
  *  @retval         != NULL         pointer to PD element
  *  @retval         NULL            No PD element found
  */
-PD_ELE_T *trdp_queueFindExistingSub (
-    PD_ELE_T            *pHead,
-    TRDP_ADDRESSES_T    *addr)
+PD_ELE_T *trdp_queueFindExistingSub (PD_ELE_T* pHead, TRDP_ADDRESSES_T* addr)
 {
-    PD_ELE_T *iterPD;
+    PD_ELE_T* iterPD;
 
     if (pHead == NULL || addr == NULL)
     {
@@ -888,9 +875,8 @@ void trdp_initUncompletedTCP (TRDP_APP_SESSION_T appHandle)
  *  @param[in]      ppHead          pointer to pointer to head of queue
  *  @param[in]      pNew            pointer to element to append
  */
-void    trdp_queueAppLast (
-    PD_ELE_T    * *ppHead,
-    PD_ELE_T    *pNew)
+void    trdp_queueAppLast (PD_ELE_T** ppHead,
+                           PD_ELE_T*  pNew)
 {
     PD_ELE_T *iterPD;
 
@@ -921,9 +907,8 @@ void    trdp_queueAppLast (
  *  @param[in]      ppHead          pointer to pointer to head of queue
  *  @param[in]      pNew            pointer to element to insert
  */
-void    trdp_queueInsFirst (
-    PD_ELE_T    * *ppHead,
-    PD_ELE_T    *pNew)
+void    trdp_queueInsFirst (PD_ELE_T** ppHead,
+                            PD_ELE_T*  pNew)
 {
     if (ppHead == NULL || pNew == NULL)
     {
@@ -976,8 +961,7 @@ void trdp_initSockets (
  *  @retval         TRDP_NO_ERR
  *  @retval         TRDP_PARAM_ERR
  */
-TRDP_ERR_T  trdp_requestSocket (
-                                TRDP_SOCKETS_T           iface[],
+TRDP_ERR_T  trdp_requestSocket (TRDP_SOCKETS_T           iface[],
                                 UINT16                   port,
                                 const TRDP_SEND_PARAM_T* params,
                                 TRDP_IP_ADDR_T           srcIP,
@@ -993,8 +977,8 @@ TRDP_ERR_T  trdp_requestSocket (
     INT32           lIndex;
     INT32           emptySockIdx = -1;    /* was emptySock, renamed to avoid confusion */
     INT32           sockMax;
-    TRDP_ERR_T      err         = TRDP_NO_ERR;
-    TRDP_IP_ADDR_T  bindAddr    = vos_determineBindAddr(srcIP, mcGroup, rcvMostly);
+    TRDP_ERR_T      err          = TRDP_NO_ERR;
+    TRDP_IP_ADDR_T  bindAddr     = vos_determineBindAddr(srcIP, mcGroup, rcvMostly);
 
     memset(&sock_options, 0, sizeof(sock_options));
 
@@ -1012,8 +996,7 @@ TRDP_ERR_T  trdp_requestSocket (
     for (lIndex = 0; lIndex < trdp_getCurrentMaxSocketCnt(type); lIndex++)
     {
         /*  Check if the wanted socket is already in our list; if yes, increment usage */
-        if (useSocket != VOS_INVALID_SOCKET &&
-            useSocket == iface[lIndex].sock)
+        if ((useSocket != VOS_INVALID_SOCKET) && (useSocket == iface[lIndex].sock))
         {
             /* Use that socket */
             *pIndex = lIndex;
@@ -1021,18 +1004,19 @@ TRDP_ERR_T  trdp_requestSocket (
             err = TRDP_NO_ERR;
             goto err_exit;
         }
-        else if ((iface[lIndex].sock != VOS_INVALID_SOCKET)
+        else if (   (iface[lIndex].sock != VOS_INVALID_SOCKET)
                  && !((mcGroup != 0u) && (bindAddr != iface[lIndex].bindAddr))  /* do no use if multicast and different iface specified! */
                  && ((bindAddr == 0) || (iface[lIndex].bindAddr == bindAddr))
                  && (iface[lIndex].type == type)
                  && ((rcvMostly) || (iface[lIndex].sendParam.qos == params->qos))
                  && ((rcvMostly) || (iface[lIndex].sendParam.ttl == params->ttl))
-                 && (iface[lIndex].sendParam.tsn == params->tsn)
+                 && (iface[lIndex].sendParam.tsn  == params->tsn)
                  && (iface[lIndex].sendParam.vlan == params->vlan)
-                 && (iface[lIndex].rcvMostly == rcvMostly)
-                 && ((type != TRDP_SOCK_MD_TCP)
-                     || ((type == TRDP_SOCK_MD_TCP) && (iface[lIndex].tcpParams.cornerIp == cornerIp) &&
-                         (iface[lIndex].usage == 0))))
+                 && (iface[lIndex].rcvMostly      == rcvMostly)
+                 && (   (type != TRDP_SOCK_MD_TCP)
+                     || (   (type == TRDP_SOCK_MD_TCP)
+                         && (iface[lIndex].tcpParams.cornerIp == cornerIp)
+                         && (iface[lIndex].usage == 0))))
         {
             /*  Did this socket join the required multicast group?  */
             if (mcGroup != 0 && trdp_SockIsJoined(iface[lIndex].mcGroups, mcGroup) == FALSE)
@@ -1057,7 +1041,7 @@ TRDP_ERR_T  trdp_requestSocket (
             }
 
             /* add_start TOSHIBA 0306 */
-            if ((type != TRDP_SOCK_MD_TCP)
+            if (   (type != TRDP_SOCK_MD_TCP)
                 && (iface[lIndex].bindAddr != 0)
                 && !vos_isMulticast(iface[lIndex].bindAddr))
             {
@@ -1070,7 +1054,7 @@ TRDP_ERR_T  trdp_requestSocket (
             }
             /* add_end TOSHIBA */
 
-#ifdef MC_ISSUE_VXWORKS_2_INTERFACES_TBD
+           #ifdef MC_ISSUE_VXWORKS_2_INTERFACES_TBD
             /* Multicast and sourceAddr on two IFs */
             if ((type = TRDP_SOCK_MD_UDP)
                 && (rcvMostly)
@@ -1083,7 +1067,7 @@ TRDP_ERR_T  trdp_requestSocket (
                      vos_printLog(VOS_LOG_WARNING, "vos_sockSetMulticastIf() for UDP snd failed! (Err: %d)\n", err); */
                 }
             }
-#endif
+           #endif
 
             /* Use that socket */
             *pIndex = lIndex;
@@ -1092,7 +1076,7 @@ TRDP_ERR_T  trdp_requestSocket (
              if there was an error (multicast IF) */
             if (err == TRDP_NO_ERR)
             {
-                iface[lIndex].usage++;
+               iface[lIndex].usage++;
             }
 
             goto err_exit;
@@ -1111,12 +1095,12 @@ TRDP_ERR_T  trdp_requestSocket (
        case TRDP_SOCK_PD_TSN:
           sockMax = TRDP_MAX_PD_SOCKET_CNT;
           break;
-           
+
        case TRDP_SOCK_MD_TCP:
        case TRDP_SOCK_MD_UDP:
           sockMax = TRDP_MAX_MD_SOCKET_CNT;
           break;
-          
+
        default:
           sockMax = 0;
     }
@@ -1420,12 +1404,11 @@ err_exit:
  *  @param[in]      mcGroupUsed     release MC group subscription
  *
  */
-void  trdp_releaseSocket (
-    TRDP_SOCKETS_T  iface[],
-    INT32           lIndex,
-    UINT32          connectTimeout,
-    BOOL8           checkAll,
-    TRDP_IP_ADDR_T  mcGroupUsed)
+void  trdp_releaseSocket (TRDP_SOCKETS_T  iface[],
+                          INT32           lIndex,
+                          UINT32          connectTimeout,
+                          BOOL8           checkAll,
+                          TRDP_IP_ADDR_T  mcGroupUsed)
 {
     TRDP_ERR_T err = TRDP_PARAM_ERR;
 
@@ -1434,7 +1417,7 @@ void  trdp_releaseSocket (
         return;
     }
 
-#if MD_SUPPORT
+   #if MD_SUPPORT
     if (checkAll == TRUE)
     {
         /* Check all the sockets */
@@ -1455,25 +1438,24 @@ void  trdp_releaseSocket (
                 vos_printLog(VOS_LOG_INFO,
                              "Deleting socket from the iface (Sock: %d, lIndex: %d)\n",
                              (int) iface[lIndex].sock, lIndex);
-                iface[lIndex].sock = TRDP_INVALID_SOCKET_INDEX;
-                iface[lIndex].sendParam.qos = 0;
-                iface[lIndex].sendParam.ttl = 0;
-                iface[lIndex].usage         = 0;
-                iface[lIndex].bindAddr      = 0;
-                iface[lIndex].srcAddr       = 0;
-                iface[lIndex].type      = TRDP_SOCK_INVAL;
-                iface[lIndex].rcvMostly = FALSE;
-                iface[lIndex].tcpParams.cornerIp = 0;
-                iface[lIndex].tcpParams.connectionTimeout.tv_sec    = 0;
-                iface[lIndex].tcpParams.connectionTimeout.tv_usec   = 0;
-                iface[lIndex].tcpParams.addFileDesc = FALSE;
-                iface[lIndex].tcpParams.morituri    = FALSE;
+                iface[lIndex].sock                                = TRDP_INVALID_SOCKET_INDEX;
+                iface[lIndex].sendParam.qos                       = 0;
+                iface[lIndex].sendParam.ttl                       = 0;
+                iface[lIndex].usage                               = 0;
+                iface[lIndex].bindAddr                            = 0;
+                iface[lIndex].srcAddr                             = 0;
+                iface[lIndex].type                                = TRDP_SOCK_INVAL;
+                iface[lIndex].rcvMostly                           = FALSE;
+                iface[lIndex].tcpParams.cornerIp                  = 0;
+                iface[lIndex].tcpParams.connectionTimeout.tv_sec  = 0;
+                iface[lIndex].tcpParams.connectionTimeout.tv_usec = 0;
+                iface[lIndex].tcpParams.addFileDesc               = FALSE;
+                iface[lIndex].tcpParams.morituri                  = FALSE;
             }
         }
-
     }
     else
-#endif
+   #endif
     {
         /* Handle a specified socket */
         if (iface[lIndex].sock != VOS_INVALID_SOCKET &&

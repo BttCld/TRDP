@@ -120,7 +120,7 @@ static void ecspConfRepMDCallback(
                 priv_ecspConfReply.safetyTrail.userDataVersion.ver = pTelegram->safetyTrail.userDataVersion.ver;
 
                 memcpy(&priv_ecspConfReplyMdInfo, pMsg, sizeof(TRDP_MD_INFO_T));
-                
+
                 if (priv_pfEcspConfReplyCbFunction != NULL)
                 {
                     priv_pfEcspConfReplyCbFunction(pRefCon, appHandle, pMsg, (UINT8 *) &priv_ecspConfReply, dataSize);
@@ -273,8 +273,8 @@ EXT_DECL TRDP_ERR_T tau_terminateEcspCtrl (TRDP_APP_SESSION_T appHandle)
  *  @retval         TRDP_PARAM_ERR  Parameter error
  *
  */
-EXT_DECL TRDP_ERR_T tau_setEcspCtrl ( TRDP_APP_SESSION_T    appHandle,
-                                      TRDP_ECSP_CTRL_T      *pEcspCtrl)
+EXT_DECL TRDP_ERR_T tau_setEcspCtrl (TRDP_APP_SESSION_T appHandle,
+                                     TRDP_ECSP_CTRL_T*  pEcspCtrl)
 {
     if (priv_ecspCtrlInitialised == TRUE)
     {
@@ -388,7 +388,7 @@ EXT_DECL TRDP_ERR_T tau_requestEcspConfirm ( TRDP_APP_SESSION_T         appHandl
                                              TRDP_ECSP_CONF_REQUEST_T   *pEcspConfRequest)
 {
     TRDP_ERR_T result = TRDP_NOINIT_ERR;
-    
+
     if (priv_ecspCtrlInitialised == TRUE)
     {
         TRDP_UUID_T sessionId;                 /*    Our session ID for sending MD                             */
@@ -426,7 +426,7 @@ EXT_DECL TRDP_ERR_T tau_requestEcspConfirm ( TRDP_APP_SESSION_T         appHandl
         pTelegramSafetyTrail->userDataVersion.ver = pSafetyTrail->userDataVersion.ver;
 
         priv_pfEcspConfReplyCbFunction = pfCbFunction;
-        
+
         result = tlm_request( appHandle,                      /* appHandle */
                               pUserRef,                       /* pUserRef */
                               ecspConfRepMDCallback,          /* callback function #373 */

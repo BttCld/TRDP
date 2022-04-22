@@ -514,15 +514,14 @@ EXT_DECL BOOL8 vos_netIfUp (
  *  @retval         number of ready file descriptors
  */
 
-EXT_DECL INT32 vos_select (
-    SOCKET          highDesc,
-    VOS_FDS_T       *pReadableFD,
-    VOS_FDS_T       *pWriteableFD,
-    VOS_FDS_T       *pErrorFD,
-    VOS_TIMEVAL_T   *pTimeOut)
+EXT_DECL INT32 vos_select (SOCKET         highDesc,
+                           VOS_FDS_T*     pReadableFD,
+                           VOS_FDS_T*     pWriteableFD,
+                           VOS_FDS_T*     pErrorFD,
+                           VOS_TIMEVAL_T* pTimeOut)
 {
-    return select((int)highDesc, (fd_set *) pReadableFD, (fd_set *) pWriteableFD,
-                  (fd_set *) pErrorFD, (struct timeval *) pTimeOut);
+    return select((int)highDesc, (fd_set*)pReadableFD, (fd_set*)pWriteableFD,
+                  (fd_set*) pErrorFD, (struct timeval*)pTimeOut);
 }
 
 /*    Sockets    */
@@ -536,7 +535,7 @@ EXT_DECL INT32 vos_select (
  *  @retval         IP address of interface
  *  @retval         0 if index not found
  */
-UINT32 vos_getInterfaceIP(UINT32 index)
+UINT32 vos_getInterfaceIP (UINT32 index)
 {
     static VOS_IF_REC_T ifAddrs[VOS_MAX_NUM_IF] = { 0 };
     static UINT32       ifCount = 0u;
@@ -1192,12 +1191,12 @@ EXT_DECL VOS_ERR_T vos_sockSendUDP (
             *pSize += sendSize;
         }
 
-        if (sendSize == SOCKET_ERROR && err == WSAEWOULDBLOCK)
+        if ((sendSize == SOCKET_ERROR) && (err == WSAEWOULDBLOCK))
         {
             return VOS_BLOCK_ERR;
         }
-    }
-    while (sendSize == SOCKET_ERROR && err == WSAEINTR);
+
+    } while ((sendSize == SOCKET_ERROR) && (err == WSAEINTR));
 
     if (sendSize == SOCKET_ERROR)
     {
@@ -1205,6 +1204,7 @@ EXT_DECL VOS_ERR_T vos_sockSendUDP (
                      inet_ntoa(destAddr.sin_addr), port, err);
         return VOS_IO_ERR;
     }
+
     return VOS_NO_ERR;
 }
 
@@ -1326,8 +1326,7 @@ EXT_DECL VOS_ERR_T vos_sockReceiveUDP (
         {
             return VOS_BLOCK_ERR;
         }
-    }
-    while (rcvSize < 0 && err == WSAEINTR);
+    } while ((rcvSize < 0) && (err == WSAEINTR));
 
     if (rcvSize == SOCKET_ERROR)
     {
@@ -1742,12 +1741,10 @@ EXT_DECL VOS_ERR_T vos_sockReceiveTCP (
  *  @retval         VOS_NO_ERR          no error
  *  @retval         VOS_PARAM_ERR       sock descriptor unknown, parameter error
  */
-EXT_DECL VOS_ERR_T vos_sockSetMulticastIf (
-    SOCKET  sock,
-    UINT32  mcIfAddress)
+EXT_DECL VOS_ERR_T vos_sockSetMulticastIf (SOCKET sock, UINT32 mcIfAddress)
 {
-    DWORD       optValue    = vos_htonl(mcIfAddress);
-    VOS_ERR_T   result      = VOS_NO_ERR;
+    DWORD     optValue = vos_htonl(mcIfAddress);
+    VOS_ERR_T result   = VOS_NO_ERR;
 
     if (sock == (SOCKET) INVALID_SOCKET)
     {

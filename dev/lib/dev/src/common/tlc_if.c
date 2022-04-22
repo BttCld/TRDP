@@ -125,9 +125,9 @@ extern "C" {
  * LOCALS
  */
 
-const TRDP_VERSION_T        trdpVersion = {TRDP_VERSION, TRDP_RELEASE, TRDP_UPDATE, TRDP_EVOLUTION};
-static TRDP_APP_SESSION_T   sSession        = NULL;
-static VOS_MUTEX_T          sSessionMutex   = NULL;
+const TRDP_VERSION_T        trdpVersion   = {TRDP_VERSION, TRDP_RELEASE, TRDP_UPDATE, TRDP_EVOLUTION};
+static TRDP_APP_SESSION_T   sSession      = NULL;
+static VOS_MUTEX_T          sSessionMutex = NULL;
 static BOOL8 sInited = FALSE;
 
 /******************************************************************************
@@ -135,9 +135,9 @@ static BOOL8 sInited = FALSE;
  */
 
 BOOL8               trdp_isValidSession (TRDP_APP_SESSION_T pSessionHandle);
-TRDP_APP_SESSION_T  *trdp_sessionQueue (void);
-TRDP_ERR_T          trdp_getAccess (TRDP_APP_SESSION_T  pSessionHandle, int force);
-void                trdp_releaseAccess (TRDP_APP_SESSION_T pSessionHandle);
+TRDP_APP_SESSION_T* trdp_sessionQueue   (void);
+TRDP_ERR_T          trdp_getAccess      (TRDP_APP_SESSION_T  pSessionHandle, int force);
+void                trdp_releaseAccess  (TRDP_APP_SESSION_T pSessionHandle);
 
 /***********************************************************************************************************************
  * GLOBAL FUNCTIONS
@@ -152,8 +152,7 @@ void                trdp_releaseAccess (TRDP_APP_SESSION_T pSessionHandle);
  *  @retval       TRUE                  is valid
  *  @retval       FALSE                 is invalid
  */
-BOOL8    trdp_isValidSession (
-    TRDP_APP_SESSION_T pSessionHandle)
+BOOL8 trdp_isValidSession (TRDP_APP_SESSION_T pSessionHandle)
 {
     TRDP_SESSION_PT pSession = NULL;
     BOOL8 found = FALSE;
@@ -193,7 +192,7 @@ BOOL8    trdp_isValidSession (
  *
  *    @retval            &sSession
  */
-TRDP_APP_SESSION_T *trdp_sessionQueue (void)
+TRDP_APP_SESSION_T* trdp_sessionQueue (void)
 {
     return (TRDP_APP_SESSION_T *)sSession;
 }
@@ -209,7 +208,7 @@ TRDP_APP_SESSION_T *trdp_sessionQueue (void)
  *  @retval         TRDP_INIT_ERR
  *  @retval         TRDP_MUTEX_ERR
  */
-TRDP_ERR_T  trdp_getAccess (TRDP_APP_SESSION_T appHandle, int force)
+TRDP_ERR_T trdp_getAccess (TRDP_APP_SESSION_T appHandle, int force)
 {
     TRDP_ERR_T ret = TRDP_INIT_ERR;
     VOS_ERR_T (*mutexLock)(VOS_MUTEX_T) = (force == TRUE)? vos_mutexTryLock : vos_mutexLock;
@@ -252,7 +251,7 @@ TRDP_ERR_T  trdp_getAccess (TRDP_APP_SESSION_T appHandle, int force)
  *  @param[in]      appHandle          A handle for further calls to the trdp stack
  *  @retval         realIP
  */
-void  trdp_releaseAccess (TRDP_APP_SESSION_T appHandle)
+void trdp_releaseAccess (TRDP_APP_SESSION_T appHandle)
 {
     /* In case of an error we cannot do anything, except logging... */
     VOS_ERR_T err = vos_mutexUnlock(appHandle->mutexRxPD);
@@ -302,10 +301,9 @@ EXT_DECL TRDP_IP_ADDR_T tlc_getOwnIpAddress (TRDP_APP_SESSION_T appHandle)
 *  @retval         TRDP_MEM_ERR        memory allocation failed
 *  @retval         TRDP_PARAM_ERR      initialization error
 */
-EXT_DECL TRDP_ERR_T tlc_init (
-                              const TRDP_PRINT_DBG_T  pPrintDebugString,
-                              void                    *pRefCon,
-                              const TRDP_MEM_CONFIG_T *pMemConfig)
+EXT_DECL TRDP_ERR_T tlc_init (const TRDP_PRINT_DBG_T   pPrintDebugString,
+                              void*                    pRefCon,
+                              const TRDP_MEM_CONFIG_T* pMemConfig)
 {
     TRDP_ERR_T ret = TRDP_NO_ERR;
 
@@ -385,8 +383,7 @@ EXT_DECL TRDP_ERR_T tlc_init (
  *  @retval         TRDP_PARAM_ERR      parameter error
  *  @retval         TRDP_SOCK_ERR       socket error
  */
-EXT_DECL TRDP_ERR_T tlc_openSession (
-                                           TRDP_APP_SESSION_T*     pAppHandle,
+EXT_DECL TRDP_ERR_T tlc_openSession (      TRDP_APP_SESSION_T*     pAppHandle,
                                            TRDP_IP_ADDR_T          ownIpAddr,
                                            TRDP_IP_ADDR_T          leaderIpAddr,
                                      const TRDP_MARSHALL_CONFIG_T* pMarshall,
@@ -430,17 +427,17 @@ EXT_DECL TRDP_ERR_T tlc_openSession (
     }
    #endif
 
-    pSession->realIP    = ownIpAddr;
-    pSession->virtualIP = leaderIpAddr;
+    pSession->realIP                      = ownIpAddr;
+    pSession->virtualIP                   = leaderIpAddr;
 
-    pSession->pdDefault.pfCbFunction    = NULL;
-    pSession->pdDefault.pRefCon         = NULL;
-    pSession->pdDefault.flags           = TRDP_FLAGS_NONE;
-    pSession->pdDefault.timeout         = TRDP_PD_DEFAULT_TIMEOUT;
-    pSession->pdDefault.toBehavior      = TRDP_TO_SET_TO_ZERO;
-    pSession->pdDefault.port            = TRDP_PD_UDP_PORT;
-    pSession->pdDefault.sendParam.qos   = TRDP_PD_DEFAULT_QOS;
-    pSession->pdDefault.sendParam.ttl   = TRDP_PD_DEFAULT_TTL;
+    pSession->pdDefault.pfCbFunction      = NULL;
+    pSession->pdDefault.pRefCon           = NULL;
+    pSession->pdDefault.flags             = TRDP_FLAGS_NONE;
+    pSession->pdDefault.timeout           = TRDP_PD_DEFAULT_TIMEOUT;
+    pSession->pdDefault.toBehavior        = TRDP_TO_SET_TO_ZERO;
+    pSession->pdDefault.port              = TRDP_PD_UDP_PORT;
+    pSession->pdDefault.sendParam.qos     = TRDP_PD_DEFAULT_QOS;
+    pSession->pdDefault.sendParam.ttl     = TRDP_PD_DEFAULT_TTL;
 
    #if MD_SUPPORT
     pSession->mdDefault.pfCbFunction      = NULL;
@@ -465,7 +462,7 @@ EXT_DECL TRDP_ERR_T tlc_openSession (
         return ret;
     }
 
-    ret = (TRDP_ERR_T) vos_mutexCreate(&pSession->mutex);
+    ret  = (TRDP_ERR_T) vos_mutexCreate(&pSession->mutex);
     ret += (TRDP_ERR_T) vos_mutexCreate(&pSession->mutexTxPD); /*lint !e656 Only checking for error code TRDP_NO_ERR, which is 0 */
     ret += (TRDP_ERR_T) vos_mutexCreate(&pSession->mutexRxPD); /*lint !e656 Only checking for error code TRDP_NO_ERR, which is 0 */
    #if MD_SUPPORT
@@ -527,20 +524,21 @@ EXT_DECL TRDP_ERR_T tlc_openSession (
         for (retries = 0; retries < TRDP_IF_WAIT_FOR_READY; retries++)
         {
             /*  Publish our statistics packet   */
-            ret = tlp_publish(pSession,                 /*    our application identifier    */
-                              &dummyPubHndl,            /*    our pulication identifier     */
-                              NULL, NULL,
+            ret = tlp_publish(pSession,                      /* our application identifier    */
+                              &dummyPubHndl,                 /* our pulication identifier     */
+                              NULL,                          // user callback context
+                              NULL,                          // user callback
                               0u,
-                              TRDP_GLOBAL_STATS_REPLY_COMID, /*    ComID to send                 */
-                              0u,                       /*    local consist only            */
-                              0u,                       /*    no orient/direction info      */
-                              0u,                       /*    default source IP             */
-                              0u,                       /*    where to send to              */
-                              0u,                       /*    Cycle time in ms              */
-                              0u,                       /*    not redundant                 */
-                              TRDP_FLAGS_NONE,          /*    No callbacks                  */
-                              &defaultParams,           /*    default qos and ttl           */
-                              NULL,                     /*    initial data                  */
+                              TRDP_GLOBAL_STATS_REPLY_COMID, /* ComID to send                 */
+                              0u,                            /* local consist only            */
+                              0u,                            /* no orient/direction info      */
+                              0u,                            /* default source IP             */
+                              0u,                            /* where to send to              */
+                              0u,                            /* Cycle time in ms              */
+                              0u,                            /* not redundant                 */
+                              TRDP_FLAGS_NONE,               /* No callbacks                  */
+                              &defaultParams,                /* default qos and ttl           */
+                              NULL,                          /* initial data                  */
                               sizeof(TRDP_STATISTICS_T));
             if ((ret == TRDP_SOCK_ERR) &&
                 (ownIpAddr == VOS_INADDR_ANY))          /*  do not wait if own IP was set (but invalid)    */
@@ -610,12 +608,11 @@ EXT_DECL TRDP_ERR_T tlc_openSession (
  *  @retval         TRDP_INIT_ERR       not yet inited
  *  @retval         TRDP_PARAM_ERR      parameter error
  */
-EXT_DECL TRDP_ERR_T tlc_configSession (
-    TRDP_APP_SESSION_T              appHandle,
-    const TRDP_MARSHALL_CONFIG_T    *pMarshall,
-    const TRDP_PD_CONFIG_T          *pPdDefault,
-    const TRDP_MD_CONFIG_T          *pMdDefault,
-    const TRDP_PROCESS_CONFIG_T     *pProcessConfig)
+EXT_DECL TRDP_ERR_T tlc_configSession (      TRDP_APP_SESSION_T      appHandle,
+                                       const TRDP_MARSHALL_CONFIG_T* pMarshall,
+                                       const TRDP_PD_CONFIG_T*       pPdDefault,
+                                       const TRDP_MD_CONFIG_T*       pMdDefault,
+                                       const TRDP_PROCESS_CONFIG_T*  pProcessConfig)
 {
     TRDP_SESSION_PT pSession = appHandle;
 
@@ -626,9 +623,9 @@ EXT_DECL TRDP_ERR_T tlc_configSession (
 
     if (pProcessConfig != NULL)
     {
-        pSession->option = pProcessConfig->options;
-        pSession->stats.processCycle    = pProcessConfig->cycleTime;
-        pSession->stats.processPrio     = pProcessConfig->priority;
+        pSession->option             = pProcessConfig->options;
+        pSession->stats.processCycle = pProcessConfig->cycleTime;
+        pSession->stats.processPrio  = pProcessConfig->priority;
         vos_strncpy(pSession->stats.hostName, pProcessConfig->hostName, TRDP_MAX_LABEL_LEN - 1);
         vos_strncpy(pSession->stats.leaderName, pProcessConfig->leaderName, TRDP_MAX_LABEL_LEN - 1);
     }
@@ -642,53 +639,53 @@ EXT_DECL TRDP_ERR_T tlc_configSession (
     {
         /* check whether default values needed or not */
 
-        if ((pSession->pdDefault.pfCbFunction == NULL) &&
-            (pPdDefault->pfCbFunction != NULL))
+        if (   (pSession->pdDefault.pfCbFunction == NULL)
+            && (pPdDefault->pfCbFunction         != NULL))
         {
             pSession->pdDefault.pfCbFunction = pPdDefault->pfCbFunction;
         }
 
-        if ((pSession->pdDefault.pRefCon == NULL) &&
-            (pPdDefault->pRefCon != NULL))
+        if (   (pSession->pdDefault.pRefCon == NULL)
+            && (pPdDefault->pRefCon         != NULL))
         {
             pSession->pdDefault.pRefCon = pPdDefault->pRefCon;
         }
 
-        if ((pPdDefault->flags != TRDP_FLAGS_DEFAULT) &&
-            (!(pPdDefault->flags & TRDP_FLAGS_NONE)))
+        if (   (pPdDefault->flags  != TRDP_FLAGS_DEFAULT)
+            && (!(pPdDefault->flags & TRDP_FLAGS_NONE)))
         {
-            pSession->pdDefault.flags   |= pPdDefault->flags;
-            pSession->pdDefault.flags   &= ~TRDP_FLAGS_NONE;   /* clear TRDP_FLAGS_NONE */
+            pSession->pdDefault.flags |= pPdDefault->flags;
+            pSession->pdDefault.flags &= ~TRDP_FLAGS_NONE;   /* clear TRDP_FLAGS_NONE */
         }
 
-        if ((pSession->pdDefault.port == TRDP_PD_UDP_PORT) &&
-            (pPdDefault->port != 0u))
+        if (   (pSession->pdDefault.port == TRDP_PD_UDP_PORT)
+            && (pPdDefault->port != 0u))
         {
             pSession->pdDefault.port = pPdDefault->port;
         }
 
-        if ((pSession->pdDefault.timeout == TRDP_PD_DEFAULT_TIMEOUT) &&
-            (pPdDefault->timeout != 0u))
+        if (   (pSession->pdDefault.timeout == TRDP_PD_DEFAULT_TIMEOUT)
+            && (pPdDefault->timeout != 0u))
         {
             pSession->pdDefault.timeout = pPdDefault->timeout;
         }
 
-        if ((pSession->pdDefault.toBehavior == TRDP_TO_DEFAULT) &&
-            (pPdDefault->toBehavior != TRDP_TO_DEFAULT))
+        if (   (pSession->pdDefault.toBehavior == TRDP_TO_DEFAULT)
+            && (pPdDefault->toBehavior != TRDP_TO_DEFAULT))
         {
             pSession->pdDefault.toBehavior = pPdDefault->toBehavior;
         }
 
-        if ((pSession->pdDefault.sendParam.qos == TRDP_PD_DEFAULT_QOS) &&
-            (pPdDefault->sendParam.qos != TRDP_PD_DEFAULT_QOS) &&
-            (pPdDefault->sendParam.qos != 0u))
+        if (   (pSession->pdDefault.sendParam.qos == TRDP_PD_DEFAULT_QOS)
+            && (pPdDefault->sendParam.qos != TRDP_PD_DEFAULT_QOS)
+            && (pPdDefault->sendParam.qos != 0u))
         {
             pSession->pdDefault.sendParam.qos = pPdDefault->sendParam.qos;
         }
 
-        if ((pSession->pdDefault.sendParam.ttl == TRDP_PD_DEFAULT_TTL) &&
-            (pPdDefault->sendParam.ttl != TRDP_PD_DEFAULT_TTL) &&
-            (pPdDefault->sendParam.ttl != 0u))
+        if (   (pSession->pdDefault.sendParam.ttl == TRDP_PD_DEFAULT_TTL)
+            && (pPdDefault->sendParam.ttl != TRDP_PD_DEFAULT_TTL)
+            && (pPdDefault->sendParam.ttl != 0u))
         {
             pSession->pdDefault.sendParam.ttl = pPdDefault->sendParam.ttl;
         }
@@ -696,13 +693,12 @@ EXT_DECL TRDP_ERR_T tlc_configSession (
 
     /* Set some statistic defaults here */
     {
-        pSession->stats.pd.defQos       = pSession->pdDefault.sendParam.qos;
-        pSession->stats.pd.defTtl       = pSession->pdDefault.sendParam.ttl;
-        pSession->stats.pd.defTimeout   = pSession->pdDefault.timeout;
+        pSession->stats.pd.defQos     = pSession->pdDefault.sendParam.qos;
+        pSession->stats.pd.defTtl     = pSession->pdDefault.sendParam.ttl;
+        pSession->stats.pd.defTimeout = pSession->pdDefault.timeout;
     }
 
-#if MD_SUPPORT
-
+   #if MD_SUPPORT
     if (pMdDefault != NULL)
     {
         /* If the existing values are the defaults or unset, and new non-default values are supplied,
@@ -795,17 +791,17 @@ EXT_DECL TRDP_ERR_T tlc_configSession (
 
     /* Set some statistic defaults here */
     {
-        pSession->stats.udpMd.defQos    = pSession->mdDefault.sendParam.qos;
-        pSession->stats.tcpMd.defQos    = pSession->mdDefault.sendParam.qos;
-        pSession->stats.udpMd.defTtl    = pSession->mdDefault.sendParam.ttl;
-        pSession->stats.tcpMd.defTtl    = pSession->mdDefault.sendParam.ttl;
+        pSession->stats.udpMd.defQos            = pSession->mdDefault.sendParam.qos;
+        pSession->stats.tcpMd.defQos            = pSession->mdDefault.sendParam.qos;
+        pSession->stats.udpMd.defTtl            = pSession->mdDefault.sendParam.ttl;
+        pSession->stats.tcpMd.defTtl            = pSession->mdDefault.sendParam.ttl;
         pSession->stats.udpMd.defConfirmTimeout = pSession->mdDefault.confirmTimeout;
         pSession->stats.tcpMd.defConfirmTimeout = pSession->mdDefault.confirmTimeout;
         pSession->stats.udpMd.defReplyTimeout   = pSession->mdDefault.replyTimeout;
         pSession->stats.tcpMd.defReplyTimeout   = pSession->mdDefault.replyTimeout;
     }
+   #endif   // MD_SUPPORT
 
-#endif
     return TRDP_NO_ERR;
 
 }
@@ -823,8 +819,7 @@ EXT_DECL TRDP_ERR_T tlc_configSession (
  *  @retval         TRDP_INIT_ERR       not yet inited
  *  @retval         TRDP_PARAM_ERR      parameter error
  */
-EXT_DECL TRDP_ERR_T tlc_updateSession (
-                                       TRDP_APP_SESSION_T appHandle)
+EXT_DECL TRDP_ERR_T tlc_updateSession (TRDP_APP_SESSION_T appHandle)
 {
     TRDP_ERR_T ret = TRDP_NO_ERR;
 
@@ -833,7 +828,6 @@ EXT_DECL TRDP_ERR_T tlc_updateSession (
     /*  Stop any ongoing communication by getting the mutexes */
 
     ret = trdp_getAccess(appHandle, FALSE);
-
     if (ret == TRDP_NO_ERR)
     {
         ret = trdp_indexCreatePubTables(appHandle);
@@ -1231,6 +1225,9 @@ EXT_DECL TRDP_ERR_T tlc_reinitSession (
     return ret;
 }
 
+
+#ifdef HIGH_PERF_INDEXED
+#else
 /**********************************************************************************************************************/
 /** Get the lowest time interval for PDs.
  *  Return the maximum time interval suitable for 'select()' so that we
@@ -1245,77 +1242,74 @@ EXT_DECL TRDP_ERR_T tlc_reinitSession (
  *  @retval         TRDP_NO_ERR        no error
  *  @retval         TRDP_NOINIT_ERR    handle invalid
  */
-EXT_DECL TRDP_ERR_T tlc_getInterval (
-    TRDP_APP_SESSION_T  appHandle,
-    TRDP_TIME_T         *pInterval,
-    TRDP_FDS_T          *pFileDesc,
-    INT32               *pNoDesc)
+EXT_DECL TRDP_ERR_T tlc_getInterval (TRDP_APP_SESSION_T appHandle,
+                                     TRDP_TIME_T*       pInterval,
+                                     TRDP_FDS_T*        pFileDesc,
+                                     INT32*             pNoDesc)
 {
-#ifdef HIGH_PERF_INDEXED
-    vos_printLogStr(VOS_LOG_ERROR, "####   tlc_getInterval() is not supported when using HIGH_PERF_INDEXED!  ####\n");
-    vos_printLogStr(VOS_LOG_ERROR, "####           Use tlp_getInterval()/tlm_getInterval() instead!          ####\n");
-    return TRDP_NOINIT_ERR;
-#else
-    TRDP_TIME_T now;
-    TRDP_ERR_T  ret = TRDP_NOINIT_ERR;
+   TRDP_TIME_T now;
+   TRDP_ERR_T  ret = TRDP_NOINIT_ERR;
 
-    if (trdp_isValidSession(appHandle))
-    {
-        if ((pInterval == NULL)
-            || (pFileDesc == NULL)
-            || (pNoDesc == NULL))
-        {
-            ret = TRDP_PARAM_ERR;
-        }
-        else
-        {
-            ret = (TRDP_ERR_T) vos_mutexLock(appHandle->mutex);
+   if (trdp_isValidSession(appHandle))
+   {
+      if (   (pInterval == NULL)
+          || (pFileDesc == NULL)
+          || (pNoDesc   == NULL))
+      {
+         ret = TRDP_PARAM_ERR;
+      }
+      else
+      {
+         ret = (TRDP_ERR_T) vos_mutexLock(appHandle->mutex);
 
-            if (ret != TRDP_NO_ERR)
-            {
-                vos_printLogStr(VOS_LOG_INFO, "vos_mutexLock() failed\n");
-            }
-            else
-            {
-                /*    Get the current time    */
-                vos_getTime(&now);
-                vos_clearTime(&appHandle->nextJob);
+         if (ret != TRDP_NO_ERR)
+         {
+             vos_printLogStr(VOS_LOG_INFO, "vos_mutexLock() failed\n");
+         }
+         else
+         {
+             /*    Get the current time    */
+             vos_getTime(&now);
+             vos_clearTime(&appHandle->nextJob);
 
-                trdp_pdCheckPending(appHandle, pFileDesc, pNoDesc, TRUE);
+             trdp_pdCheckPending(appHandle, pFileDesc, pNoDesc, TRUE);
 
-#if MD_SUPPORT
-                trdp_mdCheckPending(appHandle, pFileDesc, pNoDesc);
-#endif
+            #if MD_SUPPORT
+             trdp_mdCheckPending(appHandle, pFileDesc, pNoDesc);
+            #endif
 
-                /*    if next job time is known, return the time-out value to the caller   */
-                if (timerisset(&appHandle->nextJob) &&
-                    timercmp(&now, &appHandle->nextJob, <))
-                {
-                    vos_subTime(&appHandle->nextJob, &now);
-                    *pInterval = appHandle->nextJob;
-                }
-                else if (timerisset(&appHandle->nextJob))
-                {
-                    pInterval->tv_sec   = 0u;                               /* 0ms if time is over (were we delayed?) */
-                    pInterval->tv_usec  = 0;                                /* Application should limit this    */
-                }
-                else    /* if no timeout set, set maximum time to 1 sec   */
-                {
-                    pInterval->tv_sec   = 1u;                               /* 1000ms if no timeout is set      */
-                    pInterval->tv_usec  = 0;                                /* Application should limit this    */
-                }
+             /*    if next job time is known, return the time-out value to the caller   */
+             if (timerisset(&appHandle->nextJob) &&
+                 timercmp(&now, &appHandle->nextJob, <))
+             {
+                 vos_subTime(&appHandle->nextJob, &now);
+                 *pInterval = appHandle->nextJob;
+             }
+             else if (timerisset(&appHandle->nextJob))
+             {
+                 pInterval->tv_sec   = 0u;                               /* 0ms if time is over (were we delayed?) */
+                 pInterval->tv_usec  = 0;                                /* Application should limit this    */
+             }
+             else    /* if no timeout set, set maximum time to 1 sec   */
+             {
+                 pInterval->tv_sec   = 1u;                               /* 1000ms if no timeout is set      */
+                 pInterval->tv_usec  = 0;                                /* Application should limit this    */
+             }
 
-                if (vos_mutexUnlock(appHandle->mutex) != VOS_NO_ERR)
-                {
-                    vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
-                }
-            }
-        }
-    }
-    return ret;
-#endif
+             if (vos_mutexUnlock(appHandle->mutex) != VOS_NO_ERR)
+             {
+                 vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
+             }
+         }
+      }
+   }
+
+   return ret;
 }
+#endif
 
+#ifdef HIGH_PERF_INDEXED
+#else
 /**********************************************************************************************************************/
 /** Work loop of the TRDP handler.
  *    Search the queue for pending PDs and MDs to be sent
@@ -1337,113 +1331,110 @@ EXT_DECL TRDP_ERR_T tlc_getInterval (
  *  @retval         TRDP_NO_ERR        no error
  *  @retval         TRDP_NOINIT_ERR    handle invalid
  */
-EXT_DECL TRDP_ERR_T tlc_process (
-                                 TRDP_APP_SESSION_T  appHandle,
-                                 TRDP_FDS_T          *pRfds,
-                                 INT32               *pCount)
+EXT_DECL TRDP_ERR_T tlc_process (TRDP_APP_SESSION_T appHandle,
+                                 TRDP_FDS_T* pRfds, INT32* pCount)
 {
-   #ifdef HIGH_PERF_INDEXED
-    vos_printLogStr(VOS_LOG_ERROR, "####   tlc_process() is not supported when using HIGH_PERF_INDEXED!  ####\n");
-    vos_printLogStr(VOS_LOG_ERROR, "#### Use tlp_processSend/tlp_processReceive()/tlm_process() instead! ####\n");
-    return TRDP_NOINIT_ERR;
-   #else
-    TRDP_ERR_T  result = TRDP_NO_ERR;
-    TRDP_ERR_T  err;
+   TRDP_ERR_T result = TRDP_NO_ERR;
+   TRDP_ERR_T err;
 
-    if (!trdp_isValidSession(appHandle))
-    {
-        return TRDP_NOINIT_ERR;
-    }
+   if (!trdp_isValidSession(appHandle))
+   {
+      return TRDP_NOINIT_ERR;
+   }
 
-    if (vos_mutexLock(appHandle->mutex) != VOS_NO_ERR)
-    {
-        return TRDP_NOINIT_ERR;
-    }
-    else
-    {
-        vos_clearTime(&appHandle->nextJob);
+   if (vos_mutexLock(appHandle->mutex) != VOS_NO_ERR)
+   {
+      return TRDP_NOINIT_ERR;
+   }
 
-        /******************************************************
-         Find and send the packets which have to be sent next:
-         ******************************************************/
+   vos_clearTime(&appHandle->nextJob);
 
-        if (vos_mutexTryLock(appHandle->mutexTxPD) == VOS_NO_ERR)
-        {
-            err = trdp_pdSendQueued(appHandle);
+   /******************************************************
+    SOURCE port management
+    ******************************************************/
+   if (vos_mutexTryLock(appHandle->mutexTxPD) == VOS_NO_ERR)
+   {
+      // Find and send the packets which have to be sent next:
+      err = trdp_pdSendQueued(appHandle);
+      if (err != TRDP_NO_ERR)
+      {
+         /*  We do not break here, only report error */
+         result = err;
+         /* vos_printLog(VOS_LOG_ERROR, "trdp_pdSendQueued failed (Err: %d)\n", err);*/
+      }
 
-            if (err != TRDP_NO_ERR)
-            {
-                /*  We do not break here, only report error */
-                result = err;
-                /* vos_printLog(VOS_LOG_ERROR, "trdp_pdSendQueued failed (Err: %d)\n", err);*/
-            }
+      if (vos_mutexUnlock(appHandle->mutexTxPD) != VOS_NO_ERR)
+      {
+         vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
+      }
+   }
 
-            if (vos_mutexUnlock(appHandle->mutexTxPD) != VOS_NO_ERR)
-            {
-                vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
-            }
-        }
+   /******************************************************
+    SINK port management
+    ******************************************************/
+   if (vos_mutexLock(appHandle->mutexRxPD) == VOS_NO_ERR)
+   {
+      /******************************************************
+       Find packets which are to be received
+       ******************************************************/
+      err = trdp_pdCheckListenSocks(appHandle, pRfds, pCount);
+      if (err != TRDP_NO_ERR)
+      {
+         /*  We do not break here */
+         result = err;
+      }
 
-        if (vos_mutexLock(appHandle->mutexRxPD) == VOS_NO_ERR)
-        {
-            /******************************************************
-             Find packets which are pending/overdue
-             ******************************************************/
-            trdp_pdHandleTimeOuts(appHandle);
+      // [BC] moved down to run as tlp_processReceive
+      /******************************************************
+       Find packets which are pending/overdue
+       ******************************************************/
+      trdp_pdHandleTimeOuts(appHandle);
 
-            /******************************************************
-             Find packets which are to be received
-             ******************************************************/
-            err = trdp_pdCheckListenSocks(appHandle, pRfds, pCount);
-            if (err != TRDP_NO_ERR)
-            {
-                /*  We do not break here */
-                result = err;
-            }
+      if (vos_mutexUnlock(appHandle->mutexRxPD) != VOS_NO_ERR)
+      {
+         vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
+      }
+   }
 
-            if (vos_mutexUnlock(appHandle->mutexRxPD) != VOS_NO_ERR)
-            {
-                vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
-            }
-        }
+  #if MD_SUPPORT
+   /******************************************************
+    MESSAGE DATA management
+    ******************************************************/
+   if (vos_mutexLock(appHandle->mutexMD) == VOS_NO_ERR)
+   {
+      err = trdp_mdSend(appHandle);
+      if (err != TRDP_NO_ERR)
+      {
+         if (err == TRDP_IO_ERR)
+         {
+            vos_printLogStr(VOS_LOG_INFO, "trdp_mdSend() incomplete \n");
+         }
+         else
+         {
+            result = err;
+            vos_printLog(VOS_LOG_ERROR, "trdp_mdSend() failed (Err: %d)\n", err);
+         }
+      }
 
-       #if MD_SUPPORT
-        if (vos_mutexLock(appHandle->mutexMD) == VOS_NO_ERR)
-        {
-            err = trdp_mdSend(appHandle);
-            if (err != TRDP_NO_ERR)
-            {
-                if (err == TRDP_IO_ERR)
-                {
-                    vos_printLogStr(VOS_LOG_INFO, "trdp_mdSend() incomplete \n");
-                }
-                else
-                {
-                    result = err;
-                    vos_printLog(VOS_LOG_ERROR, "trdp_mdSend() failed (Err: %d)\n", err);
-                }
-            }
+      trdp_mdCheckListenSocks(appHandle, pRfds, pCount);
 
-            trdp_mdCheckListenSocks(appHandle, pRfds, pCount);
+      trdp_mdCheckTimeouts(appHandle);
 
-            trdp_mdCheckTimeouts(appHandle);
+      if (vos_mutexUnlock(appHandle->mutexMD) != VOS_NO_ERR)
+      {
+         vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
+      }
+   }
+  #endif
 
-            if (vos_mutexUnlock(appHandle->mutexMD) != VOS_NO_ERR)
-            {
-                vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
-            }
-        }
-       #endif
+   if (vos_mutexUnlock(appHandle->mutex) != VOS_NO_ERR)
+   {
+      vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
+   }
 
-        if (vos_mutexUnlock(appHandle->mutex) != VOS_NO_ERR)
-        {
-            vos_printLogStr(VOS_LOG_INFO, "vos_mutexUnlock() failed\n");
-        }
-    }
-
-    return result;
-   #endif
+   return result;
 }
+#endif
 
 /**********************************************************************************************************************/
 /** Return a human readable version representation.
@@ -1488,9 +1479,8 @@ EXT_DECL const TRDP_VERSION_T *tlc_getVersion (void)
  *  @retval         TRDP_NO_ERR         no error
  *  @retval         TRDP_NOINIT_ERR     handle invalid
  */
-EXT_DECL TRDP_ERR_T tlc_setETBTopoCount (
-    TRDP_APP_SESSION_T  appHandle,
-    UINT32              etbTopoCnt)
+EXT_DECL TRDP_ERR_T tlc_setETBTopoCount (TRDP_APP_SESSION_T appHandle,
+                                         UINT32             etbTopoCnt)
 {
     TRDP_ERR_T ret;
 
@@ -1527,9 +1517,8 @@ EXT_DECL TRDP_ERR_T tlc_setETBTopoCount (
  *  @retval         TRDP_NO_ERR         no error
  *  @retval         TRDP_NOINIT_ERR     handle invalid
  */
-EXT_DECL TRDP_ERR_T tlc_setOpTrainTopoCount (
-    TRDP_APP_SESSION_T  appHandle,
-    UINT32              opTrnTopoCnt)
+EXT_DECL TRDP_ERR_T tlc_setOpTrainTopoCount (TRDP_APP_SESSION_T appHandle,
+                                             UINT32             opTrnTopoCnt)
 {
     TRDP_ERR_T ret;
 
@@ -1582,8 +1571,7 @@ EXT_DECL UINT32 tlc_getETBTopoCount (TRDP_APP_SESSION_T appHandle)
  *
  *  @retval         opTrnTopoCnt        New operational topocount value
  */
-EXT_DECL UINT32 tlc_getOpTrainTopoCount (
-    TRDP_APP_SESSION_T appHandle)
+EXT_DECL UINT32 tlc_getOpTrainTopoCount (TRDP_APP_SESSION_T appHandle)
 {
     if (trdp_isValidSession(appHandle))
     {

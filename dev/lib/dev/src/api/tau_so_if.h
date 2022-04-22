@@ -33,29 +33,25 @@ extern "C" {
  * DEFINITIONS
  */
 
-EXT_DECL TRDP_ERR_T tau_addService (
-    TRDP_APP_SESSION_T  appHandle,
-    SRM_SERVICE_INFO_T  *pServiceToAdd,
-    BOOL8               waitForCompletion);
+EXT_DECL TRDP_ERR_T tau_addService (TRDP_APP_SESSION_T  appHandle,
+                                    SRM_SERVICE_INFO_T* pServiceToAdd,
+                                    BOOL8               waitForCompletion);
 
-EXT_DECL TRDP_ERR_T tau_delService (
-    TRDP_APP_SESSION_T  appHandle,
-    SRM_SERVICE_INFO_T  *pServiceToAdd,
-    BOOL8               waitForCompletion);
+EXT_DECL TRDP_ERR_T tau_delService (TRDP_APP_SESSION_T  appHandle,
+                                    SRM_SERVICE_INFO_T* pServiceToAdd,
+                                    BOOL8               waitForCompletion);
 
-EXT_DECL TRDP_ERR_T tau_updService (
-    TRDP_APP_SESSION_T  appHandle,
-    SRM_SERVICE_INFO_T  *pServiceToAdd,
-    BOOL8               waitForCompletion);
+EXT_DECL TRDP_ERR_T tau_updService (TRDP_APP_SESSION_T  appHandle,
+                                    SRM_SERVICE_INFO_T* pServiceToAdd,
+                                    BOOL8               waitForCompletion);
 
-EXT_DECL TRDP_ERR_T tau_getServicesList (
-    TRDP_APP_SESSION_T      appHandle,
-    SRM_SERVICE_ENTRIES_T   * *ppServicesToAdd,
-    UINT32                  *pNoOfServices,
-    SRM_SERVICE_ENTRIES_T   *pFilterEntry);
+EXT_DECL TRDP_ERR_T tau_getServicesList (TRDP_APP_SESSION_T      appHandle,
+                                         SRM_SERVICE_ENTRIES_T** ppServicesToAdd,
+                                         UINT32*                 pNoOfServices,
+                                         SRM_SERVICE_ENTRIES_T*  pFilterEntry);
 
-EXT_DECL void tau_freeServicesList (
-    SRM_SERVICE_ENTRIES_T *pServicesListBuffer);
+EXT_DECL void tau_freeServicesList (SRM_SERVICE_ENTRIES_T* pServicesListBuffer);
+
 #ifdef __cplusplus
 }
 #endif

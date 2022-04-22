@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TRDP_PD_source", "TRDP_PD_s
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TRDP", "..\..\..\..\..\lib\dev\prj\vs\TRDP.vcxproj", "{AE986D59-880C-499F-ABBF-FBBFDE093A3B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TRDP_PD_sink", "TRDP_PD_sink.vcxproj", "{903F23B1-736A-4613-9A66-754FC792A0AF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,14 +31,6 @@ Global
 		{AE986D59-880C-499F-ABBF-FBBFDE093A3B}.Release|x64.Build.0 = Release|x64
 		{AE986D59-880C-499F-ABBF-FBBFDE093A3B}.Release|x86.ActiveCfg = Release|Win32
 		{AE986D59-880C-499F-ABBF-FBBFDE093A3B}.Release|x86.Build.0 = Release|Win32
-		{903F23B1-736A-4613-9A66-754FC792A0AF}.Debug|x64.ActiveCfg = Debug|x64
-		{903F23B1-736A-4613-9A66-754FC792A0AF}.Debug|x64.Build.0 = Debug|x64
-		{903F23B1-736A-4613-9A66-754FC792A0AF}.Debug|x86.ActiveCfg = Debug|Win32
-		{903F23B1-736A-4613-9A66-754FC792A0AF}.Debug|x86.Build.0 = Debug|Win32
-		{903F23B1-736A-4613-9A66-754FC792A0AF}.Release|x64.ActiveCfg = Release|x64
-		{903F23B1-736A-4613-9A66-754FC792A0AF}.Release|x64.Build.0 = Release|x64
-		{903F23B1-736A-4613-9A66-754FC792A0AF}.Release|x86.ActiveCfg = Release|Win32
-		{903F23B1-736A-4613-9A66-754FC792A0AF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

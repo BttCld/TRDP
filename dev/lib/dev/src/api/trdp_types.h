@@ -74,11 +74,11 @@ extern "C" {
  */
 
 #ifndef MD_SUPPORT
-    #define MD_SUPPORT  1
+#define MD_SUPPORT  1
 #endif
 
 #ifndef USE_HEAP
-    #define USE_HEAP  0                 /**< If this is set, we can allocate dynamically memory    */
+#define USE_HEAP  0                 /**< If this is set, we can allocate dynamically memory    */
 #endif
 
 #ifndef TRDP_RETRIES
@@ -87,17 +87,17 @@ extern "C" {
 
 /*    Special handling for Windows DLLs    */
 #if (defined (WIN32) || defined (WIN64))
-    #ifdef DLL_EXPORT
-        #define EXT_DECL    __declspec(dllexport)
-    #elif DLL_IMPORT
-        #define EXT_DECL    __declspec(dllimport)
-    #else
-        #define EXT_DECL
-    #endif
+#ifdef DLL_EXPORT
+#define EXT_DECL    __declspec(dllexport)
+#elif DLL_IMPORT
+#define EXT_DECL    __declspec(dllimport)
+#else
+#define EXT_DECL
+#endif
 
 #else
 
-    #define EXT_DECL
+#define EXT_DECL
 
 #endif
 
@@ -131,45 +131,45 @@ typedef VOS_VERSION_T TRDP_VERSION_T;   /* TRDP_VERSION_T is identical to VOS_VE
 /** Return codes for all API functions, -1..-29 taken over from vos */
 typedef enum
 {
-    TRDP_NO_ERR             = 0,    /**< No error  */
-    TRDP_PARAM_ERR          = -1,   /**< Parameter missing or out of range              */
-    TRDP_INIT_ERR           = -2,   /**< Call without valid initialization              */
-    TRDP_NOINIT_ERR         = -3,   /**< Call with invalid handle                       */
-    TRDP_TIMEOUT_ERR        = -4,   /**< Timout                                         */
-    TRDP_NODATA_ERR         = -5,   /**< Non blocking mode: no data received            */
-    TRDP_SOCK_ERR           = -6,   /**< Socket error / option not supported            */
-    TRDP_IO_ERR             = -7,   /**< Socket IO error, data can't be received/sent   */
-    TRDP_MEM_ERR            = -8,   /**< No more memory available                       */
-    TRDP_SEMA_ERR           = -9,   /**< Semaphore not available                        */
-    TRDP_QUEUE_ERR          = -10,  /**< Queue empty                                    */
-    TRDP_QUEUE_FULL_ERR     = -11,  /**< Queue full                                     */
-    TRDP_MUTEX_ERR          = -12,  /**< Mutex not available                            */
-    TRDP_THREAD_ERR         = -13,  /**< Thread error                                   */
-    TRDP_BLOCK_ERR          = -14,  /**< System call would have blocked in blocking mode  */
-    TRDP_INTEGRATION_ERR    = -15,  /**< Alignment or endianess for selected target wrong */
-    TRDP_NOCONN_ERR         = -16,  /**< No TCP connection                              */
-    TRDP_NOSESSION_ERR      = -30,  /**< No such session                                */
-    TRDP_SESSION_ABORT_ERR  = -31,  /**< Session aborted                                */
-    TRDP_NOSUB_ERR          = -32,  /**< No subscriber                                  */
-    TRDP_NOPUB_ERR          = -33,  /**< No publisher                                   */
-    TRDP_NOLIST_ERR         = -34,  /**< No listener                                    */
-    TRDP_CRC_ERR            = -35,  /**< Wrong CRC                                      */
-    TRDP_WIRE_ERR           = -36,  /**< Wire                                           */
-    TRDP_TOPO_ERR           = -37,  /**< Invalid topo count                             */
-    TRDP_COMID_ERR          = -38,  /**< Unknown ComId                                  */
-    TRDP_STATE_ERR          = -39,  /**< Call in wrong state                            */
-    TRDP_APP_TIMEOUT_ERR    = -40,  /**< Application Timeout                            */
-    TRDP_APP_REPLYTO_ERR    = -41,  /**< Application Reply Sent Timeout                 */
-    TRDP_APP_CONFIRMTO_ERR  = -42,  /**< Application Confirm Sent Timeout               */
-    TRDP_REPLYTO_ERR        = -43,  /**< Protocol Reply Timeout                         */
-    TRDP_CONFIRMTO_ERR      = -44,  /**< Protocol Confirm Timeout                       */
-    TRDP_REQCONFIRMTO_ERR   = -45,  /**< Protocol Confirm Timeout (Request sender)      */
-    TRDP_PACKET_ERR         = -46,  /**< Incomplete message data packet                 */
-    TRDP_UNRESOLVED_ERR     = -47,  /**< DNR: address could not be resolved             */
-    TRDP_XML_PARSER_ERR     = -48,  /**< Returned by the tau_xml subsystem              */
-    TRDP_INUSE_ERR          = -49,  /**< Resource is still in use                       */
-    TRDP_MARSHALLING_ERR    = -50,  /**< Source size exceeded, dataset mismatch         */
-    TRDP_UNKNOWN_ERR        = -99   /**< Unspecified error                              */
+   TRDP_NO_ERR             = 0,    /**< No error  */
+   TRDP_PARAM_ERR          = -1,   /**< Parameter missing or out of range              */
+   TRDP_INIT_ERR           = -2,   /**< Call without valid initialization              */
+   TRDP_NOINIT_ERR         = -3,   /**< Call with invalid handle                       */
+   TRDP_TIMEOUT_ERR        = -4,   /**< Timout                                         */
+   TRDP_NODATA_ERR         = -5,   /**< Non blocking mode: no data received            */
+   TRDP_SOCK_ERR           = -6,   /**< Socket error / option not supported            */
+   TRDP_IO_ERR             = -7,   /**< Socket IO error, data can't be received/sent   */
+   TRDP_MEM_ERR            = -8,   /**< No more memory available                       */
+   TRDP_SEMA_ERR           = -9,   /**< Semaphore not available                        */
+   TRDP_QUEUE_ERR          = -10,  /**< Queue empty                                    */
+   TRDP_QUEUE_FULL_ERR     = -11,  /**< Queue full                                     */
+   TRDP_MUTEX_ERR          = -12,  /**< Mutex not available                            */
+   TRDP_THREAD_ERR         = -13,  /**< Thread error                                   */
+   TRDP_BLOCK_ERR          = -14,  /**< System call would have blocked in blocking mode  */
+   TRDP_INTEGRATION_ERR    = -15,  /**< Alignment or endianess for selected target wrong */
+   TRDP_NOCONN_ERR         = -16,  /**< No TCP connection                              */
+   TRDP_NOSESSION_ERR      = -30,  /**< No such session                                */
+   TRDP_SESSION_ABORT_ERR  = -31,  /**< Session aborted                                */
+   TRDP_NOSUB_ERR          = -32,  /**< No subscriber                                  */
+   TRDP_NOPUB_ERR          = -33,  /**< No publisher                                   */
+   TRDP_NOLIST_ERR         = -34,  /**< No listener                                    */
+   TRDP_CRC_ERR            = -35,  /**< Wrong CRC                                      */
+   TRDP_WIRE_ERR           = -36,  /**< Wire                                           */
+   TRDP_TOPO_ERR           = -37,  /**< Invalid topo count                             */
+   TRDP_COMID_ERR          = -38,  /**< Unknown ComId                                  */
+   TRDP_STATE_ERR          = -39,  /**< Call in wrong state                            */
+   TRDP_APP_TIMEOUT_ERR    = -40,  /**< Application Timeout                            */
+   TRDP_APP_REPLYTO_ERR    = -41,  /**< Application Reply Sent Timeout                 */
+   TRDP_APP_CONFIRMTO_ERR  = -42,  /**< Application Confirm Sent Timeout               */
+   TRDP_REPLYTO_ERR        = -43,  /**< Protocol Reply Timeout                         */
+   TRDP_CONFIRMTO_ERR      = -44,  /**< Protocol Confirm Timeout                       */
+   TRDP_REQCONFIRMTO_ERR   = -45,  /**< Protocol Confirm Timeout (Request sender)      */
+   TRDP_PACKET_ERR         = -46,  /**< Incomplete message data packet                 */
+   TRDP_UNRESOLVED_ERR     = -47,  /**< DNR: address could not be resolved             */
+   TRDP_XML_PARSER_ERR     = -48,  /**< Returned by the tau_xml subsystem              */
+   TRDP_INUSE_ERR          = -49,  /**< Resource is still in use                       */
+   TRDP_MARSHALLING_ERR    = -50,  /**< Source size exceeded, dataset mismatch         */
+   TRDP_UNKNOWN_ERR        = -99   /**< Unspecified error                              */
 } TRDP_ERR_T;
 
 
@@ -189,18 +189,18 @@ typedef VOS_FDS_T TRDP_FDS_T;
 /** Reply status messages    */
 typedef enum
 {
-    TRDP_REPLY_OK                   = 0,
-    TRDP_REPLY_RESERVED01           = -1,
-    TRDP_REPLY_SESSION_ABORT        = -2,
-    TRDP_REPLY_NO_REPLIER_INST      = -3,
-    TRDP_REPLY_NO_MEM_REPL          = -4,
-    TRDP_REPLY_NO_MEM_LOCAL         = -5,
-    TRDP_REPLY_NO_REPLY             = -6,
-    TRDP_REPLY_NOT_ALL_REPLIES      = -7,
-    TRDP_REPLY_NO_CONFIRM           = -8,
-    TRDP_REPLY_RESERVED02           = -9,
-    TRDP_REPLY_SENDING_FAILED       = -10,
-    TRDP_REPLY_UNSPECIFIED_ERROR    = -99
+   TRDP_REPLY_OK                   =  0,
+   TRDP_REPLY_RESERVED01           = -1,
+   TRDP_REPLY_SESSION_ABORT        = -2,
+   TRDP_REPLY_NO_REPLIER_INST      = -3,
+   TRDP_REPLY_NO_MEM_REPL          = -4,
+   TRDP_REPLY_NO_MEM_LOCAL         = -5,
+   TRDP_REPLY_NO_REPLY             = -6,
+   TRDP_REPLY_NOT_ALL_REPLIES      = -7,
+   TRDP_REPLY_NO_CONFIRM           = -8,
+   TRDP_REPLY_RESERVED02           = -9,
+   TRDP_REPLY_SENDING_FAILED       = -10,
+   TRDP_REPLY_UNSPECIFIED_ERROR    = -99
 } TRDP_REPLY_STATUS_T;
 
 
@@ -234,16 +234,16 @@ typedef UINT16 TRDP_MSG_T;
 /** Redundancy states */
 typedef enum
 {
-    TRDP_RED_FOLLOWER   = 0u,        /**< Redundancy follower - redundant PD will be not sent out    */
-    TRDP_RED_LEADER     = 1u         /**< Redundancy leader - redundant PD will be sent out          */
+   TRDP_RED_FOLLOWER   = 0u,        /**< Redundancy follower - redundant PD will be not sent out    */
+   TRDP_RED_LEADER     = 1u         /**< Redundancy leader - redundant PD will be sent out          */
 } TRDP_RED_STATE_T;
 
 /** How invalid PD shall be handled    */
 typedef enum
 {
-    TRDP_TO_DEFAULT         = 0u,    /**< Default value defined in tlc_openDession will be taken     */
-    TRDP_TO_SET_TO_ZERO     = 1u,    /**< If set, data will be reset to zero on time out             */
-    TRDP_TO_KEEP_LAST_VALUE = 2u     /**< If set, last received values will be returned              */
+   TRDP_TO_DEFAULT         = 0u,    /**< Default value defined in tlc_openDession will be taken     */
+   TRDP_TO_SET_TO_ZERO     = 1u,    /**< If set, data will be reset to zero on time out             */
+   TRDP_TO_KEEP_LAST_VALUE = 2u     /**< If set, last received values will be returned              */
 } TRDP_TO_BEHAVIOR_T;
 
 /**    Process data info from received telegram; allows the application to generate responses.
@@ -252,22 +252,22 @@ typedef enum
  */
 typedef struct
 {
-    TRDP_IP_ADDR_T      srcIpAddr;      /**< source IP address for filtering                            */
-    TRDP_IP_ADDR_T      destIpAddr;     /**< destination IP address for filtering                       */
-    UINT32              seqCount;       /**< sequence counter                                           */
-    UINT16              protVersion;    /**< Protocol version                                           */
-    TRDP_MSG_T          msgType;        /**< Protocol ('PD', 'MD', ...)                                 */
-    UINT32              comId;          /**< ComID                                                      */
-    UINT32              etbTopoCnt;     /**< received ETB topocount                                     */
-    UINT32              opTrnTopoCnt;   /**< received operational train directory topocount             */
-    UINT32              replyComId;     /**< ComID for reply (request only)                             */
-    TRDP_IP_ADDR_T      replyIpAddr;    /**< IP address for reply (request only)                        */
-    const void          *pUserRef;      /**< User reference given with the local subscribe              */
-    TRDP_ERR_T          resultCode;     /**< error code                                                 */
-    TRDP_URI_HOST_T     srcHostURI;     /**< source URI host part (unused)                              */
-    TRDP_URI_HOST_T     destHostURI;    /**< destination URI host part (unused)                         */
-    TRDP_TO_BEHAVIOR_T  toBehavior;     /**< callback can decide about handling of data on timeout      */
-    UINT32              serviceId;      /**< the reserved field of the PD header                        */
+   TRDP_IP_ADDR_T      srcIpAddr;      /**< source IP address for filtering                            */
+   TRDP_IP_ADDR_T      destIpAddr;     /**< destination IP address for filtering                       */
+   UINT32              seqCount;       /**< sequence counter                                           */
+   UINT16              protVersion;    /**< Protocol version                                           */
+   TRDP_MSG_T          msgType;        /**< Protocol ('PD', 'MD', ...)                                 */
+   UINT32              comId;          /**< ComID                                                      */
+   UINT32              etbTopoCnt;     /**< received ETB topocount                                     */
+   UINT32              opTrnTopoCnt;   /**< received operational train directory topocount             */
+   UINT32              replyComId;     /**< ComID for reply (request only)                             */
+   TRDP_IP_ADDR_T      replyIpAddr;    /**< IP address for reply (request only)                        */
+   const void*         pUserRef;       /**< User reference given with the local subscribe              */
+   TRDP_ERR_T          resultCode;     /**< error code                                                 */
+   TRDP_URI_HOST_T     srcHostURI;     /**< source URI host part (unused)                              */
+   TRDP_URI_HOST_T     destHostURI;    /**< destination URI host part (unused)                         */
+   TRDP_TO_BEHAVIOR_T  toBehavior;     /**< callback can decide about handling of data on timeout      */
+   UINT32              serviceId;      /**< the reserved field of the PD header                        */
 } TRDP_PD_INFO_T;
 
 
@@ -282,41 +282,41 @@ typedef VOS_UUID_T TRDP_UUID_T;
  */
 typedef struct
 {
-    TRDP_IP_ADDR_T      srcIpAddr;          /**< source IP address for filtering            */
-    TRDP_IP_ADDR_T      destIpAddr;         /**< destination IP address for filtering       */
-    UINT32              seqCount;           /**< sequence counter                           */
-    UINT16              protVersion;        /**< Protocol version                           */
-    TRDP_MSG_T          msgType;            /**< Protocol ('PD', 'MD', ...)                 */
-    UINT32              comId;              /**< ComID                                      */
-    UINT32              etbTopoCnt;         /**< received topocount                         */
-    UINT32              opTrnTopoCnt;       /**< received topocount                         */
-    BOOL8               aboutToDie;         /**< session is about to die                    */
-    UINT32              numRepliesQuery;    /**< number of ReplyQuery received              */
-    UINT32              numConfirmSent;     /**< number of Confirm sent                     */
-    UINT32              numConfirmTimeout;  /**< number of Confirm Timeouts (incremented by listeners */
-    UINT16              userStatus;         /**< error code, user stat                      */
-    TRDP_REPLY_STATUS_T replyStatus;        /**< reply status                               */
-    TRDP_UUID_T         sessionId;          /**< for response                               */
-    UINT32              replyTimeout;       /**< reply timeout in us given with the request */
-    TRDP_URI_USER_T     srcUserURI;         /**< source URI user part from MD header        */
-    TRDP_URI_HOST_T     srcHostURI;         /**< source URI host part (unused)              */
-    TRDP_URI_USER_T     destUserURI;        /**< destination URI user part from MD header   */
-    TRDP_URI_HOST_T     destHostURI;        /**< destination URI host part (unused)         */
-    UINT32              numExpReplies;      /**< number of expected replies, 0 if unknown   */
-    UINT32              numReplies;         /**< actual number of replies for the request   */
-    const void          *pUserRef;          /**< User reference given with the local call   */
-    TRDP_ERR_T          resultCode;         /**< error code                                 */
+   TRDP_IP_ADDR_T      srcIpAddr;          /**< source IP address for filtering            */
+   TRDP_IP_ADDR_T      destIpAddr;         /**< destination IP address for filtering       */
+   UINT32              seqCount;           /**< sequence counter                           */
+   UINT16              protVersion;        /**< Protocol version                           */
+   TRDP_MSG_T          msgType;            /**< Protocol ('PD', 'MD', ...)                 */
+   UINT32              comId;              /**< ComID                                      */
+   UINT32              etbTopoCnt;         /**< received topocount                         */
+   UINT32              opTrnTopoCnt;       /**< received topocount                         */
+   BOOL8               aboutToDie;         /**< session is about to die                    */
+   UINT32              numRepliesQuery;    /**< number of ReplyQuery received              */
+   UINT32              numConfirmSent;     /**< number of Confirm sent                     */
+   UINT32              numConfirmTimeout;  /**< number of Confirm Timeouts (incremented by listeners */
+   UINT16              userStatus;         /**< error code, user stat                      */
+   TRDP_REPLY_STATUS_T replyStatus;        /**< reply status                               */
+   TRDP_UUID_T         sessionId;          /**< for response                               */
+   UINT32              replyTimeout;       /**< reply timeout in us given with the request */
+   TRDP_URI_USER_T     srcUserURI;         /**< source URI user part from MD header        */
+   TRDP_URI_HOST_T     srcHostURI;         /**< source URI host part (unused)              */
+   TRDP_URI_USER_T     destUserURI;        /**< destination URI user part from MD header   */
+   TRDP_URI_HOST_T     destHostURI;        /**< destination URI host part (unused)         */
+   UINT32              numExpReplies;      /**< number of expected replies, 0 if unknown   */
+   UINT32              numReplies;         /**< actual number of replies for the request   */
+   const void*         pUserRef;           /**< User reference given with the local call   */
+   TRDP_ERR_T          resultCode;         /**< error code                                 */
 } TRDP_MD_INFO_T;
 
 
 /**    Quality/type of service, time to live , no. of retries, TSN flag and VLAN ID   */
 typedef struct
 {
-    UINT8   qos;        /**< Quality of service (default should be 2 for PD and 2 for MD, TSN priority >= 3)    */
-    UINT8   ttl;        /**< Time to live (default should be 64)                                                */
-    UINT8   retries;    /**< MD Retries from XML file                                                           */
-    BOOL8   tsn;        /**< if TRUE, do not schedule packet but use TSN socket                                 */
-    UINT16  vlan;       /**< VLAN Id to be used                                                                 */
+   UINT8   qos;        /**< Quality of service (default should be 2 for PD and 2 for MD, TSN priority >= 3)    */
+   UINT8   ttl;        /**< Time to live (default should be 64)                                                */
+   UINT8   retries;    /**< MD Retries from XML file                                                           */
+   BOOL8   tsn;        /**< if TRUE, do not schedule packet but use TSN socket                                 */
+   UINT16  vlan;       /**< VLAN Id to be used                                                                 */
 } TRDP_COM_PARAM_T, TRDP_SEND_PARAM_T;
 
 
@@ -327,24 +327,24 @@ typedef struct
 /**    Dataset element definition    */
 typedef enum
 {
-    TRDP_INVALID    = 0u,   /**< Invalid/unknown                   */
-    TRDP_BITSET8    = 1u,   /**< =UINT8                            */
-    TRDP_CHAR8      = 2u,   /**< char, can be used also as UTF8    */
-    TRDP_UTF16      = 3u,   /**< Unicode UTF-16 character          */
-    TRDP_INT8       = 4u,   /**< Signed integer, 8 bit             */
-    TRDP_INT16      = 5u,   /**< Signed integer, 16 bit            */
-    TRDP_INT32      = 6u,   /**< Signed integer, 32 bit            */
-    TRDP_INT64      = 7u,   /**< Signed integer, 64 bit            */
-    TRDP_UINT8      = 8u,   /**< Unsigned integer, 8 bit           */
-    TRDP_UINT16     = 9u,   /**< Unsigned integer, 16 bit          */
-    TRDP_UINT32     = 10u,  /**< Unsigned integer, 32 bit          */
-    TRDP_UINT64     = 11u,  /**< Unsigned integer, 64 bit          */
-    TRDP_REAL32     = 12u,  /**< Floating point real, 32 bit       */
-    TRDP_REAL64     = 13u,  /**< Floating point real, 64 bit       */
-    TRDP_TIMEDATE32 = 14u,  /**< 32 bit UNIX time  */
-    TRDP_TIMEDATE48 = 15u,  /**< 48 bit TCN time (32 bit UNIX time and 16 bit ticks) */
-    TRDP_TIMEDATE64 = 16u,  /**< 32 bit UNIX time + 32 bit microseconds              */
-    TRDP_TYPE_MAX   = 30u   /**< Values greater are considered nested datasets       */
+   TRDP_INVALID    = 0u,   /**< Invalid/unknown                   */
+   TRDP_BITSET8    = 1u,   /**< =UINT8                            */
+   TRDP_CHAR8      = 2u,   /**< char, can be used also as UTF8    */
+   TRDP_UTF16      = 3u,   /**< Unicode UTF-16 character          */
+   TRDP_INT8       = 4u,   /**< Signed integer, 8 bit             */
+   TRDP_INT16      = 5u,   /**< Signed integer, 16 bit            */
+   TRDP_INT32      = 6u,   /**< Signed integer, 32 bit            */
+   TRDP_INT64      = 7u,   /**< Signed integer, 64 bit            */
+   TRDP_UINT8      = 8u,   /**< Unsigned integer, 8 bit           */
+   TRDP_UINT16     = 9u,   /**< Unsigned integer, 16 bit          */
+   TRDP_UINT32     = 10u,  /**< Unsigned integer, 32 bit          */
+   TRDP_UINT64     = 11u,  /**< Unsigned integer, 64 bit          */
+   TRDP_REAL32     = 12u,  /**< Floating point real, 32 bit       */
+   TRDP_REAL64     = 13u,  /**< Floating point real, 64 bit       */
+   TRDP_TIMEDATE32 = 14u,  /**< 32 bit UNIX time  */
+   TRDP_TIMEDATE48 = 15u,  /**< 48 bit TCN time (32 bit UNIX time and 16 bit ticks) */
+   TRDP_TIMEDATE64 = 16u,  /**< 32 bit UNIX time + 32 bit microseconds              */
+   TRDP_TYPE_MAX   = 30u   /**< Values greater are considered nested datasets       */
 } TRDP_DATA_TYPE_T;
 
 #define TRDP_BOOL8          TRDP_BITSET8 /**< 1 bit relevant
@@ -357,30 +357,30 @@ struct TRDP_DATASET;
 /**    Dataset element definition    */
 typedef struct
 {
-    UINT32              type;           /**< Data type (TRDP_DATA_TYPE_T 1...99) or dataset id > 1000   */
-    UINT32              size;           /**< Number of items or TRDP_VAR_SIZE (0)                       */
-    CHAR8               *name;          /**< Name param, on special request (Ticket #211)               */
-    CHAR8               *unit;          /**< Unit text for visualisation                                */
-    REAL32              scale;          /**< Factor for visualisation                                   */
-    INT32               offset;         /**< Offset for visualisation   (val = scale * x + offset)      */
-    struct TRDP_DATASET *pCachedDS;     /**< Used internally for marshalling speed-up                   */
+   UINT32               type;         /**< Data type (TRDP_DATA_TYPE_T 1...99) or dataset id > 1000   */
+   UINT32               size;         /**< Number of items or TRDP_VAR_SIZE (0)                       */
+   CHAR8*               name;         /**< Name param, on special request (Ticket #211)               */
+   CHAR8*               unit;         /**< Unit text for visualisation                                */
+   REAL32               scale;        /**< Factor for visualisation                                   */
+   INT32                offset;       /**< Offset for visualisation   (val = scale * x + offset)      */
+   struct TRDP_DATASET* pCachedDS;    /**< Used internally for marshalling speed-up                   */
 } TRDP_DATASET_ELEMENT_T;
 
 /**    Dataset definition    */
 typedef struct TRDP_DATASET
 {
-    UINT32                  id;         /**< dataset identifier > 1000                                  */
-    UINT16                  reserved1;  /**< Reserved for future use, must be zero                      */
-    UINT16                  numElement; /**< Number of elements                                         */
-    TRDP_EXTRA_LABEL_T      name;       /**< Dataset name #349                                          */
-    TRDP_DATASET_ELEMENT_T  pElement[]; /**< Pointer to a dataset element, used as array                */
+   UINT32                 id;         /**< dataset identifier > 1000                                  */
+   UINT16                 reserved1;  /**< Reserved for future use, must be zero                      */
+   UINT16                 numElement; /**< Number of elements                                         */
+   TRDP_EXTRA_LABEL_T     name;       /**< Dataset name #349                                          */
+   TRDP_DATASET_ELEMENT_T pElement[]; /**< Pointer to a dataset element, used as array                */
 } TRDP_DATASET_T;
 
 /**    ComId - data set mapping element definition    */
 typedef struct
 {
-    UINT32  comId;                      /**< comId                                                      */
-    UINT32  datasetId;                  /**< corresponding dataset Id                                   */
+   UINT32 comId;                      /**< comId                                                      */
+   UINT32 datasetId;                  /**< corresponding dataset Id                                   */
 } TRDP_COMID_DSID_MAP_T;
 
 /**     Array of pointers to dataset  */
@@ -408,7 +408,7 @@ typedef apTRDP_DATASET_T* papTRDP_DATASET_T;
 /** Structure containing comId for MD statistics request (ComId 32). */
 typedef struct
 {
-    UINT32 comId;                                       /**< ComId to request: 35...41 */
+   UINT32 comId;                                       /**< ComId to request: 35...41 */
 } GNU_PACKED TRDP_STATISTICS_REQUEST_T;
 
 
@@ -419,110 +419,110 @@ typedef VOS_MEM_STATISTICS_T TRDP_MEM_STATISTICS_T;
 /** Structure containing all general PD statistics information. */
 typedef struct
 {
-    UINT32  defQos;           /**< default QoS for PD */
-    UINT32  defTtl;           /**< default TTL for PD */
-    UINT32  defTimeout;       /**< default timeout in us for PD */
-    UINT32  numSubs;          /**< number of subscribed ComId's */
-    UINT32  numPub;           /**< number of published ComId's */
-    UINT32  numRcv;           /**< number of received PD packets */
-    UINT32  numCrcErr;        /**< number of received PD packets with CRC err */
-    UINT32  numProtErr;       /**< number of received PD packets with protocol err */
-    UINT32  numTopoErr;       /**< number of received PD packets with wrong topo count */
-    UINT32  numNoSubs;        /**< number of received PD push packets without subscription */
-    UINT32  numNoPub;         /**< number of received PD pull packets without publisher */
-    UINT32  numTimeout;       /**< number of PD timeouts */
-    UINT32  numSend;          /**< number of sent PD  packets */
-    UINT32  numMissed;        /**< number of packets skipped */
+   UINT32  defQos;           /**< default QoS for PD */
+   UINT32  defTtl;           /**< default TTL for PD */
+   UINT32  defTimeout;       /**< default timeout in us for PD */
+   UINT32  numSubs;          /**< number of subscribed ComId's */
+   UINT32  numPub;           /**< number of published ComId's */
+   UINT32  numRcv;           /**< number of received PD packets */
+   UINT32  numCrcErr;        /**< number of received PD packets with CRC err */
+   UINT32  numProtErr;       /**< number of received PD packets with protocol err */
+   UINT32  numTopoErr;       /**< number of received PD packets with wrong topo count */
+   UINT32  numNoSubs;        /**< number of received PD push packets without subscription */
+   UINT32  numNoPub;         /**< number of received PD pull packets without publisher */
+   UINT32  numTimeout;       /**< number of PD timeouts */
+   UINT32  numSend;          /**< number of sent PD  packets */
+   UINT32  numMissed;        /**< number of packets skipped */
 } GNU_PACKED TRDP_PD_STATISTICS_T;
 
 
 /** Structure containing all general MD statistics information. */
 typedef struct
 {
-    UINT32  defQos;                /**< default QoS for MD */
-    UINT32  defTtl;                /**< default TTL for MD */
-    UINT32  defReplyTimeout;       /**< default reply timeout in us for MD */
-    UINT32  defConfirmTimeout;     /**< default confirm timeout in us for MD */
-    UINT32  numList;               /**< number of listeners */
-    UINT32  numRcv;                /**< number of received MD packets */
-    UINT32  numCrcErr;             /**< number of received MD packets with CRC err */
-    UINT32  numProtErr;            /**< number of received MD packets with protocol err */
-    UINT32  numTopoErr;            /**< number of received MD packets with wrong topo count */
-    UINT32  numNoListener;         /**< number of received MD packets without listener */
-    UINT32  numReplyTimeout;       /**< number of reply timeouts */
-    UINT32  numConfirmTimeout;     /**< number of confirm timeouts */
-    UINT32  numSend;               /**< number of sent MD packets */
+   UINT32  defQos;                /**< default QoS for MD */
+   UINT32  defTtl;                /**< default TTL for MD */
+   UINT32  defReplyTimeout;       /**< default reply timeout in us for MD */
+   UINT32  defConfirmTimeout;     /**< default confirm timeout in us for MD */
+   UINT32  numList;               /**< number of listeners */
+   UINT32  numRcv;                /**< number of received MD packets */
+   UINT32  numCrcErr;             /**< number of received MD packets with CRC err */
+   UINT32  numProtErr;            /**< number of received MD packets with protocol err */
+   UINT32  numTopoErr;            /**< number of received MD packets with wrong topo count */
+   UINT32  numNoListener;         /**< number of received MD packets without listener */
+   UINT32  numReplyTimeout;       /**< number of reply timeouts */
+   UINT32  numConfirmTimeout;     /**< number of confirm timeouts */
+   UINT32  numSend;               /**< number of sent MD packets */
 } GNU_PACKED TRDP_MD_STATISTICS_T;
 
 
 /** Structure containing all general memory, PD and MD statistics information. */
 typedef struct
 {
-    UINT32                  version;      /**< TRDP version  */
-    UINT64                  timeStamp;    /**< actual time stamp */
-    UINT32                  upTime;       /**< time in sec since last initialisation */
-    UINT32                  statisticTime; /**< time in sec since last reset of statistics */
-    TRDP_NET_LABEL_T        hostName;     /**< host name */
-    TRDP_NET_LABEL_T        leaderName;   /**< leader host name */
-    TRDP_IP_ADDR_T          ownIpAddr;    /**< own IP address */
-    TRDP_IP_ADDR_T          leaderIpAddr; /**< leader IP address */
-    UINT32                  processPrio;  /**< priority of TRDP process */
-    UINT32                  processCycle; /**< cycle time of TRDP process in microseconds */
-    UINT32                  numJoin;      /**< number of joins */
-    UINT32                  numRed;       /**< number of redundancy groups */
-    TRDP_MEM_STATISTICS_T   mem;          /**< memory statistics */
-    TRDP_PD_STATISTICS_T    pd;           /**< pd statistics */
-    TRDP_MD_STATISTICS_T    udpMd;        /**< UDP md statistics */
-    TRDP_MD_STATISTICS_T    tcpMd;        /**< TCP md statistics */
+   UINT32                  version;      /**< TRDP version  */
+   UINT64                  timeStamp;    /**< actual time stamp */
+   UINT32                  upTime;       /**< time in sec since last initialisation */
+   UINT32                  statisticTime; /**< time in sec since last reset of statistics */
+   TRDP_NET_LABEL_T        hostName;     /**< host name */
+   TRDP_NET_LABEL_T        leaderName;   /**< leader host name */
+   TRDP_IP_ADDR_T          ownIpAddr;    /**< own IP address */
+   TRDP_IP_ADDR_T          leaderIpAddr; /**< leader IP address */
+   UINT32                  processPrio;  /**< priority of TRDP process */
+   UINT32                  processCycle; /**< cycle time of TRDP process in microseconds */
+   UINT32                  numJoin;      /**< number of joins */
+   UINT32                  numRed;       /**< number of redundancy groups */
+   TRDP_MEM_STATISTICS_T   mem;          /**< memory statistics */
+   TRDP_PD_STATISTICS_T    pd;           /**< pd statistics */
+   TRDP_MD_STATISTICS_T    udpMd;        /**< UDP md statistics */
+   TRDP_MD_STATISTICS_T    tcpMd;        /**< TCP md statistics */
 } GNU_PACKED TRDP_STATISTICS_T;
 
 /** Table containing particular PD subscription information. */
 typedef struct
 {
-    UINT32                  comId;  /**< Subscribed ComId      */
-    TRDP_IP_ADDR_T          joinedAddr; /**< Joined IP address   */
-    TRDP_IP_ADDR_T          filterAddr; /**< Filter IP address, i.e IP address of the sender for this subscription, 0.0.0.0
+   UINT32                  comId;  /**< Subscribed ComId      */
+   TRDP_IP_ADDR_T          joinedAddr; /**< Joined IP address   */
+   TRDP_IP_ADDR_T          filterAddr; /**< Filter IP address, i.e IP address of the sender for this subscription, 0.0.0.0
                                             in case all senders. */
-    UINT32                  callBack; /**< call back function if used */
-    UINT32                  userRef; /**< User reference if used */
-    UINT32                  timeout; /**< Time-out value in us. 0 = No time-out supervision */
-    UINT32 /*TRDP_ERR_T*/   status;           /**< Receive status information TRDP_NO_ERR, TRDP_TIMEOUT_ERR */
-    UINT32                  toBehav; /**< Behavior at time-out. Set data to zero / keep last value */
-    UINT32                  numRecv; /**< Number of packets received for this subscription */
-    UINT32                  numMissed; /**< number of packets skipped for this subscription */
+   UINT32                  callBack; /**< call back function if used */
+   UINT32                  userRef; /**< User reference if used */
+   UINT32                  timeout; /**< Time-out value in us. 0 = No time-out supervision */
+   UINT32 /*TRDP_ERR_T*/   status;           /**< Receive status information TRDP_NO_ERR, TRDP_TIMEOUT_ERR */
+   UINT32                  toBehav; /**< Behavior at time-out. Set data to zero / keep last value */
+   UINT32                  numRecv; /**< Number of packets received for this subscription */
+   UINT32                  numMissed; /**< number of packets skipped for this subscription */
 } GNU_PACKED TRDP_SUBS_STATISTICS_T;
 
 /** Table containing particular PD publishing information. */
 typedef struct
 {
-    UINT32          comId;      /**< Published ComId  */
-    TRDP_IP_ADDR_T  destAddr;   /**< IP address of destination for this publishing. */
-    UINT32          cycle;      /**< Publishing cycle in us */
-    UINT32          redId;      /**< Redundancy group id */
-    UINT32          redState;   /**< Redundant state.Leader or Follower */
-    UINT32          numPut;     /**< Number of packet updates */
-    UINT32          numSend;    /**< Number of packets sent out */
+   UINT32          comId;      /**< Published ComId  */
+   TRDP_IP_ADDR_T  destAddr;   /**< IP address of destination for this publishing. */
+   UINT32          cycle;      /**< Publishing cycle in us */
+   UINT32          redId;      /**< Redundancy group id */
+   UINT32          redState;   /**< Redundant state.Leader or Follower */
+   UINT32          numPut;     /**< Number of packet updates */
+   UINT32          numSend;    /**< Number of packets sent out */
 } GNU_PACKED TRDP_PUB_STATISTICS_T;
 
 
 /** Information about a particular MD listener */
 typedef struct
 {
-    UINT32          comId;      /**< ComId to listen to */
-    CHAR8           uri[32];    /**< URI user part to listen to */
-    TRDP_IP_ADDR_T  joinedAddr; /**< Joined IP address */
-    UINT32          callBack;   /**< Call back function if used */
-    UINT32          queue;      /**< Queue reference if used */
-    UINT32          userRef;    /**< User reference if used */
-    UINT32          numRecv;    /**< Number of received packets  */
+   UINT32          comId;      /**< ComId to listen to */
+   CHAR8           uri[32];    /**< URI user part to listen to */
+   TRDP_IP_ADDR_T  joinedAddr; /**< Joined IP address */
+   UINT32          callBack;   /**< Call back function if used */
+   UINT32          queue;      /**< Queue reference if used */
+   UINT32          userRef;    /**< User reference if used */
+   UINT32          numRecv;    /**< Number of received packets  */
 } GNU_PACKED TRDP_LIST_STATISTICS_T;
 
 
 /** A table containing PD redundant group information */
 typedef struct
 {
-    UINT32  id;                /**< Redundant Id */
-    UINT32  state;             /**< Redundant state.Leader or Follower */
+   UINT32  id;                /**< Redundant Id */
+   UINT32  state;             /**< Redundant state.Leader or Follower */
 } GNU_PACKED TRDP_RED_STATISTICS_T;
 
 #if (defined (WIN32) || defined (WIN64))
@@ -575,14 +575,13 @@ typedef VOS_LOG_T TRDP_LOG_T;
  *
  */
 
-typedef TRDP_ERR_T (*TRDP_MARSHALL_T)(
-    void            *pRefCon,
-    UINT32          comId,
-    UINT8           *pSrc,
-    UINT32          srcSize,
-    UINT8           *pDst,
-    UINT32          *pDstSize,
-    TRDP_DATASET_T  * *ppCachedDS);
+typedef TRDP_ERR_T (*TRDP_MARSHALL_T)(void*            pRefCon,
+                                      UINT32           comId,
+                                      UINT8*           pSrc,
+                                      UINT32           srcSize,
+                                      UINT8*           pDst,
+                                      UINT32*          pDstSize,
+                                      TRDP_DATASET_T** ppCachedDS);
 
 
 /****************************************************************************************/
@@ -603,23 +602,22 @@ typedef TRDP_ERR_T (*TRDP_MARSHALL_T)(
  *
  */
 
-typedef TRDP_ERR_T (*TRDP_UNMARSHALL_T)(
-    void            *pRefCon,
-    UINT32          comId,
-    UINT8           *pSrc,
-    UINT32          srcSize,
-    UINT8           *pDst,
-    UINT32          *pDstSize,
-    TRDP_DATASET_T  * *ppCachedDS);
+typedef TRDP_ERR_T (*TRDP_UNMARSHALL_T)(void*            pRefCon,
+                                        UINT32           comId,
+                                        UINT8*           pSrc,
+                                        UINT32           srcSize,
+                                        UINT8*           pDst,
+                                        UINT32*          pDstSize,
+                                        TRDP_DATASET_T** ppCachedDS);
 
 
 /****************************************************************************************/
 /** Marshaling/unmarshalling configuration    */
 typedef struct
 {
-    TRDP_MARSHALL_T   pfCbMarshall;    /**< Pointer to marshall callback function      */
-    TRDP_UNMARSHALL_T pfCbUnmarshall;  /**< Pointer to unmarshall callback function    */
-    void*             pRefCon;         /**< Pointer to user context for call back      */
+   TRDP_MARSHALL_T   pfCbMarshall;    /**< Pointer to marshall callback function      */
+   TRDP_UNMARSHALL_T pfCbUnmarshall;  /**< Pointer to unmarshall callback function    */
+   void*             pRefCon;         /**< Pointer to user context for call back      */
 } TRDP_MARSHALL_CONFIG_T;
 
 
@@ -632,25 +630,24 @@ typedef struct
  *  @param[in]    pData         pointer to received data
  *  @param[in]    dataSize      size of received data pointer to received data
  */
-typedef void (*TRDP_PD_CALLBACK_T)(
-                                         void*              pRefCon,
-                                         TRDP_APP_SESSION_T appHandle,
-                                   const TRDP_PD_INFO_T*    pMsg,
-                                         UINT8*             pData,
-                                         UINT32             dataSize);
+typedef void (*TRDP_PD_CALLBACK_T)(void*                 pRefCon,
+                                   TRDP_APP_SESSION_T    appHandle,
+                                   const TRDP_PD_INFO_T* pMsg,
+                                   UINT8*                pData,
+                                   UINT32                dataSize);
 
 
 /****************************************************************************************/
 /** Default PD configuration    */
 typedef struct
 {
-    TRDP_PD_CALLBACK_T  pfCbFunction; /**< Pointer to PD callback function            */
-    void                *pRefCon;     /**< Pointer to user context for call back      */
-    TRDP_SEND_PARAM_T   sendParam;    /**< Default send parameters                    */
-    TRDP_FLAGS_T        flags;        /**< Default flags for PD packets               */
-    UINT32              timeout;      /**< Default timeout in us                      */
-    TRDP_TO_BEHAVIOR_T  toBehavior;   /**< Default timeout behavior                   */
-    UINT16              port;         /**< Port to be used for PD communication (default: 17224)      */
+   TRDP_PD_CALLBACK_T  pfCbFunction; /**< Pointer to PD callback function            */
+   void*               pRefCon;      /**< Pointer to user context for call back      */
+   TRDP_SEND_PARAM_T   sendParam;    /**< Default send parameters                    */
+   TRDP_FLAGS_T        flags;        /**< Default flags for PD packets               */
+   UINT32              timeout;      /**< Default timeout in us                      */
+   TRDP_TO_BEHAVIOR_T  toBehavior;   /**< Default timeout behavior                   */
+   UINT16              port;         /**< Port to be used for PD communication (default: 17224)      */
 } TRDP_PD_CONFIG_T;
 
 
@@ -663,12 +660,11 @@ typedef struct
  *  @param[in]    pData         pointer to received data
  *  @param[in]    dataSize      size of received data pointer to received data
  */
-typedef void (*TRDP_MD_CALLBACK_T)(
-    void                    *pRefCon,
-    TRDP_APP_SESSION_T      appHandle,
-    const TRDP_MD_INFO_T    *pMsg,
-    UINT8                   *pData,
-    UINT32                  dataSize);
+typedef void (*TRDP_MD_CALLBACK_T)(void*                 pRefCon,
+                                   TRDP_APP_SESSION_T    appHandle,
+                                   const TRDP_MD_INFO_T* pMsg,
+                                   UINT8*                pData,
+                                   UINT32                dataSize);
 
 
 /****************************************************************************************/
@@ -676,17 +672,17 @@ typedef void (*TRDP_MD_CALLBACK_T)(
  */
 typedef struct
 {
-    TRDP_MD_CALLBACK_T  pfCbFunction;           /**< Pointer to MD callback function            */
-    void                *pRefCon;               /**< Pointer to user context for call back      */
-    TRDP_SEND_PARAM_T   sendParam;              /**< Default send parameters                    */
-    TRDP_FLAGS_T        flags;                  /**< Default flags for MD packets               */
-    UINT32              replyTimeout;           /**< Default reply timeout in us                */
-    UINT32              confirmTimeout;         /**< Default confirmation timeout in us         */
-    UINT32              connectTimeout;         /**< Default connection timeout in us           */
-    UINT32              sendingTimeout;         /**< Default sending timeout in us              */
-    UINT16              udpPort;                /**< Port to be used for UDP MD communication (default: 17225)  */
-    UINT16              tcpPort;                /**< Port to be used for TCP MD communication (default: 17225)  */
-    UINT32              maxNumSessions;         /**< Maximal number of replier sessions         */
+   TRDP_MD_CALLBACK_T  pfCbFunction;           /**< Pointer to MD callback function            */
+   void*               pRefCon;                /**< Pointer to user context for call back      */
+   TRDP_SEND_PARAM_T   sendParam;              /**< Default send parameters                    */
+   TRDP_FLAGS_T        flags;                  /**< Default flags for MD packets               */
+   UINT32              replyTimeout;           /**< Default reply timeout in us                */
+   UINT32              confirmTimeout;         /**< Default confirmation timeout in us         */
+   UINT32              connectTimeout;         /**< Default connection timeout in us           */
+   UINT32              sendingTimeout;         /**< Default sending timeout in us              */
+   UINT16              udpPort;                /**< Port to be used for UDP MD communication (default: 17225)  */
+   UINT16              tcpPort;                /**< Port to be used for TCP MD communication (default: 17225)  */
+   UINT32              maxNumSessions;         /**< Maximal number of replier sessions         */
 } TRDP_MD_CONFIG_T;
 
 
@@ -698,9 +694,9 @@ typedef struct
 /** Structure describing memory    (and its pre-fragmentation)    */
 typedef struct
 {
-    UINT8   *p;                                     /**< pointer to static or allocated memory  */
-    UINT32  size;                                   /**< size of static or allocated memory     */
-    UINT32  prealloc[VOS_MEM_NBLOCKSIZES];          /**< memory block structure                 */
+   UINT8*  p;                                      /**< pointer to static or allocated memory  */
+   UINT32  size;                                   /**< size of static or allocated memory     */
+   UINT32  prealloc[VOS_MEM_NBLOCKSIZES];          /**< memory block structure                 */
 } TRDP_MEM_CONFIG_T;
 
 
@@ -733,12 +729,12 @@ typedef UINT8 TRDP_OPTION_T;
  */
 typedef struct
 {
-    TRDP_LABEL_T        hostName;       /**< Host name  */
-    TRDP_LABEL_T        leaderName;     /**< Leader name dependant on redundancy concept   */
-    TRDP_LABEL_T        type;           /**< process type #349 */
-    UINT32              cycleTime;      /**< TRDP main process cycle time in us  */
-    UINT32              priority;       /**< TRDP main process priority (0-255, 0=default, 255=highest)   */
-    TRDP_OPTION_T       options;        /**< TRDP options */
+   TRDP_LABEL_T  hostName;   /**< Host name  */
+   TRDP_LABEL_T  leaderName; /**< Leader name dependant on redundancy concept   */
+   TRDP_LABEL_T  type;       /**< process type #349 */
+   UINT32        cycleTime;  /**< TRDP main process cycle time in us  */
+   UINT32        priority;   /**< TRDP main process priority (0-255, 0=default, 255=highest)   */
+   TRDP_OPTION_T options;    /**< TRDP options */
 } TRDP_PROCESS_CONFIG_T;
 
 /****************************************************************************************/
@@ -746,16 +742,16 @@ typedef struct
  */
 typedef struct
 {
-    UINT32  maxNoOfLowCatSubscriptions;         /**< Max. number of expected subscriptions with intervals <= 100ms  */
-    UINT32  maxNoOfMidCatSubscriptions;         /**< Max. number of expected subscriptions with intervals <= 1000ms */
-    UINT32  maxNoOfHighCatSubscriptions;        /**< Max. number of expected subscriptions with intervals > 1000ms  */
-    UINT32  maxNoOfLowCatPublishers;            /**< Max. number of expected publishers with intervals <= 100ms     */
-    UINT32  maxDepthOfLowCatPublishers;         /**< depth / overlapped publishers with intervals <= 100ms          */
-    UINT32  maxNoOfMidCatPublishers;            /**< Max. number of expected publishers with intervals <= 1000ms    */
-    UINT32  maxDepthOfMidCatPublishers;         /**< depth / overlapped publishers with intervals <= 1000ms         */
-    UINT32  maxNoOfHighCatPublishers;           /**< Max. number of expected publishers with intervals <= 10000ms   */
-    UINT32  maxDepthOfHighCatPublishers;        /**< depth / overlapped publishers with intervals <= 10000ms        */
-    UINT32  maxNoOfExtPublishers;               /**< Max. number of expected publishers with intervals > 10000ms    */
+   UINT32  maxNoOfLowCatSubscriptions;         /**< Max. number of expected subscriptions with intervals <= 100ms  */
+   UINT32  maxNoOfMidCatSubscriptions;         /**< Max. number of expected subscriptions with intervals <= 1000ms */
+   UINT32  maxNoOfHighCatSubscriptions;        /**< Max. number of expected subscriptions with intervals > 1000ms  */
+   UINT32  maxNoOfLowCatPublishers;            /**< Max. number of expected publishers with intervals <= 100ms     */
+   UINT32  maxDepthOfLowCatPublishers;         /**< depth / overlapped publishers with intervals <= 100ms          */
+   UINT32  maxNoOfMidCatPublishers;            /**< Max. number of expected publishers with intervals <= 1000ms    */
+   UINT32  maxDepthOfMidCatPublishers;         /**< depth / overlapped publishers with intervals <= 1000ms         */
+   UINT32  maxNoOfHighCatPublishers;           /**< Max. number of expected publishers with intervals <= 10000ms   */
+   UINT32  maxDepthOfHighCatPublishers;        /**< depth / overlapped publishers with intervals <= 10000ms        */
+   UINT32  maxNoOfExtPublishers;               /**< Max. number of expected publishers with intervals > 10000ms    */
 } TRDP_IDX_TABLE_T;
 
 

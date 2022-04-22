@@ -403,21 +403,20 @@ EXT_DECL TRDP_ERR_T tlm_request (
  *  @retval         TRDP_MEM_ERR        out of memory
  *  @retval         TRDP_NOINIT_ERR     handle invalid
  */
-EXT_DECL TRDP_ERR_T  tlm_addListener (
-    TRDP_APP_SESSION_T      appHandle,
-    TRDP_LIS_T              *pListenHandle,
-    const void              *pUserRef,
-    TRDP_MD_CALLBACK_T      pfCbFunction,
-    BOOL8                   comIdListener,
-    UINT32                  comId,
-    UINT32                  etbTopoCnt,
-    UINT32                  opTrnTopoCnt,
-    TRDP_IP_ADDR_T          srcIpAddr1,
-    TRDP_IP_ADDR_T          srcIpAddr2,
-    TRDP_IP_ADDR_T          mcDestIpAddr,
-    TRDP_FLAGS_T            pktFlags,
-    const TRDP_URI_USER_T   srcURI,
-    const TRDP_URI_USER_T   destURI)
+EXT_DECL TRDP_ERR_T tlm_addListener (      TRDP_APP_SESSION_T appHandle,
+                                           TRDP_LIS_T*        pListenHandle,
+                                     const void*              pUserRef,
+                                           TRDP_MD_CALLBACK_T pfCbFunction,
+                                           BOOL8              comIdListener,
+                                           UINT32             comId,
+                                           UINT32             etbTopoCnt,
+                                           UINT32             opTrnTopoCnt,
+                                           TRDP_IP_ADDR_T     srcIpAddr1,
+                                           TRDP_IP_ADDR_T     srcIpAddr2,
+                                           TRDP_IP_ADDR_T     mcDestIpAddr,
+                                           TRDP_FLAGS_T       pktFlags,
+                                     const TRDP_URI_USER_T    srcURI,
+                                     const TRDP_URI_USER_T    destURI)
 {
     TRDP_ERR_T      errv            = TRDP_NO_ERR;
     MD_LIS_ELE_T    *pNewElement    = NULL;

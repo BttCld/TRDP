@@ -19,26 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\common.c" />
-    <ClCompile Include="..\..\src\consolle.c" />
     <ClCompile Include="..\..\src\getopt.c" />
-    <ClCompile Include="..\..\src\trdp_pd_sink.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\common.h" />
-    <ClInclude Include="..\..\src\consolle.h" />
-    <ClInclude Include="..\..\src\getopt.h" />
+    <ClCompile Include="..\..\src\subTest.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\lib\dev\prj\vs\TRDP.vcxproj">
       <Project>{ae986d59-880c-499f-abbf-fbbfde093a3b}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\getopt.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{903f23b1-736a-4613-9a66-754fc792a0af}</ProjectGuid>
-    <RootNamespace>TRDPPDsink</RootNamespace>
+    <RootNamespace>TRDPvarious</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
