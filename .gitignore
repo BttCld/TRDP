@@ -7,3 +7,4 @@ dev/lib/prj/vs/.vs
 *.udb
 /dev/app/MVB_TRDP_gw/cfg.bat
 dev/app/MVB_TRDP_gw/*
+/dev/app/pd_test/dev/prj/vs/PD_sink.log
