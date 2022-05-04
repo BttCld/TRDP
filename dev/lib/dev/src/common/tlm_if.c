@@ -481,8 +481,8 @@ EXT_DECL TRDP_ERR_T tlm_addListener (      TRDP_APP_SESSION_T appHandle,
                 }
                 if (vos_isMulticast(mcDestIpAddr))
                 {
-                    pNewElement->addr.mcGroup   = mcDestIpAddr;     /* Set multicast group address */
-                    pNewElement->privFlags      |= TRDP_MC_JOINT;   /* Set multicast flag */
+                    pNewElement->addr.mcGroup  = mcDestIpAddr;     /* Set multicast group address */
+                    pNewElement->privFlags    |= TRDP_MC_JOINT;   /* Set multicast flag */
                 }
                 else
                 {
@@ -498,18 +498,17 @@ EXT_DECL TRDP_ERR_T tlm_addListener (      TRDP_APP_SESSION_T appHandle,
                 if ((pNewElement->pktFlags & TRDP_FLAGS_TCP) == 0)
                 {
                     /* socket to receive UDP MD */
-                    errv = trdp_requestSocket(
-                            appHandle->ifaceMD,
-                            appHandle->mdDefault.udpPort,
-                            &appHandle->mdDefault.sendParam,
-                            appHandle->realIP,
-                            pNewElement->addr.mcGroup,
-                            TRDP_SOCK_MD_UDP,
-                            appHandle->option,
-                            TRUE,
-                            -1,
-                            &pNewElement->socketIdx,
-                            0);
+                    errv = trdp_requestSocket(appHandle->ifaceMD,
+                                              appHandle->mdDefault.udpPort,
+                                              &appHandle->mdDefault.sendParam,
+                                              appHandle->realIP,
+                                              pNewElement->addr.mcGroup,
+                                              TRDP_SOCK_MD_UDP,
+                                              appHandle->option,
+                                              TRUE,
+                                              -1,
+                                              &pNewElement->socketIdx,
+                                              0);
                 }
                 else
                 {
@@ -523,8 +522,8 @@ EXT_DECL TRDP_ERR_T tlm_addListener (      TRDP_APP_SESSION_T appHandle,
                 else
                 {
                     /* Insert into list */
-                    pNewElement->pNext          = appHandle->pMDListenQueue;
-                    appHandle->pMDListenQueue   = pNewElement;
+                    pNewElement->pNext        = appHandle->pMDListenQueue;
+                    appHandle->pMDListenQueue = pNewElement;
 
                     /* Statistics */
                     if ((pNewElement->pktFlags & TRDP_FLAGS_TCP) != 0)

@@ -5,3 +5,5 @@ dev/lib/prj/vs/.vs
 *.VC.*
 *.suo
 *.udb
+/dev/app/MVB_TRDP_gw/cfg.bat
+dev/app/MVB_TRDP_gw/*

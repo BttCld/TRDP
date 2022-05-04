@@ -973,7 +973,7 @@ static void    trdp_mdUpdatePacket (MD_ELE_T *pElement)
     myCRC = vos_crc32(INITFCS,
                       (UINT8 *)&pElement->pPacket->frameHead,
                       sizeof(MD_HEADER_T) - SIZE_OF_FCS);
-                      
+
     /* Convert to Little Endian */
     pElement->pPacket->frameHead.frameCheckSum = MAKE_LE(myCRC);
 }
@@ -2765,8 +2765,8 @@ void  trdp_mdCheckListenSocks (
 
                     memset(&trdp_sock_opt, 0, sizeof(trdp_sock_opt));
 
-                    trdp_sock_opt.qos   = appHandle->mdDefault.sendParam.qos;
-                    trdp_sock_opt.ttl   = appHandle->mdDefault.sendParam.ttl;
+                    trdp_sock_opt.qos           = appHandle->mdDefault.sendParam.qos;
+                    trdp_sock_opt.ttl           = appHandle->mdDefault.sendParam.ttl;
                     trdp_sock_opt.ttl_multicast = 0;
                     trdp_sock_opt.reuseAddrPort = TRUE;
                     trdp_sock_opt.nonBlocking   = TRUE;

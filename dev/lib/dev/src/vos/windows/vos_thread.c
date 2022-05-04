@@ -875,8 +875,7 @@ VOS_ERR_T vos_mutexLocalCreate (struct VOS_MUTEX* pMutex)
 *  @param[in]      pMutex          mutex handle
 */
 
-EXT_DECL void vos_mutexDelete (
-   VOS_MUTEX_T pMutex)
+EXT_DECL void vos_mutexDelete (VOS_MUTEX_T pMutex)
 {
    if ((pMutex == NULL) || (pMutex->magicNo != cMutextMagic))
    {
@@ -903,8 +902,7 @@ EXT_DECL void vos_mutexDelete (
 *  @param[in]      pMutex          Pointer to mutex struct
 */
 
-void vos_mutexLocalDelete (
-   struct VOS_MUTEX* pMutex)
+void vos_mutexLocalDelete (struct VOS_MUTEX* pMutex)
 {
    if ((pMutex == NULL) || (pMutex->magicNo != cMutextMagic))
    {
@@ -1043,9 +1041,7 @@ EXT_DECL VOS_ERR_T vos_mutexUnlock (VOS_MUTEX_T pMutex)
 *  @retval         VOS_SEMA_ERR    no semaphore available
 */
 
-EXT_DECL VOS_ERR_T vos_semaCreate (
-   VOS_SEMA_T*          pSema,
-   VOS_SEMA_STATE_T    initialState)
+EXT_DECL VOS_ERR_T vos_semaCreate (VOS_SEMA_T* pSema, VOS_SEMA_STATE_T initialState)
 {
    VOS_ERR_T retVal = VOS_SEMA_ERR;
 

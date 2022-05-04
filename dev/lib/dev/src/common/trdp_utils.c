@@ -1155,15 +1155,15 @@ TRDP_ERR_T  trdp_requestSocket (TRDP_SOCKETS_T           iface[],
             goto err_exit;
         }
 
-        sock_options.qos    = params->qos;
-        sock_options.ttl    = params->ttl;
-        sock_options.reuseAddrPort  = (options & TRDP_OPTION_NO_REUSE_ADDR) ? FALSE : TRUE;
-        sock_options.nonBlocking    = (options & TRDP_OPTION_BLOCK) ? FALSE : TRUE;
-        sock_options.ttl_multicast  = (type != TRDP_SOCK_MD_TCP) ? params->ttl : 0;
-        sock_options.no_mc_loop     = ((type != TRDP_SOCK_MD_TCP) && (options & TRDP_OPTION_NO_MC_LOOP_BACK)) ? 1 : 0;
-        sock_options.no_udp_crc     = ((type != TRDP_SOCK_MD_TCP) && (options & TRDP_OPTION_NO_UDP_CHK)) ? 1 : 0;
-        sock_options.vlanId         = params->vlan;
-        sock_options.ifName[0]      = 0;
+        sock_options.qos           = params->qos;
+        sock_options.ttl           = params->ttl;
+        sock_options.reuseAddrPort = (options & TRDP_OPTION_NO_REUSE_ADDR) ? FALSE : TRUE;
+        sock_options.nonBlocking   = (options & TRDP_OPTION_BLOCK) ? FALSE : TRUE;
+        sock_options.ttl_multicast = (type != TRDP_SOCK_MD_TCP) ? params->ttl : 0;
+        sock_options.no_mc_loop    = ((type != TRDP_SOCK_MD_TCP) && (options & TRDP_OPTION_NO_MC_LOOP_BACK)) ? 1 : 0;
+        sock_options.no_udp_crc    = ((type != TRDP_SOCK_MD_TCP) && (options & TRDP_OPTION_NO_UDP_CHK)) ? 1 : 0;
+        sock_options.vlanId        = params->vlan;
+        sock_options.ifName[0]     = 0;
         switch (type)
         {
            #ifdef TSN_SUPPORT

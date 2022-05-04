@@ -856,7 +856,7 @@ EXT_DECL VOS_ERR_T vos_sockSetOptions (
         if (1 == pOptions->reuseAddrPort)
         {
             DWORD optValue = TRUE;
-#ifdef SO_REUSEPORT
+           #ifdef SO_REUSEPORT
             if (setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &sockOptValue,
                            sizeof(sockOptValue)) == SOCKET_ERROR )
             {
@@ -865,7 +865,7 @@ EXT_DECL VOS_ERR_T vos_sockSetOptions (
                 err = err;
                 vos_printLog(VOS_LOG_ERROR, "setsockopt() SO_REUSEPORT failed (Err: %d)\n", err);
             }
-#else
+           #else
             if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char *)&optValue,
                            sizeof(optValue)) == SOCKET_ERROR )
             {
@@ -874,7 +874,7 @@ EXT_DECL VOS_ERR_T vos_sockSetOptions (
                 err = err; /* for lint */
                 vos_printLog(VOS_LOG_ERROR, "setsockopt() SO_REUSEADDR failed (Err: %d)\n", err);
             }
-#endif
+           #endif
         }
 
         {
@@ -916,7 +916,7 @@ EXT_DECL VOS_ERR_T vos_sockSetOptions (
                 vos_printLog(VOS_LOG_WARNING, "setsockopt() IP_TOS failed (Err: %d)\n", err);
             }
 
-#ifdef SO_PRIORITY
+           #ifdef SO_PRIORITY
             /* if available (and the used socket is tagged) set the VLAN PCP field as well. */
             sockOptValue = (int)pOptions->qos;
             if (setsockopt(sock, SOL_SOCKET, SO_PRIORITY, &sockOptValue,
@@ -927,7 +927,7 @@ EXT_DECL VOS_ERR_T vos_sockSetOptions (
                 err = err; /* for lint */
                 vos_printLog(VOS_LOG_WARNING, "setsockopt() SO_PRIORITY failed (Err: %d)\n", err);
             }
-#endif
+           #endif
         }
         if (pOptions->ttl > 0)
         {
@@ -997,10 +997,7 @@ EXT_DECL VOS_ERR_T vos_sockSetOptions (
  *  @retval         VOS_SOCK_ERR    option not supported
  */
 
-EXT_DECL VOS_ERR_T vos_sockJoinMC (
-    SOCKET  sock,
-    UINT32  mcAddress,
-    UINT32  ipAddress)
+EXT_DECL VOS_ERR_T vos_sockJoinMC (SOCKET sock, UINT32 mcAddress, UINT32 ipAddress)
 {
     struct ip_mreq  mreq;
     VOS_ERR_T       result = VOS_NO_ERR;
@@ -1082,10 +1079,7 @@ EXT_DECL VOS_ERR_T vos_sockJoinMC (
  *  @retval         VOS_SOCK_ERR    option not supported
  */
 
-EXT_DECL VOS_ERR_T vos_sockLeaveMC (
-                                    SOCKET  sock,
-                                    UINT32  mcAddress,
-                                    UINT32  ipAddress)
+EXT_DECL VOS_ERR_T vos_sockLeaveMC (SOCKET sock, UINT32 mcAddress, UINT32 ipAddress)
 {
     struct ip_mreq  mreq;
     VOS_ERR_T       result = VOS_NO_ERR;
@@ -1097,7 +1091,6 @@ EXT_DECL VOS_ERR_T vos_sockLeaveMC (
     /*    Is this a multicast address?    */
     else if (IN_MULTICAST(mcAddress))
     {
-
         mreq.imr_multiaddr.s_addr   = vos_htonl(mcAddress);
         mreq.imr_interface.s_addr   = vos_htonl(ipAddress);
 
@@ -1148,8 +1141,7 @@ EXT_DECL VOS_ERR_T vos_sockLeaveMC (
  *  @retval         VOS_BLOCK_ERR   Call would have blocked in blocking mode
  */
 
-EXT_DECL VOS_ERR_T vos_sockSendUDP (
-                                          SOCKET  sock,
+EXT_DECL VOS_ERR_T vos_sockSendUDP (      SOCKET  sock,
                                     const UINT8*  pBuffer,
                                           UINT32* pSize,
                                           UINT32  ipAddress,
@@ -1167,8 +1159,8 @@ EXT_DECL VOS_ERR_T vos_sockSendUDP (
         return VOS_PARAM_ERR;
     }
 
-    size    = *pSize;
-    *pSize  = 0;
+    size   = *pSize;
+    *pSize = 0;
 
     /*      We send UDP packets to the address  */
     memset(&destAddr, 0, sizeof(destAddr));
@@ -1233,8 +1225,7 @@ EXT_DECL VOS_ERR_T vos_sockSendUDP (
  *  @retval         VOS_BLOCK_ERR   Call would have blocked in blocking mode
  */
 
-EXT_DECL VOS_ERR_T vos_sockReceiveUDP (
-                                       SOCKET  sock,
+EXT_DECL VOS_ERR_T vos_sockReceiveUDP (SOCKET  sock,
                                        UINT8*  pBuffer,
                                        UINT32* pSize,
                                        UINT32* pSrcIPAddr,
@@ -1367,10 +1358,7 @@ EXT_DECL VOS_ERR_T vos_sockReceiveUDP (
  *  @retval         VOS_MEM_ERR     resource error
  */
 
-EXT_DECL VOS_ERR_T vos_sockBind (
-    SOCKET  sock,
-    UINT32  ipAddress,
-    UINT16  port)
+EXT_DECL VOS_ERR_T vos_sockBind (SOCKET sock, UINT32 ipAddress, UINT16 port)
 {
     struct sockaddr_in srcAddress;
 
@@ -1420,9 +1408,7 @@ EXT_DECL VOS_ERR_T vos_sockBind (
  *  @retval         VOS_MEM_ERR     resource error
  */
 
-EXT_DECL VOS_ERR_T vos_sockListen (
-    SOCKET  sock,
-    UINT32  backlog)
+EXT_DECL VOS_ERR_T vos_sockListen (SOCKET sock, UINT32 backlog)
 {
     if (sock == (SOCKET)INVALID_SOCKET )
     {
@@ -1455,11 +1441,8 @@ EXT_DECL VOS_ERR_T vos_sockListen (
  *  @retval         VOS_UNKNOWN_ERR sock descriptor unknown error
  */
 
-EXT_DECL VOS_ERR_T vos_sockAccept (
-    SOCKET  sock,
-    SOCKET  *pSock,
-    UINT32  *pIPAddress,
-    UINT16  *pPort)
+EXT_DECL VOS_ERR_T vos_sockAccept (SOCKET sock, SOCKET* pSock,
+                                   UINT32* pIPAddress, UINT16* pPort)
 {
     struct sockaddr_in srcAddress;
     SOCKET connFd = SOCKET_ERROR;
@@ -1494,9 +1477,9 @@ EXT_DECL VOS_ERR_T vos_sockAccept (
                 }
                 case WSAEINTR:         break;
                 case WSAECONNABORTED:  break;
-#if defined (WSAEPROTO)
+               #if defined (WSAEPROTO)
                 case WSAEPROTO:        break;
-#endif
+               #endif
                 default:
                 {
                     vos_printLog(VOS_LOG_ERROR, "accept() failed (socket: %d, err: %d)", (int) *pSock, err);
@@ -1529,10 +1512,7 @@ EXT_DECL VOS_ERR_T vos_sockAccept (
  *  @retval         VOS_MEM_ERR     resource error
  */
 
-EXT_DECL VOS_ERR_T vos_sockConnect (
-    SOCKET  sock,
-    UINT32  ipAddress,
-    UINT16  port)
+EXT_DECL VOS_ERR_T vos_sockConnect (SOCKET sock, UINT32 ipAddress, UINT16 port)
 {
     struct sockaddr_in dstAddress;
 
@@ -1585,10 +1565,7 @@ EXT_DECL VOS_ERR_T vos_sockConnect (
  *  @retval         VOS_BLOCK_ERR   Call would have blocked in blocking mode
  */
 
-EXT_DECL VOS_ERR_T vos_sockSendTCP (
-    SOCKET      sock,
-    const UINT8 *pBuffer,
-    UINT32      *pSize)
+EXT_DECL VOS_ERR_T vos_sockSendTCP (SOCKET sock, const UINT8* pBuffer, UINT32* pSize)
 {
     int sendSize = 0;
     int bufferSize;
@@ -1621,8 +1598,8 @@ EXT_DECL VOS_ERR_T vos_sockSendTCP (
         {
             return VOS_BLOCK_ERR;
         }
-    }
-    while (bufferSize && !(sendSize == -1 && err != WSAEINTR));
+
+    } while (bufferSize && !(sendSize == -1 && err != WSAEINTR));
 
     if (sendSize == -1)
     {
@@ -1659,10 +1636,7 @@ EXT_DECL VOS_ERR_T vos_sockSendTCP (
  *  @retval         VOS_BLOCK_ERR   call would have blocked in blocking mode
  */
 
-EXT_DECL VOS_ERR_T vos_sockReceiveTCP (
-    SOCKET  sock,
-    UINT8   *pBuffer,
-    UINT32  *pSize)
+EXT_DECL VOS_ERR_T vos_sockReceiveTCP (SOCKET sock, UINT8* pBuffer, UINT32* pSize)
 {
     int rcvSize     = 0;
     int bufferSize  = (int) *pSize;
@@ -1778,9 +1752,9 @@ EXT_DECL VOS_ERR_T vos_sockSetMulticastIf (SOCKET sock, UINT32 mcIfAddress)
  *
  *  @retval         Address to bind to
  */
-EXT_DECL VOS_IP4_ADDR_T vos_determineBindAddr ( VOS_IP4_ADDR_T  srcIP,
-                                                VOS_IP4_ADDR_T  mcGroup,
-                                                VOS_IP4_ADDR_T  rcvMostly)
+EXT_DECL VOS_IP4_ADDR_T vos_determineBindAddr (VOS_IP4_ADDR_T srcIP,
+                                               VOS_IP4_ADDR_T mcGroup,
+                                               VOS_IP4_ADDR_T rcvMostly)
 {
     return srcIP;
 }

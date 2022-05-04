@@ -212,7 +212,7 @@ void gen_push_ports_slave (UINT32 comid, UINT32 echoid)
             snk.size    = (UINT32)_size[sz];
             snk.cycle   = (UINT32)(1000 * _period[per]);
             snk.dst     = mcast;
-            snk.src     = dstip;
+            //snk.src     = dstip;
             snk.timeout = 4 * snk.cycle;
 
             /* add ports to config */

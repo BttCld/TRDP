@@ -77,33 +77,35 @@ typedef struct memBlock
 
 typedef struct
 {
-   UINT32  freeSize;             /* Size of free memory */
-   UINT32  minFreeSize;          /* Size of free memory */
-   UINT32  allocCnt;             /* No of allocated memory blocks */
-   UINT32  allocErrCnt;          /* No of allocated memory errors */
-   UINT32  freeErrCnt;           /* No of free memory errors */
-   UINT32  blockCnt[VOS_MEM_NBLOCKSIZES];  /* D:o per block size */
-   UINT32  preAlloc[VOS_MEM_NBLOCKSIZES];  /* Pre allocated per block size */
+   UINT32 freeSize;                       /* Size of free memory */
+   UINT32 minFreeSize;                    /* Size of free memory */
+   UINT32 allocCnt;                       /* No of allocated memory blocks */
+   UINT32 allocErrCnt;                    /* No of allocated memory errors */
+   UINT32 freeErrCnt;                     /* No of free memory errors */
+   UINT32 blockCnt[VOS_MEM_NBLOCKSIZES];  /* D:o per block size */
+   UINT32 preAlloc[VOS_MEM_NBLOCKSIZES];  /* Pre allocated per block size */
 
 } MEM_STATISTIC_T;
 
 typedef struct
 {
-   struct VOS_MUTEX    mutex;          /* Memory allocation semaphore */
-   UINT8*               pArea;         /* Pointer to start of memory area */
-   UINT8*               pFreeArea;     /* Pointer to start of free part of memory area */
-   UINT32              memSize;        /* Size of memory area */
-   UINT32              allocSize;      /* Size of allocated area */
-   UINT32              noOfBlocks;     /* No of blocks */
-   BOOL8               wasMalloced;    /* needs to be freed in the end */
+   struct VOS_MUTEX mutex;                /* Memory allocation semaphore */
+          UINT8*    pArea;                /* Pointer to start of memory area */
+          UINT8*    pFreeArea;            /* Pointer to start of free part of memory area */
+          UINT32    memSize;              /* Size of memory area */
+          UINT32    allocSize;            /* Size of allocated area */
+          UINT32    noOfBlocks;           /* No of blocks */
+          BOOL8     wasMalloced;          /* needs to be freed in the end */
 
    /* Free block header array, one entry for each possible free block size */
    struct
    {
-      UINT32      size;               /* Block size */
-      MEM_BLOCK_T* pFirst;            /* Pointer to first free block */
+      UINT32       size;                   /* Block size */
+      MEM_BLOCK_T* pFirst;                 /* Pointer to first free block */
    } freeBlock[VOS_MEM_NBLOCKSIZES];
-   MEM_STATISTIC_T memCnt;             /* Statistic counters */
+
+   MEM_STATISTIC_T memCnt;                 /* Statistic counters */
+
 } MEM_CONTROL_T;
 
 typedef struct
@@ -119,21 +121,21 @@ typedef struct
 /* Queue header struct */
 struct VOS_QUEUE
 {
-   UINT32                  magicNumber;
-   UINT32                  firstElem;
-   UINT32                  lastElem;
-   VOS_QUEUE_POLICY_T      queueType;
-   UINT32                  maxNoOfMsg;
-   VOS_SEMA_T              semaphore;
-   VOS_MUTEX_T             mutex;
-   struct VOS_QUEUE_ELEM*   pQueue;
+          UINT32              magicNumber;
+          UINT32              firstElem;
+          UINT32              lastElem;
+          VOS_QUEUE_POLICY_T  queueType;
+          UINT32              maxNoOfMsg;
+          VOS_SEMA_T          semaphore;
+          VOS_MUTEX_T         mutex;
+   struct VOS_QUEUE_ELEM*     pQueue;
 };
 
 /* Queue element struct */
 struct VOS_QUEUE_ELEM
 {
-   UINT8*   pData;
-   UINT32  size;
+   UINT8* pData;
+   UINT32 size;
 };
 
 /* Forward declaration, Mutex size is target dependent! */
@@ -408,8 +410,8 @@ EXT_DECL UINT8* vos_memAlloc (UINT32 size)
    }
    else
    {
-      blockSize   = gMem.freeBlock[i].size;
-      pBlock      = gMem.freeBlock[i].pFirst;
+      blockSize = gMem.freeBlock[i].size;
+      pBlock    = gMem.freeBlock[i].pFirst;
 
       /* Check if there is a free block ready */
       if (pBlock != NULL)
@@ -706,18 +708,15 @@ EXT_DECL INT32 vos_strnicmp (const CHAR8* pStr1, const CHAR8* pStr2, UINT32 coun
  *  @retval         none
  */
 
-EXT_DECL void vos_strncpy (
-   CHAR8*       pStrDst,
-   const CHAR8* pStrSrc,
-   UINT32      count )
+EXT_DECL void vos_strncpy (CHAR8* pStrDst, const CHAR8* pStrSrc, UINT32 count)
 {
-#if (defined (WIN32) || defined (WIN64))
+  #if (defined (WIN32) || defined (WIN64))
    CHAR8 character = pStrDst[count];
    (void) strncpy_s((char*)pStrDst, (size_t)(count + 1), (const char*)pStrSrc, (size_t) count);
    pStrDst[count] = character;
-#else
+  #else
    (void) strncpy((char*)pStrDst, (const char*)pStrSrc, (size_t) count);   /*lint !e920: return value not used */
-#endif
+  #endif
 }
 
 /****************************************************************************************/
@@ -730,16 +729,13 @@ EXT_DECL void vos_strncpy (
  *  @retval         none
  */
 
-EXT_DECL void vos_strncat (
-   CHAR8*       pStrDst,
-   UINT32      count,
-   const CHAR8* pStrSrc)
+EXT_DECL void vos_strncat (CHAR8* pStrDst, UINT32 count, const CHAR8* pStrSrc)
 {
-#if (defined (WIN32) || defined (WIN64))
+  #if (defined (WIN32) || defined (WIN64))
    (void) strcat_s((char*)pStrDst, (size_t) count, (const char*)pStrSrc);
-#else
+  #else
    (void) strncat((char*)pStrDst, (const char*)pStrSrc, (size_t) count);   /*lint !e920: return value not used */
-#endif
+  #endif
 }
 
 /****************************************************************************************/
@@ -762,10 +758,9 @@ EXT_DECL void vos_strncat (
  *  @retval         VOS_QUEUE_ERR   error creating queue
  */
 
-EXT_DECL VOS_ERR_T vos_queueCreate (
-   VOS_QUEUE_POLICY_T  queueType,
-   UINT32              maxNoOfMsg,
-   VOS_QUEUE_T*         pQueueHandle )
+EXT_DECL VOS_ERR_T vos_queueCreate (VOS_QUEUE_POLICY_T queueType,
+                                    UINT32             maxNoOfMsg,
+                                    VOS_QUEUE_T*       pQueueHandle)
 {
    VOS_ERR_T retVal = VOS_UNKNOWN_ERR;
 
@@ -870,10 +865,10 @@ EXT_DECL VOS_ERR_T vos_queueSend (VOS_QUEUE_T queueHandle, UINT8* pData, UINT32 
    VOS_ERR_T   err = VOS_UNKNOWN_ERR;
    BOOL8       giveSemaphore = FALSE;
 
-   if ((queueHandle == (VOS_QUEUE_T) NULL)
-         || (pData == NULL)
-         || (size == 0)
-         || (queueHandle->magicNumber != cQueueMagic))
+   if (   (queueHandle == (VOS_QUEUE_T) NULL)
+       || (pData == NULL)
+       || (size == 0)
+       || (queueHandle->magicNumber != cQueueMagic))
    {
       vos_printLogStr(VOS_LOG_ERROR, "vos_queueSend() ERROR invalid parameter\n");
       retVal = VOS_PARAM_ERR;
@@ -889,8 +884,9 @@ EXT_DECL VOS_ERR_T vos_queueSend (VOS_QUEUE_T queueHandle, UINT8* pData, UINT32 
       else
       {
          /* Check if queue is full */
-         if ((queueHandle->lastElem + 1 == queueHandle->firstElem)
-               || ((queueHandle->lastElem == queueHandle->maxNoOfMsg - 1) && (queueHandle->firstElem == 0)))
+         if (   (queueHandle->lastElem + 1 == queueHandle->firstElem)
+             || (   (queueHandle->lastElem == queueHandle->maxNoOfMsg - 1)
+                 && (queueHandle->firstElem == 0)))
          {
             vos_printLogStr(VOS_LOG_ERROR, "vos_queueSend() ERROR Queue is full\n");
             retVal = VOS_QUEUE_FULL_ERR;
@@ -901,8 +897,8 @@ EXT_DECL VOS_ERR_T vos_queueSend (VOS_QUEUE_T queueHandle, UINT8* pData, UINT32 
             if (queueHandle->pQueue[queueHandle->firstElem].pData != NULL)
             {
                /* Determine queue type */
-               if ((queueHandle->queueType == VOS_QUEUE_POLICY_FIFO)
-                     || (queueHandle->queueType == VOS_QUEUE_POLICY_OTHER))
+               if (   (queueHandle->queueType == VOS_QUEUE_POLICY_FIFO)
+                   || (queueHandle->queueType == VOS_QUEUE_POLICY_OTHER))
                {
                   /* FIFO, append to end */
                   if (queueHandle->lastElem == queueHandle->maxNoOfMsg - 1)
@@ -913,8 +909,9 @@ EXT_DECL VOS_ERR_T vos_queueSend (VOS_QUEUE_T queueHandle, UINT8* pData, UINT32 
                   {
                      queueHandle->lastElem++;
                   }
-                  queueHandle->pQueue[queueHandle->lastElem].pData    = pData;
-                  queueHandle->pQueue[queueHandle->lastElem].size     = size;
+
+                  queueHandle->pQueue[queueHandle->lastElem].pData = pData;
+                  queueHandle->pQueue[queueHandle->lastElem].size  = size;
                }
                else
                {
@@ -927,18 +924,19 @@ EXT_DECL VOS_ERR_T vos_queueSend (VOS_QUEUE_T queueHandle, UINT8* pData, UINT32 
                   {
                      queueHandle->firstElem--;
                   }
-                  queueHandle->pQueue[queueHandle->firstElem].pData   = pData;
-                  queueHandle->pQueue[queueHandle->firstElem].size    = size;
+                  queueHandle->pQueue[queueHandle->firstElem].pData = pData;
+                  queueHandle->pQueue[queueHandle->firstElem].size  = size;
                }
             }
             else
             {
                /* queue is empty, don't need to update first / last element indicators */
-               queueHandle->pQueue[queueHandle->firstElem].pData   = pData;
-               queueHandle->pQueue[queueHandle->firstElem].size    = size;
+               queueHandle->pQueue[queueHandle->firstElem].pData = pData;
+               queueHandle->pQueue[queueHandle->firstElem].size  = size;
             }
             giveSemaphore = TRUE;
          }
+
          err = vos_mutexUnlock(queueHandle->mutex);
          if (err != VOS_NO_ERR)
          {
@@ -974,11 +972,8 @@ EXT_DECL VOS_ERR_T vos_queueSend (VOS_QUEUE_T queueHandle, UINT8* pData, UINT32 
  *  @retval         VOS_QUEUE_ERR    queue is empty
  */
 
-EXT_DECL VOS_ERR_T vos_queueReceive (
-   VOS_QUEUE_T queueHandle,
-   UINT8       * *ppData,
-   UINT32*      pSize,
-   UINT32      usTimeout )
+EXT_DECL VOS_ERR_T vos_queueReceive (VOS_QUEUE_T queueHandle,
+                                     UINT8** ppData, UINT32* pSize, UINT32 usTimeout )
 {
    VOS_ERR_T   retVal  = VOS_UNKNOWN_ERR;
    VOS_ERR_T   err     = VOS_UNKNOWN_ERR;

@@ -56,9 +56,10 @@
  * INCLUDES
  */
 
-#include "vos_types.h"
-#include "vos_mem.h"
-#include "vos_sock.h"
+#include "vos/api/vos_types.h"
+#include "vos/api/vos_mem.h"
+#include "vos/api/vos_sock.h"
+
 #include "iec61375-2-3.h"
 
 #ifdef TSN_SUPPORT
