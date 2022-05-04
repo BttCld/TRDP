@@ -60,10 +60,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "trdp_types.h"
-#include "trdp_utils.h"
-#include "tau_xml.h"
-#include "trdp_xml.h"
+#include "api/trdp_types.h"
+#include "common/trdp_utils.h"
+#include "api/tau_xml.h"
+#include "common/trdp_xml.h"
 
 /*******************************************************************************
  * DEFINES

@@ -97,13 +97,13 @@
 
 #include <string.h>
 
-#include "trdp_if_light.h"
-#include "trdp_utils.h"
-#include "trdp_pdcom.h"
-#include "trdp_stats.h"
-#include "vos_sock.h"
-#include "vos_mem.h"
-#include "vos_utils.h"
+#include "api/trdp_if_light.h"
+#include "common/trdp_utils.h"
+#include "common/trdp_pdcom.h"
+#include "common/trdp_stats.h"
+#include "vos/api/vos_sock.h"
+#include "vos/api/vos_mem.h"
+#include "vos/api/vos_utils.h"
 
 #if MD_SUPPORT
 #include "trdp_mdcom.h"

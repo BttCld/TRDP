@@ -35,8 +35,8 @@
 #error "wrong file included!"
 #endif
 
-#include "vos_types.h"
-#include "vos_thread.h"
+#include "vos/api/vos_types.h"
+#include "vos/api/vos_thread.h"
 
 #ifdef __cplusplus
 extern "C" {

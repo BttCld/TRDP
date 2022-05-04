@@ -34,10 +34,10 @@
 
 #include <string.h>
 
-#include "vos_utils.h"
-#include "vos_sock.h"
-#include "vos_thread.h"
-#include "vos_mem.h"
+#include "vos/api/vos_utils.h"
+#include "vos/api/vos_sock.h"
+#include "vos/api/vos_thread.h"
+#include "vos/api/vos_mem.h"
 #include "vos_private.h"
 
 #ifndef PROGMEM

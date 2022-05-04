@@ -1,5 +1,5 @@
 
-#include "trdp_if_light.h"
+#include "api/trdp_if_light.h"
 
 #ifdef TSN_SUPPORT
 #define PORT_FLAGS TRDP_FLAGS_TSN

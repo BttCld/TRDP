@@ -45,9 +45,9 @@
 #include "trdp_utils.h"
 #include "trdp_mdcom.h"
 #include "trdp_stats.h"
-#include "vos_sock.h"
-#include "vos_mem.h"
-#include "vos_utils.h"
+#include "vos/api/vos_sock.h"
+#include "vos/api/vos_mem.h"
+#include "vos/api/vos_utils.h"
 
 #ifdef __cplusplus
 extern "C" {

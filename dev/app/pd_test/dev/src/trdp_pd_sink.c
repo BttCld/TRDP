@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "trdp_if_light.h"
+#include "api/trdp_if_light.h"
 
 #if defined (POSIX)
 #include <unistd.h>
@@ -37,7 +37,7 @@
 #include <time.h>
 #endif
 
-#include "vos_thread.h"
+#include "vos/api/vos_thread.h"
 
 #include "common.h"
 

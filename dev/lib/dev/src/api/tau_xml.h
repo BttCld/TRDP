@@ -37,7 +37,7 @@
  * INCLUDES
  */
 
-#include "vos_types.h"
+#include "vos/api/vos_types.h"
 #include "trdp_types.h"
 
 #ifdef __cplusplus

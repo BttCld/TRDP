@@ -76,7 +76,7 @@
 
 #include <string.h>
 
-#include "trdp_if_light.h"
+#include "api/trdp_if_light.h"
 #include "tlc_if.h"
 #include "trdp_utils.h"
 #include "trdp_mdcom.h"

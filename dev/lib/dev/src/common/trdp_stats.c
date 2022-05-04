@@ -37,13 +37,13 @@
 #include <string.h>
 
 #include "trdp_stats.h"
-#include "trdp_if_light.h"
+#include "api/trdp_if_light.h"
 #include "tlc_if.h"
 #include "trdp_private.h"
 #include "trdp_pdcom.h"
 #include "trdp_utils.h"
-#include "vos_mem.h"
-#include "vos_thread.h"
+#include "vos/api/vos_mem.h"
+#include "vos/api/vos_thread.h"
 
 /*******************************************************************************
  * DEFINES

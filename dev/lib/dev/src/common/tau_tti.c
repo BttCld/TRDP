@@ -75,12 +75,12 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "trdp_if_light.h"
-#include "trdp_utils.h"
-#include "tau_marshall.h"
-#include "tau_tti.h"
-#include "vos_sock.h"
-#include "tau_dnr.h"
+#include "api/trdp_if_light.h"
+#include "common/trdp_utils.h"
+#include "api/tau_marshall.h"
+#include "api/tau_tti.h"
+#include "vos/api/vos_sock.h"
+#include "api/tau_dnr.h"
 
 #include "tau_cstinfo.h"
 

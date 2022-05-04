@@ -41,10 +41,10 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "trdp_types.h"
-#include "trdp_utils.h"
-#include "trdp_if_light.h"
-#include "tau_ctrl.h"
+#include "api/trdp_types.h"
+#include "common/trdp_utils.h"
+#include "api/trdp_if_light.h"
+#include "api/tau_ctrl.h"
 
 /**********************************************************************************************************************
  * DEFINES

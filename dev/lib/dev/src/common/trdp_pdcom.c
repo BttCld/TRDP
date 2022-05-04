@@ -83,13 +83,13 @@
 
 #include <string.h>
 
-#include "trdp_types.h"
+#include "api/trdp_types.h"
 #include "trdp_utils.h"
 #include "trdp_pdcom.h"
 #include "tlc_if.h"
 #include "trdp_stats.h"
-#include "vos_sock.h"
-#include "vos_mem.h"
+#include "vos/api/vos_sock.h"
+#include "vos/api/vos_mem.h"
 
 #ifdef HIGH_PERF_INDEXED
 #include "trdp_pdindex.h"

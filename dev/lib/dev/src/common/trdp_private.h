@@ -53,9 +53,9 @@
  * INCLUDES
  */
 
-#include "trdp_types.h"
-#include "vos_thread.h"
-#include "vos_sock.h"
+#include "api/trdp_types.h"
+#include "vos/api/vos_thread.h"
+#include "vos/api/vos_sock.h"
 
 
 /***********************************************************************************************************************

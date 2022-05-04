@@ -33,7 +33,7 @@
  * INCLUDES
  */
 
-#include "trdp_if_light.h"
+#include "api/trdp_if_light.h"
 
 #ifdef __cplusplus
 extern "C" {

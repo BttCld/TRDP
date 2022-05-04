@@ -58,10 +58,10 @@
 #define PTHREAD_MUTEX_INITIALIZER  0 /* Dummy */
 #endif
 
-#include "vos_types.h"
-#include "vos_utils.h"
-#include "vos_mem.h"
-#include "vos_thread.h"
+#include "vos/api/vos_types.h"
+#include "vos/api/vos_utils.h"
+#include "vos/api/vos_mem.h"
+#include "vos/api/vos_thread.h"
 #include "vos_private.h"
 
 /*****************************************************************************************

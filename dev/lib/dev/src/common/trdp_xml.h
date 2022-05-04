@@ -33,7 +33,7 @@
 #include <stdio.h>
 
 #include "trdp_private.h"
-#include "vos_utils.h"
+#include "vos/api/vos_utils.h"
 
 /*******************************************************************************
  * DEFINES

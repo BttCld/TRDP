@@ -38,7 +38,7 @@
     "You are trying to compile the Windows implementation of vos_sock.c - either define WIN32 or WIN64 or exclude this file!"
 #endif
 
-#include "vos_types.h"
+#include "vos/api/vos_types.h"
 
 #ifdef TSN_SUPPORT
 #pragma WARNING("*** To build a TSN capable TRDP library the vos_sock implementation has to be extended! ***")
@@ -61,10 +61,10 @@
 #include <netioapi.h>
 #include <iphlpapi.h>
 
-#include "vos_utils.h"
-#include "vos_sock.h"
-#include "vos_thread.h"
-#include "vos_mem.h"
+#include "vos/api/vos_utils.h"
+#include "vos/api/vos_sock.h"
+#include "vos/api/vos_thread.h"
+#include "vos/api/vos_mem.h"
 
 #pragma comment(lib, "IPHLPAPI.lib")
 

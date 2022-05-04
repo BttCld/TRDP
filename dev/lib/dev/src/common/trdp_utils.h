@@ -44,8 +44,8 @@
 #include <stdio.h>  /*lint !e451 missing guard in std-header */
 
 #include "trdp_private.h"
-#include "vos_utils.h"
-#include "vos_sock.h"
+#include "vos/api/vos_utils.h"
+#include "vos/api/vos_sock.h"
 
 /*******************************************************************************
  * DEFINES

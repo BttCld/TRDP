@@ -44,12 +44,12 @@
 
 #include <string.h>
 
-#include "trdp_types.h"
-#include "trdp_if_light.h"
-#include "trdp_utils.h"
-#include "vos_mem.h"
+#include "api/trdp_types.h"
+#include "api/trdp_if_light.h"
+#include "common/trdp_utils.h"
+#include "vos/api/vos_mem.h"
 
-#include "tau_marshall.h"
+#include "api/tau_marshall.h"
 
 /***********************************************************************************************************************
  * TYPEDEFS

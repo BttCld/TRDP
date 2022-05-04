@@ -42,12 +42,12 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "trdp_types.h"
+#include "api/trdp_types.h"
 #include "trdp_utils.h"
 #include "trdp_pdcom.h"
-#include "vos_utils.h"
-#include "vos_sock.h"
-#include "vos_thread.h"
+#include "vos/api/vos_utils.h"
+#include "vos/api/vos_sock.h"
+#include "vos/api/vos_thread.h"
 #include "trdp_pdindex.h"
 
 #ifdef HIGH_PERF_INDEXED

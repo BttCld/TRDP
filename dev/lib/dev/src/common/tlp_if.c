@@ -50,9 +50,9 @@
 #include "trdp_utils.h"
 #include "trdp_pdcom.h"
 #include "trdp_stats.h"
-#include "vos_sock.h"
-#include "vos_mem.h"
-#include "vos_utils.h"
+#include "vos/api/vos_sock.h"
+#include "vos/api/vos_mem.h"
+#include "vos/api/vos_utils.h"
 
 #ifdef HIGH_PERF_INDEXED
 #include "trdp_pdindex.h"

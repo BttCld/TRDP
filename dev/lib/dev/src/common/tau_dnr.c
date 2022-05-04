@@ -45,13 +45,13 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include "tau_tti.h"                        /* needed for TRDP_SHORT_VERSION */
-#include "tau_dnr.h"
-#include "tau_dnr_types.h"
-#include "trdp_utils.h"
-#include "trdp_if_light.h"
-#include "vos_mem.h"
-#include "vos_sock.h"
+#include "api/tau_tti.h"                        /* needed for TRDP_SHORT_VERSION */
+#include "api/tau_dnr.h"
+#include "api/tau_dnr_types.h"
+#include "common/trdp_utils.h"
+#include "api/trdp_if_light.h"
+#include "vos/api/vos_mem.h"
+#include "vos/api/vos_sock.h"
 
 
 /***********************************************************************************************************************
