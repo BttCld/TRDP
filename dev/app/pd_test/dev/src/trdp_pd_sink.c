@@ -37,6 +37,7 @@
 #include <time.h>
 #endif
 
+#include "vos/api/vos_utils.h"
 #include "vos/api/vos_thread.h"
 
 #include "common.h"
@@ -118,7 +119,7 @@ int main (int argc, char* argv[])
    pdcfg.sendParam.qos = 5;
    pdcfg.sendParam.ttl = 64;
    pdcfg.flags         = TRDP_FLAGS_NONE;
-   pdcfg.timeout       = 10000000;
+   pdcfg.timeout       = VOS_TIME_SEC(10);
    pdcfg.toBehavior    = TRDP_TO_SET_TO_ZERO;
    pdcfg.port          = 17224;
 
@@ -136,14 +137,14 @@ int main (int argc, char* argv[])
    // populate ports vector
    setup_ports(apph, _vsPort, _uiNports);
 
-   vos_threadDelay(2000000);
+   vos_threadDelay(VOS_TIME_SEC(2));
 
    {
       VOS_FDS_T   vsFD;
-      INT32       i32MaxFD = 0;      
+      INT32       i32MaxFD = 0;
       TRDP_TIME_T sTNow;
       TRDP_TIME_T sTNext;
-      TRDP_TIME_T sTOut = {0, 10000};  // 10 msec
+      TRDP_TIME_T sTOut = {0, VOS_TIME_MSEC(10)};
       INT32       i32RetLoc;
 
       vos_getTime(&sTNow);
@@ -152,7 +153,7 @@ int main (int argc, char* argv[])
       for(;;)
       {
          sTNext.tv_sec  = 0;
-         sTNext.tv_usec = 500000;
+         sTNext.tv_usec = VOS_TIME_MSEC(500);
 
          vos_addTime(&sTNow, &sTNext);
          sTNext = sTNow;
@@ -162,18 +163,18 @@ int main (int argc, char* argv[])
          tlc_getInterval(apph, &sTOut, &vsFD, &i32MaxFD);
 
          i32RetLoc = vos_select(i32MaxFD + 1, &vsFD, NULL, NULL, &sTOut);
-      
+
          /* drive TRDP communications */
          tlc_process(apph, &vsFD, &i32RetLoc);
-      
+
          /* poll (receive) data */
          //poll_data(apph, _vsPort, _uiNports);
-      
+
          /* process data every 500 msec */
          //vos_getTime(&sTNow);
          //if (timercmp(&sTNow, &sTNext, >))
          //   process_data(apph, _vsPort, _uiNports, PORT_SINK);
-      
+
          /* wait 10 msec  */
          //vos_threadDelay(10000);
       }

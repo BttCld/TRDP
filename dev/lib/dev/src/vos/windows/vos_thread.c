@@ -160,6 +160,7 @@ static void vos_runCyclicThread (VOS_THREAD_CYC_T* pParameters)
                       "cyclic thread with interval %d usec exceeded time out by running %lld sec\n",
                       interval, (afterCall.QuadPart / (MSECS_PER_SEC * USECS_PER_MSEC)));
       }
+
       /* sleep, if waitingTime is at least 1 ms */
       if (waitingTime > USECS_PER_MSEC)
       {

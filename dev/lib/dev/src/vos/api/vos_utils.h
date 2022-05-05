@@ -46,6 +46,10 @@ extern "C" {
  * DEFINES
  */
 
+#define VOS_TIME_SEC(x)  (x * 1000 * 1000)
+#define VOS_TIME_MSEC(x) (x * 1000)
+#define VOS_TIME_USEC(x) (x)
+
 extern VOS_PRINT_DBG_T gPDebugFunction;
 extern void *gRefCon;
 
@@ -198,10 +202,7 @@ EXT_DECL int vos_hostIsBigEndian(void);
  *  @retval             crc32 according to IEEE802.3
  */
 
-EXT_DECL UINT32 vos_crc32 (
-    UINT32      crc,
-    const UINT8 *pData,
-    UINT32      dataLen);
+EXT_DECL UINT32 vos_crc32 (UINT32 crc, const UINT8 *pData, UINT32 dataLen);
 
 /**********************************************************************************************************************/
 /** Compute crc32 according to IEC 61375-2-3 B.7
@@ -213,10 +214,7 @@ EXT_DECL UINT32 vos_crc32 (
  *  @retval             crc32 according to IEC 61375-2-3
  */
 
-EXT_DECL UINT32 vos_sc32 (
-    UINT32      crc,
-    const UINT8 *pData,
-    UINT32      dataLen);
+EXT_DECL UINT32 vos_sc32 (UINT32 crc, const UINT8* pData, UINT32 dataLen);
 
 /**********************************************************************************************************************/
 /** Initialize the vos library.
@@ -228,9 +226,7 @@ EXT_DECL UINT32 vos_sc32 (
  *  @retval           VOS_INIT_ERR      unsupported
  */
 
-EXT_DECL VOS_ERR_T vos_init (
-    void            *pRefCon,
-    VOS_PRINT_DBG_T pDebugOutput);
+EXT_DECL VOS_ERR_T vos_init (void* pRefCon, VOS_PRINT_DBG_T pDebugOutput);
 
 /**********************************************************************************************************************/
 /** DeInitialize the vos library.

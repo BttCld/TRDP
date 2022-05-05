@@ -142,7 +142,7 @@ int main (int argc, char* argv[])
    pdcfg.sendParam.qos = 5;
    pdcfg.sendParam.ttl = 64;
    pdcfg.flags         = TRDP_FLAGS_NONE;
-   pdcfg.timeout       = 10000000;
+   pdcfg.timeout       = VOS_TIME_SEC(10);
    pdcfg.toBehavior    = TRDP_TO_SET_TO_ZERO;
    pdcfg.port          = 17224;
 
@@ -158,10 +158,11 @@ int main (int argc, char* argv[])
    gen_push_ports_master(10000, 20000);
 
    setup_ports(apph, _vsPort, _uiNports);
-   vos_threadDelay(2000000);
+
+   vos_threadDelay(VOS_TIME_SEC(2));
 
    /* main test loop */
-   while (1)
+   for(;;)
    {
       /* drive TRDP communications */
       tlc_process(apph, NULL, NULL);
@@ -174,7 +175,7 @@ int main (int argc, char* argv[])
          process_data(apph, _vsPort, _uiNports, PORT_PUSH);
 
       /* wait 10 msec  */
-      vos_threadDelay(10000);
+      vos_threadDelay(VOS_TIME_MSEC(10));
    }
 
    return 0;
@@ -191,8 +192,8 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
    printf("- generating PUSH ports (master side) ... ");
 
    memset(&src, 0, sizeof(src));
-   
-   src.type = PORT_PUSH;   
+
+   src.type = PORT_PUSH;
 
   #if UNICAST_EN
    /* for unicast/multicast address */
@@ -240,16 +241,16 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
          {
             /* comid  */
             src.comid = comid + 100u * a + 40 * (per + 1) + 3 * (sz + 1);
-            
+
             /* dataset size */
             src.size = (UINT32)_size[sz];
-            
+
             /* period [usec] */
             src.cycle = (UINT32)1000u * (UINT32)_period[per];
 
             /* addresses */
             src.dst  = mcast;
-            src.src  = srcip;               
+            src.src  = srcip;
             src.link = -1;
 
             /* add ports to config */

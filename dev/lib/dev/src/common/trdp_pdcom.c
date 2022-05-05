@@ -124,20 +124,20 @@
  *  @param[in]      replyIpAddress  Pull request Ip
  *  @param[in]      serviceId       Service Id
  */
-void    trdp_pdInit (
-   PD_ELE_T*    pPacket,
-   TRDP_MSG_T  type,
-   UINT32      etbTopoCnt,
-   UINT32      opTrnTopoCnt,
-   UINT32      replyComId,
-   UINT32      replyIpAddress,
-   UINT32      serviceId)
+void trdp_pdInit (PD_ELE_T*  pPacket,
+                  TRDP_MSG_T type,
+                  UINT32     etbTopoCnt,
+                  UINT32     opTrnTopoCnt,
+                  UINT32     replyComId,
+                  UINT32     replyIpAddress,
+                  UINT32     serviceId)
 {
    if (pPacket == NULL || pPacket->pFrame == NULL)
    {
       return;
    }
-#ifdef TSN_SUPPORT
+
+  #ifdef TSN_SUPPORT
    /* If TSN is set, use the smaller header */
    if (pPacket->privFlags & TRDP_IS_TSN)
    {
@@ -150,7 +150,7 @@ void    trdp_pdInit (
       pFrameHead->reserved        = vos_htonl(serviceId);
    }
    else
-#endif
+  #endif
    {
       /* This is the standard header */
       pPacket->pFrame->frameHead.protocolVersion  = vos_htons(TRDP_PROTO_VER);
@@ -281,13 +281,12 @@ TRDP_ERR_T trdp_pdPut (PD_ELE_T*       pPacket,
  *  @retval         TRDP_NO_ERR         no error
  *  @retval         TRDP_IO_ERR         socket I/O error
  */
-TRDP_ERR_T  trdp_pdSendImmediateTSN (
-   TRDP_SESSION_PT appHandle,
-   PD_ELE_T*        pSendPD,
-   VOS_TIMEVAL_T*   pTxTime)
+TRDP_ERR_T  trdp_pdSendImmediateTSN (TRDP_SESSION_PT appHandle,
+                                     PD_ELE_T*       pSendPD,
+                                     VOS_TIMEVAL_T*  pTxTime)
 {
-   VOS_ERR_T       err;
-   PD2_PACKET_T*    pFrame = (PD2_PACKET_T*) pSendPD->pFrame;
+   VOS_ERR_T     err;
+   PD2_PACKET_T* pFrame = (PD2_PACKET_T*) pSendPD->pFrame;
 
    /*  Update the sequence counter and re-compute CRC    */
    trdp_pdUpdate(pSendPD);
@@ -321,9 +320,7 @@ TRDP_ERR_T  trdp_pdSendImmediateTSN (
  *  @retval         TRDP_NO_ERR         no error
  *  @retval         TRDP_IO_ERR         socket I/O error
  */
-TRDP_ERR_T  trdp_pdSendImmediate (
-   TRDP_SESSION_PT appHandle,
-   PD_ELE_T*        pSendPD)
+TRDP_ERR_T  trdp_pdSendImmediate (TRDP_SESSION_PT appHandle, PD_ELE_T* pSendPD)
 {
    TRDP_ERR_T  err;
    PD_PACKET_T* pFrame = (PD_PACKET_T*) pSendPD->pFrame;
@@ -352,7 +349,6 @@ TRDP_ERR_T  trdp_pdSendImmediate (
                                          &pSendPD->sendSize,
                                          pSendPD->addr.destIpAddr,
                                          appHandle->pdDefault.port);
-
       if (err == TRDP_NO_ERR)
       {
          appHandle->stats.pd.numSend++;
@@ -366,12 +362,11 @@ TRDP_ERR_T  trdp_pdSendImmediate (
 /** Copy data
  *  Set the header infos
  */
-TRDP_ERR_T trdp_pdGet (
-   PD_ELE_T*            pPacket,
-   TRDP_UNMARSHALL_T   unmarshall,
-   void*                refCon,
-   const UINT8*         pData,
-   UINT32*              pDataSize)
+TRDP_ERR_T trdp_pdGet (PD_ELE_T*         pPacket,
+                       TRDP_UNMARSHALL_T unmarshall,
+                       void*             refCon,
+                       const UINT8*      pData,
+                       UINT32*           pDataSize)
 {
    if (pPacket == NULL)
    {
@@ -429,18 +424,16 @@ TRDP_ERR_T trdp_pdGet (
  *  @retval         TRDP_NO_ERR         no error
  *  @retval         TRDP_IO_ERR         socket I/O error
  */
-TRDP_ERR_T  trdp_pdSendElement (
-   TRDP_SESSION_PT appHandle,
-   PD_ELE_T        * *ppElement)
+TRDP_ERR_T trdp_pdSendElement (TRDP_SESSION_PT appHandle, PD_ELE_T** ppElement)
 {
-   TRDP_ERR_T  err     = TRDP_NO_ERR;
-   PD_ELE_T*    iterPD = *ppElement;
+   TRDP_ERR_T err    = TRDP_NO_ERR;
+   PD_ELE_T*  iterPD = *ppElement;
 
    /* send only if there is valid data */
    if (!(iterPD->privFlags & TRDP_INVALID_DATA))
    {
-      if ((iterPD->privFlags & TRDP_REQ_2B_SENT) &&
-            (iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PD)))       /*  PULL packet?  */
+      if (   (iterPD->privFlags & TRDP_REQ_2B_SENT)
+          && (iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PD)))       /*  PULL packet?  */
       {
          iterPD->pFrame->frameHead.msgType = vos_htons(TRDP_MSG_PP);
       }
@@ -504,13 +497,13 @@ TRDP_ERR_T  trdp_pdSendElement (
       }
    }
 
-   if ((iterPD->privFlags & TRDP_REQ_2B_SENT) &&
-         (iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PP)))       /*  PULL packet?  */
+   if (   (iterPD->privFlags & TRDP_REQ_2B_SENT)
+       && (iterPD->pFrame->frameHead.msgType == vos_htons(TRDP_MSG_PP)))       /*  PULL packet?  */
    {
       /* Do not reset timer, but restore msgType */
       iterPD->pFrame->frameHead.msgType = vos_htons(TRDP_MSG_PD);
    }
-#ifndef HIGH_PERF_INDEXED
+  #ifndef HIGH_PERF_INDEXED
    else if (timerisset(&iterPD->interval))
    {
       TRDP_TIME_T now;
@@ -530,7 +523,7 @@ TRDP_ERR_T  trdp_pdSendElement (
          vos_addTime(&iterPD->timeToGo, &iterPD->interval);
       }
    }
-#endif
+  #endif
    /* Reset "immediate" flag for request or requested packet */
    if (iterPD->privFlags & TRDP_REQ_2B_SENT)
    {
