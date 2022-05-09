@@ -1261,7 +1261,9 @@ EXT_DECL TRDP_ERR_T tlp_subscribe (TRDP_APP_SESSION_T      appHandle,
                                    TRDP_FLAGS_T            pktFlags,
                                    const TRDP_COM_PARAM_T* pRecParams,
                                    UINT32                  timeout,
-                                   TRDP_TO_BEHAVIOR_T      toBehavior)
+                                   TRDP_TO_BEHAVIOR_T      toBehavior,
+                                   // [BC] used for check on fixed lenght waited
+                                   UINT32                  dataSize)
 {
    TRDP_TIME_T      now;
    TRDP_ERR_T       ret = TRDP_NO_ERR;
@@ -1403,6 +1405,8 @@ EXT_DECL TRDP_ERR_T tlp_subscribe (TRDP_APP_SESSION_T      appHandle,
                                            appHandle->pdDefault.pfCbFunction : pfCbFunction;
                newPD->pCachedDS          = NULL;
                newPD->magic              = TRDP_MAGIC_SUB_HNDL_VALUE;
+               // [BC]
+               newPD->dataSize           = dataSize;
 
                if (timeout == TRDP_INFINITE_TIMEOUT)
                {

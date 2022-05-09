@@ -739,7 +739,7 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
 {
    PD_HEADER_T*     pNewFrameHead    = &appHandle->pNewFrame->frameHead;
    PD_ELE_T*        pExistingElement = NULL;
-   PD_ELE_T*        pPulledElement;
+   // [BC] PD_ELE_T*        pPulledElement;
    TRDP_ERR_T       err              = TRDP_NO_ERR;
    UINT32           recSize          = TRDP_MAX_PD_PACKET_SIZE;
    int              informUser       = FALSE;
@@ -747,6 +747,8 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
    TRDP_ADDRESSES_T subAddresses     = { 0u, 0u, 0u, 0u, 0u, 0u, 0u, 0u};
    UINT32           srcIfAddr        = 0u;
    TRDP_MSG_T       msgType;
+   UINT32           newSeqCnt        = 0u;
+   int              iRetLoc;
   #ifdef TSN_SUPPORT
    PD2_HEADER_T*    pTSNFrameHead    = (PD2_HEADER_T*) pNewFrameHead;
   #endif
@@ -787,10 +789,14 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
          return err;
 
       case TRDP_WIRE_ERR:
+         // size error (< header or > size max)
+         // protocol error
+         // type of PD not recognized
          appHandle->stats.pd.numProtErr++;
          return err;
 
       default:
+         vos_printLog(VOS_LOG_ERROR, "Unknown %d\n", err);
          return err;
    }
 
@@ -824,7 +830,7 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
       subAddresses.etbTopoCnt   = vos_ntohl(pNewFrameHead->etbTopoCnt);
       subAddresses.opTrnTopoCnt = vos_ntohl(pNewFrameHead->opTrnTopoCnt);
       subAddresses.serviceId    = vos_ntohl(pNewFrameHead->reserved);
-      msgType = vos_ntohs(pNewFrameHead->msgType);
+      msgType                   = vos_ntohs(pNewFrameHead->msgType);
    }
 
    /*  Examine subscription queue, are we interested in this PD?   */
@@ -863,12 +869,19 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
                                     pExistingElement->addr.etbTopoCnt,
                                     pExistingElement->addr.opTrnTopoCnt))
       {
-         UINT32 newSeqCnt = vos_ntohl(pNewFrameHead->sequenceCounter);   /* same location for PD and PD2 */
+         /* same location for PD and PD2 */
+         newSeqCnt = vos_ntohl(pNewFrameHead->sequenceCounter);
+
+         // [BC] start. Will do later. The reason is to call the callback with PD descriptor
+         //             not updated yet
+        #if 0
          /* Save the source IP address of the received packet */
          pExistingElement->lastSrcIP = subAddresses.srcIpAddr;
+
          /* Save the real destination of the received packet (own IP or MC group) */
          pExistingElement->addr.destIpAddr = subAddresses.destIpAddr;
-
+        #endif
+         // [BC] end
 
          if (   (newSeqCnt == 0u)                                 /* restarted or new sender  */
              || (pExistingElement->privFlags & TRDP_TIMED_OUT))   /* or timed out before      */
@@ -876,21 +889,31 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
             trdp_resetSequenceCounter(pExistingElement, subAddresses.srcIpAddr, msgType);
          }
 
+         // ==============================================================================
+         // [BC] TODO : la gestione degli errori di sequence NON VA BENE! Deve essere
+         //             notificato all'applicazione e poi la gestione della memoria...
+         //             con tutta una serie di malloc... da rivedere!
          /* find sender in our list */
-         switch (trdp_checkSequenceCounter(pExistingElement,
-                                           newSeqCnt,
-                                           subAddresses.srcIpAddr,
-                                           msgType))
+         switch (trdp_checkSequenceCounter(pExistingElement, newSeqCnt,
+                                           subAddresses.srcIpAddr, msgType))
          {
             case 0:                      /* Sequence counter is valid (at least 1 higher than previous one) */
                break;
-            case -1:                     /* List overflow */
+
+            case -1:                     /* List overflow: too much sender to manage */
+               // [BC] start. This is far from an optimal network with fixed configuration.
+               //      We dont use TRDP in an internet cafe
+               vos_printLog(VOS_LOG_ERROR, "Sequence counter list overflow)\n");
+               pExistingElement->lastErr = TRDP_MEM_ERR;
+               // [BC] end
                return TRDP_MEM_ERR;
+
             case 1:
                vos_printLog(VOS_LOG_INFO, "Old PD data ignored (SrcIp: %s comId %u)\n",
                             vos_ipDotted(subAddresses.srcIpAddr), subAddresses.comId);
                return TRDP_NO_ERR;      /* Ignore packet, too old or duplicate */
          }
+         // ==============================================================================
 
          if ((newSeqCnt > 0u) && (newSeqCnt > (pExistingElement->curSeqCnt + 1u)))
          {
@@ -901,8 +924,11 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
             pExistingElement->numMissed += UINT32_MAX - pExistingElement->curSeqCnt + newSeqCnt;
          }
 
+         // [BC] start. Moved after callback
+        #if 0
          /* Store last received sequence counter here, too (pd_get et. al. may access it).   */
          pExistingElement->curSeqCnt = vos_ntohl(pNewFrameHead->sequenceCounter);
+        #endif
 
          /*  This might have not been set!   */
         #ifdef TSN_SUPPORT
@@ -915,8 +941,16 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
          else
         #endif
          {
+            // [BC] start. Removed size assegnement in favor of prefixed port configuration
+            // Never change port configuration but if you need the last packet dimension
+            // get it from Port->pFrame where is the last packet stored
+           #if 0         
             pExistingElement->dataSize  = vos_ntohl(pNewFrameHead->datasetLength);
             pExistingElement->grossSize = trdp_packetSizePD(pExistingElement->dataSize);
+           #else
+            pNewFrameHead->datasetLength = vos_ntohl(pNewFrameHead->datasetLength);
+           #endif
+            // [BC] end. 
 
             /*  Has the data changed?   */
             if (pExistingElement->pktFlags & TRDP_FLAGS_CALLBACK)
@@ -926,11 +960,21 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
                {
                   informUser = TRUE;                 /* Inform user anyway */
                }
-               else if (0 != memcmp(appHandle->pNewFrame->data,
-                                    pExistingElement->pFrame->data,
-                                    pExistingElement->dataSize))
+               else
                {
-                  informUser = TRUE;
+                  // [BC] TODO : applay filter if required
+
+                  iRetLoc = memcmp(appHandle->pNewFrame->data,
+                                    pExistingElement->pFrame->data,
+                                    pExistingElement->dataSize); 
+                  if (0 != iRetLoc) // update on news 
+                  {
+                     informUser = TRUE;
+                  }
+                  else
+                  {
+                     // update stats for port 
+                  }
                }
             }
          }
@@ -941,14 +985,36 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
 
          /*  Update some statistics  */
          pExistingElement->numRxTx++;
-         pExistingElement->lastErr   = TRDP_NO_ERR;
-         pExistingElement->privFlags =
-            (TRDP_PRIV_FLAGS_T) (pExistingElement->privFlags & ~(TRDP_PRIV_FLAGS_T)TRDP_TIMED_OUT);
 
+         // something is arrived ... 
+         pExistingElement->privFlags = (TRDP_PRIV_FLAGS_T)
+                       (pExistingElement->privFlags & ~(TRDP_PRIV_FLAGS_T)TRDP_TIMED_OUT);
+
+         // [BC] start A size different of expected need to be segnaled
+        #if 0
          /* mark the data as valid */
          pExistingElement->privFlags =
             (TRDP_PRIV_FLAGS_T) (pExistingElement->privFlags & ~(TRDP_PRIV_FLAGS_T)TRDP_INVALID_DATA);
 
+         pExistingElement->lastErr = TRDP_NO_ERR;
+        #else
+         if (pNewFrameHead->datasetLength == pExistingElement->dataSize)
+         {
+            /* mark the data as valid */
+            pExistingElement->privFlags = (TRDP_PRIV_FLAGS_T)
+                    (pExistingElement->privFlags & ~(TRDP_PRIV_FLAGS_T)TRDP_INVALID_DATA);
+
+            err = TRDP_NO_ERR;
+         }
+         else
+         {
+            err = TRDP_PD_SIZE_ERR;
+         }
+        #endif 
+         // [BC] end
+
+         // [BC] start. Moved the swap after the callback
+       #if 0
          /*  remove the old one, insert the new one  */
          /*  -> always swap the frame pointers              */
          {
@@ -956,10 +1022,16 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
             pExistingElement->pFrame = appHandle->pNewFrame;
             appHandle->pNewFrame     = pTemp;
          }
+        #endif
+         // [BC] end
 
+         // [BC] start. Not used at the moment and anyway there is a problem because
+         // we can continue if mutex is not locked... ehi Bernd! what is the sense?
+         // cialtronism?
+        #if 0
          /*  It might be a PULL request      */
          if (  (msgType == TRDP_MSG_PR)
-             &&(FALSE == isTSN))               /* no PULL on TSN, currently */
+             &&(FALSE   == isTSN))          /* no PULL on TSN, currently */
          {
             /* We need to get the transmission mutex! */
 
@@ -1024,69 +1096,119 @@ TRDP_ERR_T  trdp_pdReceive (TRDP_SESSION_PT appHandle, SOCKET sock)
 
                informUser = TRUE;
             }
+
             /* We should release the mutex as soon as possible! */
             (void) vos_mutexUnlock(appHandle->mutexTxPD);
          }
+        #endif
       }
       else
       {
-         appHandle->stats.pd.numTopoErr++;
+         appHandle->stats.pd.numTopoErr++;         
+         // [BC] start
+        #if 0
          pExistingElement->lastErr = TRDP_TOPO_ERR;
-         err                       = TRDP_TOPO_ERR;
-         informUser                = TRUE;
-      }
-   }
-
-   if ((pExistingElement != NULL) && (informUser == TRUE))
-   {
-      /*  If a callback was provided, call it now */
-      if (   (pExistingElement->pktFlags & TRDP_FLAGS_CALLBACK)
-          && (pExistingElement->pfCbFunction != NULL))
-      {
-         TRDP_PD_INFO_T theMessage;
-         memset(&theMessage, 0, sizeof(TRDP_PD_INFO_T));
-
-         theMessage.comId      = pExistingElement->addr.comId;
-         theMessage.srcIpAddr  = pExistingElement->lastSrcIP;
-         theMessage.destIpAddr = subAddresses.destIpAddr;
-         theMessage.msgType    = msgType;
-         theMessage.seqCount   = pExistingElement->curSeqCnt;
-         theMessage.pUserRef   = pExistingElement->pUserRef; /* User reference given with the local subscribe? */
-         theMessage.resultCode = err;
-
-        #ifdef TSN_SUPPORT
-         if (TRUE == isTSN)
-         {
-            theMessage.etbTopoCnt   = 0u;
-            theMessage.opTrnTopoCnt = 0u;
-            theMessage.replyComId   = 0u;
-            theMessage.replyIpAddr  = VOS_INADDR_ANY;
-            theMessage.protVersion  = pTSNFrameHead->protocolVersion;
-            theMessage.serviceId    = pTSNFrameHead->reserved;
-            pExistingElement->pfCbFunction(appHandle->pdDefault.pRefCon,
-                                           appHandle,
-                                           &theMessage,
-                                           ((PD2_PACKET_T*)pExistingElement->pFrame)->data,
-                                           (UINT32) vos_ntohs(((PD2_PACKET_T*)pExistingElement->pFrame)->frameHead
-                                                 .datasetLength));
-         }
-         else
         #endif
-         {
-            theMessage.etbTopoCnt   = vos_ntohl(pExistingElement->pFrame->frameHead.etbTopoCnt);
-            theMessage.opTrnTopoCnt = vos_ntohl(pExistingElement->pFrame->frameHead.opTrnTopoCnt);
-            theMessage.protVersion  = vos_ntohs(pExistingElement->pFrame->frameHead.protocolVersion);
-            theMessage.replyComId   = vos_ntohl(pExistingElement->pFrame->frameHead.replyComId);
-            theMessage.replyIpAddr  = vos_ntohl(pExistingElement->pFrame->frameHead.replyIpAddress);
-            theMessage.serviceId    = vos_ntohl(pExistingElement->pFrame->frameHead.reserved);
-            pExistingElement->pfCbFunction(appHandle->pdDefault.pRefCon,
-                                           appHandle,
-                                           &theMessage,
-                                           pExistingElement->pFrame->data,
-                                           vos_ntohl(pExistingElement->pFrame->frameHead.datasetLength));
-         }
+         // [BC] end
+         err        = TRDP_TOPO_ERR;
+         informUser = TRUE;
       }
+
+
+      if (informUser == TRUE)
+      {
+         /*  If a callback was provided, call it now */
+         if (   (pExistingElement->pktFlags & TRDP_FLAGS_CALLBACK)
+             && (pExistingElement->pfCbFunction != NULL))
+         {
+            TRDP_PD_INFO_T theMessage;
+            memset(&theMessage, 0, sizeof(TRDP_PD_INFO_T));
+         
+            theMessage.comId      = pExistingElement->addr.comId;
+            // [BC] start. WHY?
+           #if 0
+            theMessage.srcIpAddr  = pExistingElement->lastSrcIP;
+           #else
+            theMessage.srcIpAddr  = subAddresses.srcIpAddr;
+           #endif
+            // [BC] end
+            theMessage.destIpAddr = subAddresses.destIpAddr;
+            theMessage.msgType    = msgType;
+            // [BC] start.
+           #if 0
+            theMessage.seqCount   = pExistingElement->curSeqCnt;
+           #else
+            theMessage.seqCount   = newSeqCnt;
+           #endif
+            // [BC] end
+            theMessage.pUserRef   = pExistingElement->pUserRef; /* User reference given with the local subscribe? */
+            theMessage.resultCode = err;
+         
+           #ifdef TSN_SUPPORT
+            if (TRUE == isTSN)
+            {
+               theMessage.etbTopoCnt   = 0u;
+               theMessage.opTrnTopoCnt = 0u;
+               theMessage.replyComId   = 0u;
+               theMessage.replyIpAddr  = VOS_INADDR_ANY;
+               theMessage.protVersion  = pTSNFrameHead->protocolVersion;
+               theMessage.serviceId    = pTSNFrameHead->reserved;
+               pExistingElement->pfCbFunction(appHandle->pdDefault.pRefCon,
+                                              appHandle,
+                                              &theMessage,
+                                              ((PD2_PACKET_T*)pExistingElement->pFrame)->data,
+                                              (UINT32) vos_ntohs(((PD2_PACKET_T*)pExistingElement->pFrame)->frameHead
+                                                    .datasetLength));
+            }
+            else
+           #endif
+            {
+               theMessage.etbTopoCnt   = vos_ntohl(pExistingElement->pFrame->frameHead.etbTopoCnt);
+               theMessage.opTrnTopoCnt = vos_ntohl(pExistingElement->pFrame->frameHead.opTrnTopoCnt);
+               theMessage.protVersion  = vos_ntohs(pExistingElement->pFrame->frameHead.protocolVersion);
+               theMessage.replyComId   = vos_ntohl(pExistingElement->pFrame->frameHead.replyComId);
+               theMessage.replyIpAddr  = vos_ntohl(pExistingElement->pFrame->frameHead.replyIpAddress);
+               theMessage.serviceId    = vos_ntohl(pExistingElement->pFrame->frameHead.reserved);
+               pExistingElement->pfCbFunction(appHandle->pdDefault.pRefCon,
+                                              appHandle,
+                                              &theMessage,
+                                              // [BC] start. Use original and after make swap
+                                             #if 0
+                                              pExistingElement->pFrame->data,
+                                              vos_ntohl(pExistingElement->pFrame->frameHead.datasetLength));
+                                             #else
+                                              appHandle->pNewFrame->data,
+                                              pNewFrameHead->datasetLength);
+                                             #endif
+                                              // [BC] end
+            }
+         }
+         
+         // [BC] start. Moved the swap here
+         /*  remove the old one, insert the new one  */
+         /*  -> always swap the frame pointers              */
+         {
+            PD_PACKET_T* pTemp       = pExistingElement->pFrame;
+            pExistingElement->pFrame = appHandle->pNewFrame;
+            appHandle->pNewFrame     = pTemp;
+         }
+         // [BC] end
+      }
+
+      // [BC] start this is the time to update some information of currente element
+      /* Store last received sequence counter here, too (pd_get et. al. may access it).   */
+      pExistingElement->curSeqCnt = newSeqCnt;
+
+      /* Save the source IP address of the received packet */
+      pExistingElement->lastSrcIP = subAddresses.srcIpAddr;
+         
+      /* Save the real destination of the received packet (own IP or MC group) */
+      pExistingElement->addr.destIpAddr = subAddresses.destIpAddr;
+      // [BC] end
+
+      pExistingElement->lastErr = TRDP_TOPO_ERR;
    }
+
    return err;
 }
 
@@ -1208,10 +1330,10 @@ void trdp_handleTimeout (TRDP_SESSION_PT appHandle, PD_ELE_T* pPacket)
            #ifdef TSN_SUPPORT
             if (pPacket->privFlags & TRDP_IS_TSN)
             {
-               PD2_PACKET_T* pFrame = (PD2_PACKET_T*) pPacket->pFrame;
-               theMessage.msgType      = (TRDP_MSG_T)pFrame->frameHead.msgType;
-               theMessage.seqCount     = vos_ntohl(pFrame->frameHead.sequenceCounter);
-               theMessage.protVersion  = pFrame->frameHead.protocolVersion;
+               PD2_PACKET_T* pFrame   = (PD2_PACKET_T*) pPacket->pFrame;
+               theMessage.msgType     = (TRDP_MSG_T)pFrame->frameHead.msgType;
+               theMessage.seqCount    = vos_ntohl(pFrame->frameHead.sequenceCounter);
+               theMessage.protVersion = pFrame->frameHead.protocolVersion;
             }
             else
            #endif
@@ -1224,6 +1346,15 @@ void trdp_handleTimeout (TRDP_SESSION_PT appHandle, PD_ELE_T* pPacket)
                theMessage.replyComId   = vos_ntohl(pPacket->pFrame->frameHead.replyComId);
                theMessage.replyIpAddr  = vos_ntohl(pPacket->pFrame->frameHead.replyIpAddress);
             }
+
+            // [BC] start
+            // added same bahaviour to the tlp_get function
+            if (   (pPacket->toBehavior == TRDP_TO_SET_TO_ZERO)
+                && (pPacket->pFrame->data != NULL))
+            {
+               memset(pPacket->pFrame->data, 0, pPacket->dataSize);
+            }
+            // [BC] end
             pPacket->pfCbFunction(appHandle->pdDefault.pRefCon,
                                   appHandle,
                                   &theMessage,
@@ -1393,8 +1524,8 @@ TRDP_ERR_T trdp_pdCheck (PD_HEADER_T* pPacket, UINT32 packetSize, int* pIsTSN)
    if (pPacket2->protocolVersion == 0x2)
    {
       *pIsTSN = TRUE;
-      if ((packetSize < TRDP_MIN_PD2_HEADER_SIZE) ||
-            (packetSize > TRDP_MAX_PD2_PACKET_SIZE))
+      if (   (packetSize < TRDP_MIN_PD2_HEADER_SIZE)
+          || (packetSize > TRDP_MAX_PD2_PACKET_SIZE))
       {
          vos_printLog(VOS_LOG_INFO, "PDframe size error (%u))\n", packetSize);
          err = TRDP_WIRE_ERR;
@@ -1411,10 +1542,10 @@ TRDP_ERR_T trdp_pdCheck (PD_HEADER_T* pPacket, UINT32 packetSize, int* pIsTSN)
             err = TRDP_CRC_ERR;
          }
          /*  Check type  */
-         else if ((pPacket2->msgType != TRDP_MSG_TSN_PD) &&
-                  (pPacket2->msgType != TRDP_MSG_TSN_PD_SDT) &&
-                  (pPacket2->msgType != TRDP_MSG_TSN_PD_MSDT) &&
-                  (pPacket2->msgType != TRDP_MSG_TSN_PD_RES))
+         else if (   (pPacket2->msgType != TRDP_MSG_TSN_PD)
+                  && (pPacket2->msgType != TRDP_MSG_TSN_PD_SDT)
+                  && (pPacket2->msgType != TRDP_MSG_TSN_PD_MSDT)
+                  && (pPacket2->msgType != TRDP_MSG_TSN_PD_RES))
          {
             vos_printLog(VOS_LOG_INFO, "PDframe type error, received %02x\n", pPacket2->msgType);
             err = TRDP_WIRE_ERR;
@@ -1432,6 +1563,7 @@ TRDP_ERR_T trdp_pdCheck (PD_HEADER_T* pPacket, UINT32 packetSize, int* pIsTSN)
    {
       /* Version 1 TRDP (non-TSN) */
       *pIsTSN = FALSE;
+
       /*  Check size    */
       if (   (packetSize < TRDP_MIN_PD_HEADER_SIZE)
           || (packetSize > TRDP_MAX_PD_PACKET_SIZE))
@@ -1450,9 +1582,9 @@ TRDP_ERR_T trdp_pdCheck (PD_HEADER_T* pPacket, UINT32 packetSize, int* pIsTSN)
             err = TRDP_CRC_ERR;
          }
          /*  Check protocol version  */
-         else if (((vos_ntohs(pPacket->protocolVersion) & TRDP_PROTOCOL_VERSION_CHECK_MASK)
-                   != (TRDP_PROTO_VER & TRDP_PROTOCOL_VERSION_CHECK_MASK)) ||
-                  (vos_ntohl(pPacket->datasetLength) > TRDP_MAX_PD_DATA_SIZE))
+         else if (   (   (vos_ntohs(pPacket->protocolVersion) & TRDP_PROTOCOL_VERSION_CHECK_MASK)
+                      != (TRDP_PROTO_VER & TRDP_PROTOCOL_VERSION_CHECK_MASK))
+                  || (vos_ntohl(pPacket->datasetLength) > TRDP_MAX_PD_DATA_SIZE))
          {
             vos_printLog(VOS_LOG_INFO, "PDframe protocol error (%04x != %04x))\n",
                          vos_ntohs(pPacket->protocolVersion),
@@ -1460,10 +1592,10 @@ TRDP_ERR_T trdp_pdCheck (PD_HEADER_T* pPacket, UINT32 packetSize, int* pIsTSN)
             err = TRDP_WIRE_ERR;
          }
          /*  Check type  */
-         else if ((vos_ntohs(pPacket->msgType) != (UINT16) TRDP_MSG_PD) &&
-                  (vos_ntohs(pPacket->msgType) != (UINT16) TRDP_MSG_PP) &&
-                  (vos_ntohs(pPacket->msgType) != (UINT16) TRDP_MSG_PR) &&
-                  (vos_ntohs(pPacket->msgType) != (UINT16) TRDP_MSG_PE))
+         else if (   ((vos_ntohs(pPacket->msgType) != (UINT16) TRDP_MSG_PD))
+                  && ((vos_ntohs(pPacket->msgType) != (UINT16) TRDP_MSG_PP))
+                  && ((vos_ntohs(pPacket->msgType) != (UINT16) TRDP_MSG_PR))
+                  && ((vos_ntohs(pPacket->msgType) != (UINT16) TRDP_MSG_PE)))
          {
             vos_printLog(VOS_LOG_INFO, "PDframe type error, received %04x\n", vos_ntohs(pPacket->msgType));
             err = TRDP_WIRE_ERR;

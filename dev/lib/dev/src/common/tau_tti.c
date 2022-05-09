@@ -45,7 +45,7 @@
 *      BL 2019-06-17: Ticket #161 Increase performance
 *      BL 2019-06-17: Ticket #191 Add provisions for TSN / Hard Real Time (open source)
 *      V 2.0.0 --------- ^^^ -----------
-*      V 1.4.2 --------- vvv -----------                             
+*      V 1.4.2 --------- vvv -----------
 *      BL 2019-06-11: Ticket #253 Incorrect storing of TTDB_STATIC_CONSIST_INFO_REPLY from network packet into local copy
 *      BL 2019-05-15: Ticket #254 API of TTI to get OwnOpCstNo and OwnTrnCstNo
 *      BL 2019-05-15: Ticket #255 opTrnState of pTTDB isn't copied completely
@@ -1014,16 +1014,21 @@ EXT_DECL TRDP_ERR_T tau_initTTIaccess (
 
     if (tlp_subscribe(appHandle,
                       &appHandle->pTTDB->pd100SubHandle1,
-                      userAction, ttiPDCallback,
+                      userAction,
+                      ttiPDCallback,
                       0u,
                       TRDP_TTDB_OP_TRN_DIR_STAT_INF_COMID,
-                      0u, 0u,
-                      VOS_INADDR_ANY, VOS_INADDR_ANY,
+                      0u,
+                      0u,
+                      VOS_INADDR_ANY,
+                      VOS_INADDR_ANY,
                       vos_dottedIP(TTDB_STATUS_DEST_IP),
                       (TRDP_FLAGS_T) (TRDP_FLAGS_CALLBACK | TRDP_FLAGS_FORCE_CB),
                       NULL,                      /*    default interface                    */
                       TTDB_STATUS_TO_US,
-                      TRDP_TO_SET_TO_ZERO) != TRDP_NO_ERR)
+                      TRDP_TO_SET_TO_ZERO,
+                      // [BC] added size = 0. Need review but at the moment we dont use thi function
+                      0) != TRDP_NO_ERR)
     {
         vos_memFree(appHandle->pTTDB);
         return TRDP_INIT_ERR;
@@ -1031,16 +1036,21 @@ EXT_DECL TRDP_ERR_T tau_initTTIaccess (
 
     if (tlp_subscribe(appHandle,
                       &appHandle->pTTDB->pd100SubHandle2,
-                      userAction, ttiPDCallback,
+                      userAction,
+                      ttiPDCallback,
                       0u,
                       TRDP_TTDB_OP_TRN_DIR_STAT_INF_COMID,
-                      0u, 0u,
-                      VOS_INADDR_ANY, VOS_INADDR_ANY,
+                      0u,
+                      0u,
+                      VOS_INADDR_ANY,
+                      VOS_INADDR_ANY,
                       vos_dottedIP(TTDB_STATUS_DEST_IP_ETB0),
                       (TRDP_FLAGS_T) (TRDP_FLAGS_CALLBACK | TRDP_FLAGS_FORCE_CB),
                       NULL,                      /*    default interface                    */
                       TTDB_STATUS_TO_US,
-                      TRDP_TO_SET_TO_ZERO) != TRDP_NO_ERR)
+                      TRDP_TO_SET_TO_ZERO,
+                      // [BC] added size = 0. Need review but at the moment we dont use thi function
+                      0) != TRDP_NO_ERR)
     {
         (void) tlp_unsubscribe(appHandle, appHandle->pTTDB->pd100SubHandle1);
         vos_memFree(appHandle->pTTDB);

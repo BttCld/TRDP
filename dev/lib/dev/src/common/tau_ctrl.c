@@ -141,8 +141,8 @@ static void ecspConfRepMDCallback(
  *  @retval         TRDP_INIT_ERR   initialisation error
  *
  */
-EXT_DECL TRDP_ERR_T tau_initEcspCtrl ( TRDP_APP_SESSION_T   appHandle,
-                                       TRDP_IP_ADDR_T       ecspIpAddr)
+EXT_DECL TRDP_ERR_T tau_initEcspCtrl ( TRDP_APP_SESSION_T appHandle,
+                                       TRDP_IP_ADDR_T     ecspIpAddr)
 {
     /* session already opened, handle publish/subscribe */
     TRDP_ERR_T err;
@@ -156,44 +156,48 @@ EXT_DECL TRDP_ERR_T tau_initEcspCtrl ( TRDP_APP_SESSION_T   appHandle,
 
     /*    Copy the packet into the internal send queue, prepare for sending.    */
     /*    If we change the data, just re-publish it    */
-    err = tlp_publish(  appHandle,                  /*    our application identifier        */
-                        &priv_pubHandle,            /*    our pulication identifier         */
-                        NULL, NULL,
-                        0u,                         /*    no serviceId                      */
-                        TRDP_ECSP_CTRL_COMID,       /*    ComID to send                     */
-                        0u,                         /*    ecnTopoCounter                    */
-                        0u,                         /*    opTopoCounter                     */
-                        appHandle->realIP,          /*    default source IP                 */
-                        ecspIpAddr,                 /*    where to send to                  */
-                        ECSP_CTRL_CYCLE,            /*    Cycle time in us                  */
-                        0u,                         /*    not redundant                     */
-                                                    /*    #356 switched to manual marshalling */
-                        0u,                         /*    packet flags - UDP, no call back  */
-                        NULL,                       /*    default qos and ttl               */
-                        (UINT8 *)NULL,              /*    no initial data                   */
-                        sizeof(TRDP_ECSP_CTRL_T)    /*    data size                         */
-                        );
+    err = tlp_publish(appHandle,                  /*    our application identifier        */
+                      &priv_pubHandle,            /*    our pulication identifier         */
+                      NULL,
+                      NULL,
+                      0u,                         /*    no serviceId                      */
+                      TRDP_ECSP_CTRL_COMID,       /*    ComID to send                     */
+                      0u,                         /*    ecnTopoCounter                    */
+                      0u,                         /*    opTopoCounter                     */
+                      appHandle->realIP,          /*    default source IP                 */
+                      ecspIpAddr,                 /*    where to send to                  */
+                      ECSP_CTRL_CYCLE,            /*    Cycle time in us                  */
+                      0u,                         /*    not redundant                     */
+                                                  /*    #356 switched to manual marshalling */
+                      0u,                         /*    packet flags - UDP, no call back  */
+                      NULL,                       /*    default qos and ttl               */
+                      (UINT8 *)NULL,              /*    no initial data                   */
+                      sizeof(TRDP_ECSP_CTRL_T)    /*    data size                         */
+                      );
     if ( err != TRDP_NO_ERR )
     {
         vos_printLogStr(VOS_LOG_ERROR, "tlp_publish() failed !\n");
         return err;
     }
 
-    err = tlp_subscribe( appHandle,                 /*    our application identifier            */
-                         &priv_subHandle,           /*    our subscription identifier           */
-                         NULL,                      /*    user ref                              */
-                         NULL,                      /*    callback function                     */
-                         0u,                        /*    no serviceId                          */
-                         TRDP_ECSP_STAT_COMID,      /*    ComID                                 */
-                         0,                         /*    ecnTopoCounter                        */
-                         0,                         /*    opTopoCounter                         */
-                         0, 0,                      /*    Source IP filter                      */
-                         appHandle->realIP,         /*    Default destination    (or MC Group)  */
-                                                    /*    #356 switched to manual unmarshalling */
-                         0,                         /*    packet flags - UDP, no call back      */
-                         NULL,                      /*    default interface                     */
-                         ECSP_STAT_TIMEOUT,         /*    Time out in us                        */
-                         TRDP_TO_SET_TO_ZERO);      /*    delete invalid data on timeout        */
+    err = tlp_subscribe(appHandle,                 /*    our application identifier            */
+                        &priv_subHandle,           /*    our subscription identifier           */
+                        NULL,                      /*    user ref                              */
+                        NULL,                      /*    callback function                     */
+                        0u,                        /*    no serviceId                          */
+                        TRDP_ECSP_STAT_COMID,      /*    ComID                                 */
+                        0,                         /*    ecnTopoCounter                        */
+                        0,                         /*    opTopoCounter                         */
+                        0,                         /*    Source IP filter 1                    */
+                        0,                         /*    Source IP filter 2                    */
+                        appHandle->realIP,         /*    Default destination    (or MC Group)  */
+                                                   /*    #356 switched to manual unmarshalling */
+                        0,                         /*    packet flags - UDP, no call back      */
+                        NULL,                      /*    default interface                     */
+                        ECSP_STAT_TIMEOUT,         /*    Time out in us                        */
+                        TRDP_TO_SET_TO_ZERO,       /*    delete invalid data on timeout        */
+                        // [BC] added 0. Need review but at the moment we dont use thi function
+                        0);
 
     if ( err != TRDP_NO_ERR )
     {

@@ -113,10 +113,8 @@ void setup_ports (TRDP_APP_SESSION_T apph, Port vsPort[], unsigned int uiNports)
          case PORT_SINK:
             p->err = tlp_subscribe(apph,                   /* session handle   */
                                    &p->sh,                 /* subscribe handle */
-                                   //NULL,                   /* user ref         */
-                                   //NULL,                   /* callback funktion */
-                                   p,
-                                   _cbPortSink,
+                                   p,                      /* user ref         */
+                                   _cbPortSink,            /* callback funktion */
                                    0u,                     /* serviceId        */
                                    p->comid,               /* comid            */
                                    0,                      /* topo counter     */
@@ -127,7 +125,8 @@ void setup_ports (TRDP_APP_SESSION_T apph, Port vsPort[], unsigned int uiNports)
                                    TRDP_FLAGS_CALLBACK,    // callback is available
                                    NULL,                   /*    Receive params */
                                    p->timeout,             /* timeout [usec]   */
-                                   TRDP_TO_SET_TO_ZERO);   /* timeout behavior */
+                                   TRDP_TO_SET_TO_ZERO,    /* timeout behavior */
+                                   p->size);
 
             if (p->err != TRDP_NO_ERR)
                printf("tlp_subscribe() failed, err: %d\n", p->err);
@@ -150,7 +149,8 @@ void setup_ports (TRDP_APP_SESSION_T apph, Port vsPort[], unsigned int uiNports)
                                    PORT_FLAGS,             /* No flags set     */
                                    &comPrams,              /*    Receive params */
                                    p->timeout,             /* timeout [usec]   */
-                                   TRDP_TO_SET_TO_ZERO);   /* timeout behavior */
+                                   TRDP_TO_SET_TO_ZERO,    /* timeout behavior */
+                                   p->size);
 
             if (p->err != TRDP_NO_ERR)
                printf("tlp_subscribe() failed, err: %d\n", p->err);
@@ -314,16 +314,59 @@ static void _cbPortSink (      void*              pRefCon,
                                UINT8*             pData,
                                UINT32             dataSize)
 {
+   static int err = 0;
    Port* psPort;
+
    assert(pMsg != NULL);
    if (pMsg != NULL)
    {
       psPort = (Port*)pMsg->pUserRef;
       psPort->err = pMsg->resultCode;
-      if (pMsg->resultCode == TRDP_NO_ERR)
+
+      if (pMsg->resultCode != TRDP_TIMEOUT_ERR)
       {
-         memcpy(psPort->data, pData, dataSize);
+         if (psPort->src != 0)
+         {
+            if (psPort->src != pMsg->srcIpAddr)
+            {
+               fprintf(stderr, "Warning, different ip source file "
+                               "prev: %d.%d.%d.%d - new: %d.%d.%d.%d\n",
+                               (psPort->src      >> 24) & 0xff, (psPort->src     >> 16) & 0xff,
+                               (psPort->src      >>  8) & 0xff,  psPort->src            & 0xff,
+                               (pMsg->srcIpAddr  >> 24) & 0xff, (pMsg->srcIpAddr >> 16) & 0xff,
+                               (pMsg->srcIpAddr  >>  8) & 0xff,  pMsg->srcIpAddr        & 0xff);
+            }
+         }
+         psPort->src = pMsg->srcIpAddr;
       }
+
+      switch (pMsg->resultCode)
+      {
+         case TRDP_NO_ERR:
+            // not needed tlp_get can be used to access buffer
+            // memcpy(psPort->data, pData, dataSize);
+            // 
+            // TODO : Send data to the circular buffer
+           #if 0
+            xoCBuff_Alloc(psPort->psCbuff, pData, dataSize);
+            xoCBuff_Send()
+           #endif
+            err--;
+            break;
+
+         case TRDP_PD_SIZE_ERR:
+            fprintf(stderr, "Error, size expected: %d - received %d\n",
+                            psPort->size, dataSize);
+            break;
+
+         case TRDP_TIMEOUT_ERR:
+            break;
+
+         default:
+            err++;
+            break;
+      }
+
       _PortPrintData(psPort);
    }
 }
@@ -453,6 +496,8 @@ static const char* _get_result_string (int ret)
          return "TRDP_STATE_ERR (call in wrong state)";
       case TRDP_APP_TIMEOUT_ERR:
          return "TRDP_APPTIMEOUT_ERR (application timeout)";
+      case TRDP_PD_SIZE_ERR:
+         return "TRDP_PD_SIZE_ERR (unexpected size)";
       case TRDP_UNKNOWN_ERR:
          return "TRDP_UNKNOWN_ERR (unspecified error)";
    }

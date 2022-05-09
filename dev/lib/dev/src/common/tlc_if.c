@@ -568,12 +568,15 @@ EXT_DECL TRDP_ERR_T tlc_openSession (      TRDP_APP_SESSION_T*     pAppHandle,
                                     TRDP_STATISTICS_PULL_COMID, /*    ComID                         */
                                     0u,                     /*    etbtopocount: local consist only  */
                                     0u,                     /*    optrntopocount                    */
-                                    0u, 0u,                 /*    Source IP filters                  */
+                                    0u,                     /*    Source IP filters 1               */
+                                    0u,                     /*    Source IP filters 2               */
                                     0u,                     /*    Default destination (or MC Group) */
                                     TRDP_FLAGS_NONE,        /*    packet flags                      */
                                     NULL,                   /*    default interface                    */
                                     TRDP_INFINITE_TIMEOUT,  /*    Time out in us                    */
-                                    TRDP_TO_DEFAULT);       /*    delete invalid data on timeout    */
+                                    TRDP_TO_DEFAULT,
+                                    // [BC] added size = 0. Need review but at the moment we dont use thi function
+                                    0); /*    delete invalid data on timeout    */
             }
         }
 

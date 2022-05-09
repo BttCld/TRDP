@@ -17,7 +17,7 @@
 /*
 * $Id: vos_thread.h 2141 2019-12-17 12:31:10Z andersoberg $
 *
-*      AÖ 2019-12-17: Ticket #308: Add vos Sim function to API 
+*      AÖ 2019-12-17: Ticket #308: Add vos Sim function to API
 *      AÖ 2019-11-11: Ticket #290: Add support for Virtualization on Windows
 *      BL 2019-06-12: Ticket #238 VOS: Public API headers include private header file
 *      BL 2017-05-22: Ticket #122: Addendum for 64Bit compatibility (VOS_TIME_T -> VOS_TIMEVAL_T)
@@ -111,10 +111,10 @@ extern "C" {
 /** Thread policy matching pthread/Posix defines    */
 typedef enum
 {
-    VOS_THREAD_POLICY_OTHER = 0,        /*  Default for the target system    */
-    VOS_THREAD_POLICY_FIFO,             /*  First come, first serve          */
-    VOS_THREAD_POLICY_RR,               /*  Round robin                      */
-    VOS_THREAD_POLICY_DEADLINE          /*  Global Earliest Deadline First (GEDF)     */
+   VOS_THREAD_POLICY_OTHER = 0,        /*  Default for the target system    */
+   VOS_THREAD_POLICY_FIFO,             /*  First come, first serve          */
+   VOS_THREAD_POLICY_RR,               /*  Round robin                      */
+   VOS_THREAD_POLICY_DEADLINE          /*  Global Earliest Deadline First (GEDF)     */
 } VOS_THREAD_POLICY_T;
 
 /** Thread priority range from 1 (lowest) to 255 (highest), 0 default of the target system    */
@@ -124,24 +124,24 @@ typedef UINT8 VOS_THREAD_PRIORITY_T;
 #define VOS_THREAD_PRIORITY_HIGHEST     255
 
 /** Thread function definition    */
-typedef void (__cdecl * VOS_THREAD_FUNC_T)(void *pArg);
+typedef void (__cdecl* VOS_THREAD_FUNC_T)(void* pArg);
 
 /** State of the semaphore    */
 typedef enum
 {
-    VOS_SEMA_EMPTY  = 0,
-    VOS_SEMA_FULL   = 1
+   VOS_SEMA_EMPTY  = 0,
+   VOS_SEMA_FULL   = 1
 } VOS_SEMA_STATE_T;
 
 
 /** Hidden mutex handle definition    */
-typedef struct VOS_MUTEX *VOS_MUTEX_T;
+typedef struct VOS_MUTEX* VOS_MUTEX_T;
 
 /** Hidden semaphore handle definition    */
-typedef struct VOS_SEMA *VOS_SEMA_T;
+typedef struct VOS_SEMA* VOS_SEMA_T;
 
 /** Hidden thread handle definition    */
-typedef void *VOS_THREAD_T;
+typedef void* VOS_THREAD_T;
 
 
 /***********************************************************************************************************************
@@ -162,8 +162,7 @@ typedef void *VOS_THREAD_T;
  *  @retval         VOS_INIT_ERR      threading not supported
  */
 
-EXT_DECL VOS_ERR_T vos_threadInit (
-    void);
+EXT_DECL VOS_ERR_T vos_threadInit (void);
 
 /**********************************************************************************************************************/
 /** De-Initialize the thread library.
@@ -171,8 +170,7 @@ EXT_DECL VOS_ERR_T vos_threadInit (
  *
  */
 
-EXT_DECL void vos_threadTerm (
-    void);
+EXT_DECL void vos_threadTerm (void);
 
 /**********************************************************************************************************************/
 /** Create a thread.
@@ -195,16 +193,15 @@ EXT_DECL void vos_threadTerm (
  *  @retval         VOS_PARAM_ERR     parameter out of range/invalid
  */
 
-EXT_DECL VOS_ERR_T vos_threadCreateSync (
-    VOS_THREAD_T            *pThread,
-    const CHAR8             *pName,
-    VOS_THREAD_POLICY_T     policy,
-    VOS_THREAD_PRIORITY_T   priority,
-    UINT32                  interval,
-    VOS_TIMEVAL_T           *pStartTime,
-    UINT32                  stackSize,
-    VOS_THREAD_FUNC_T       pFunction,
-    void                    *pArguments);
+EXT_DECL VOS_ERR_T vos_threadCreateSync (VOS_THREAD_T*         pThread,
+                                         const CHAR8*          pName,
+                                         VOS_THREAD_POLICY_T   policy,
+                                         VOS_THREAD_PRIORITY_T priority,
+                                         UINT32                interval,
+                                         VOS_TIMEVAL_T*        pStartTime,
+                                         UINT32                stackSize,
+                                         VOS_THREAD_FUNC_T     pFunction,
+                                         void*                 pArguments);
 
 /**********************************************************************************************************************/
 /** Create a thread.
@@ -226,15 +223,14 @@ EXT_DECL VOS_ERR_T vos_threadCreateSync (
  *  @retval         VOS_PARAM_ERR     parameter out of range/invalid
  */
 
-EXT_DECL VOS_ERR_T vos_threadCreate (
-    VOS_THREAD_T            *pThread,
-    const CHAR8             *pName,
-    VOS_THREAD_POLICY_T     policy,
-    VOS_THREAD_PRIORITY_T   priority,
-    UINT32                  interval,
-    UINT32                  stackSize,
-    VOS_THREAD_FUNC_T       pFunction,
-    void                    *pArguments);
+EXT_DECL VOS_ERR_T vos_threadCreate (VOS_THREAD_T*         pThread,
+                                     const CHAR8*          pName,
+                                     VOS_THREAD_POLICY_T   policy,
+                                     VOS_THREAD_PRIORITY_T priority,
+                                     UINT32                interval,
+                                     UINT32                stackSize,
+                                     VOS_THREAD_FUNC_T     pFunction,
+                                     void*                 pArguments);
 
 /**********************************************************************************************************************/
 /** Terminate a thread.
@@ -248,8 +244,7 @@ EXT_DECL VOS_ERR_T vos_threadCreate (
  *  @retval         VOS_PARAM_ERR     parameter out of range/invalid
  */
 
-EXT_DECL VOS_ERR_T vos_threadTerminate (
-    VOS_THREAD_T thread);
+EXT_DECL VOS_ERR_T vos_threadTerminate (VOS_THREAD_T thread);
 
 /**********************************************************************************************************************/
 /** Is the thread still active?
@@ -263,8 +258,7 @@ EXT_DECL VOS_ERR_T vos_threadTerminate (
  *  @retval         VOS_PARAM_ERR     parameter out of range/invalid
  */
 
-EXT_DECL VOS_ERR_T vos_threadIsActive (
-    VOS_THREAD_T thread);
+EXT_DECL VOS_ERR_T vos_threadIsActive (VOS_THREAD_T thread);
 
 #ifdef SIM
 /**********************************************************************************************************************/
@@ -277,9 +271,7 @@ EXT_DECL VOS_ERR_T vos_threadIsActive (
 *  @retval         VOS_NO_ERR      no error
 *  @retval         VOS_INIT_ERR    failed to init
 */
-EXT_DECL VOS_ERR_T vos_threadRegister(
-    const CHAR* pName,
-    BOOL bStart);
+EXT_DECL VOS_ERR_T vos_threadRegister (const CHAR* pName, BOOL bStart);
 
 /**********************************************************************************************************************/
 /** Set a instance prefix string.
@@ -289,9 +281,10 @@ EXT_DECL VOS_ERR_T vos_threadRegister(
 *  @retval         VOS_NO_ERR      no error
 *  @retval         VOS_INIT_ERR    failed to init
 */
-EXT_DECL VOS_ERR_T vos_setTimeSyncPrefix(
-    const CHAR* pPrefix);
+EXT_DECL VOS_ERR_T vos_setTimeSyncPrefix (const CHAR* pPrefix);
+
 #endif
+
 /**********************************************************************************************************************/
 /*    Timers
                                                                                                                */
@@ -306,8 +299,7 @@ EXT_DECL VOS_ERR_T vos_setTimeSyncPrefix(
  *  @retval         VOS_INIT_ERR      module not initialised
  */
 
-EXT_DECL VOS_ERR_T vos_threadDelay (
-    UINT32 delay);
+EXT_DECL VOS_ERR_T vos_threadDelay (UINT32 delay);
 
 /**********************************************************************************************************************/
 /** Return thread handle of calling task
@@ -317,8 +309,7 @@ EXT_DECL VOS_ERR_T vos_threadDelay (
  *  @retval         VOS_PARAM_ERR   parameter out of range/invalid
  */
 
-EXT_DECL VOS_ERR_T vos_threadSelf (
-    VOS_THREAD_T *pThread);
+EXT_DECL VOS_ERR_T vos_threadSelf (VOS_THREAD_T* pThread);
 
 /**********************************************************************************************************************/
 /** Return the current monotonic time in sec and us
@@ -327,8 +318,7 @@ EXT_DECL VOS_ERR_T vos_threadSelf (
  *  @param[out]     pTime            Pointer to time value
  */
 
-EXT_DECL void vos_getTime (
-    VOS_TIMEVAL_T *pTime);
+EXT_DECL void vos_getTime (VOS_TIMEVAL_T* pTime);
 
 /**********************************************************************************************************************/
 /** Return the current real time in sec and us
@@ -337,11 +327,9 @@ EXT_DECL void vos_getTime (
  *  @param[out]     pTime            Pointer to time value
  */
 
-EXT_DECL void   vos_getRealTime (
-    VOS_TIMEVAL_T *pTime);
+EXT_DECL void   vos_getRealTime (VOS_TIMEVAL_T* pTime);
 
-EXT_DECL void   vos_getNanoTime (
-    UINT64 *pTime);
+EXT_DECL void   vos_getNanoTime (UINT64* pTime);
 
 /**********************************************************************************************************************/
 /** Get a time-stamp string.
@@ -351,8 +339,7 @@ EXT_DECL void   vos_getNanoTime (
  *  @retval         timestamp        "yyyymmdd-hh:mm:ss.ms"
  */
 
-EXT_DECL const CHAR8 *vos_getTimeStamp (
-    void);
+EXT_DECL const CHAR8* vos_getTimeStamp (void);
 
 
 /**********************************************************************************************************************/
@@ -362,8 +349,7 @@ EXT_DECL const CHAR8 *vos_getTimeStamp (
  *  @param[out]     pTime             Pointer to time value
  */
 
-EXT_DECL void vos_clearTime (
-    VOS_TIMEVAL_T *pTime);
+EXT_DECL void vos_clearTime (VOS_TIMEVAL_T* pTime);
 
 /**********************************************************************************************************************/
 /** Add the second to the first time stamp, return sum in first
@@ -373,9 +359,7 @@ EXT_DECL void vos_clearTime (
  *  @param[in]          pAdd             Pointer to time value
  */
 
-EXT_DECL void vos_addTime (
-    VOS_TIMEVAL_T       *pTime,
-    const VOS_TIMEVAL_T *pAdd);
+EXT_DECL void vos_addTime (VOS_TIMEVAL_T* pTime, const VOS_TIMEVAL_T* pAdd);
 
 /**********************************************************************************************************************/
 /** Subtract the second from the first time stamp, return diff in first
@@ -385,9 +369,7 @@ EXT_DECL void vos_addTime (
  *  @param[in]          pSub             Pointer to time value
  */
 
-EXT_DECL void vos_subTime (
-    VOS_TIMEVAL_T       *pTime,
-    const VOS_TIMEVAL_T *pSub);
+EXT_DECL void vos_subTime (VOS_TIMEVAL_T* pTime, const VOS_TIMEVAL_T* pSub);
 
 /**********************************************************************************************************************/
 /** Compare the second from the first time stamp, return diff in first
@@ -400,9 +382,7 @@ EXT_DECL void vos_subTime (
  *  @retval             1                pTime > pCmp
  */
 
-EXT_DECL INT32 vos_cmpTime (
-    const VOS_TIMEVAL_T *pTime,
-    const VOS_TIMEVAL_T *pCmp);
+EXT_DECL INT32 vos_cmpTime (const VOS_TIMEVAL_T* pTime, const VOS_TIMEVAL_T* pCmp);
 
 /**********************************************************************************************************************/
 /** Divide the first time by the second, return quotient in first
@@ -412,9 +392,7 @@ EXT_DECL INT32 vos_cmpTime (
  *  @param[in]          divisor         Divisor
  */
 
-EXT_DECL void vos_divTime (
-    VOS_TIMEVAL_T   *pTime,
-    UINT32          divisor);
+EXT_DECL void vos_divTime (VOS_TIMEVAL_T* pTime, UINT32 divisor);
 
 /**********************************************************************************************************************/
 /** Multiply the first time by the second, return product in first
@@ -424,9 +402,7 @@ EXT_DECL void vos_divTime (
 *  @param[in]          mul             Factor
 */
 
-EXT_DECL void vos_mulTime (
-    VOS_TIMEVAL_T   *pTime,
-    UINT32          mul);
+EXT_DECL void vos_mulTime (VOS_TIMEVAL_T* pTime, UINT32 mul);
 
 /**********************************************************************************************************************/
 /** Get a universal unique identifier according to RFC 4122 time based version.
@@ -435,8 +411,7 @@ EXT_DECL void vos_mulTime (
  *  @param[out]     pUuID             Pointer to a universal unique identifier
  */
 
-EXT_DECL void vos_getUuid (
-    VOS_UUID_T pUuID);
+EXT_DECL void vos_getUuid (VOS_UUID_T pUuID);
 
 
 /**********************************************************************************************************************/
@@ -456,8 +431,7 @@ EXT_DECL void vos_getUuid (
  *  @retval         VOS_MUTEX_ERR    no mutex available
  */
 
-EXT_DECL VOS_ERR_T vos_mutexCreate (
-    VOS_MUTEX_T *pMutex);
+EXT_DECL VOS_ERR_T vos_mutexCreate (VOS_MUTEX_T* pMutex);
 
 /**********************************************************************************************************************/
 /** Delete a mutex.
@@ -468,8 +442,7 @@ EXT_DECL VOS_ERR_T vos_mutexCreate (
  *  @retval         VOS_NO_ERR        no error
  */
 
-EXT_DECL void vos_mutexDelete (
-    VOS_MUTEX_T pMutex);
+EXT_DECL void vos_mutexDelete (VOS_MUTEX_T pMutex);
 
 /**********************************************************************************************************************/
 /** Take a mutex.
@@ -482,8 +455,7 @@ EXT_DECL void vos_mutexDelete (
  *  @retval         VOS_NOINIT_ERR    invalid handle
  */
 
-EXT_DECL VOS_ERR_T vos_mutexLock (
-    VOS_MUTEX_T pMutex);
+EXT_DECL VOS_ERR_T vos_mutexLock (VOS_MUTEX_T pMutex);
 
 /**********************************************************************************************************************/
 /** Try to take a mutex.
@@ -497,8 +469,7 @@ EXT_DECL VOS_ERR_T vos_mutexLock (
  *  @retval         VOS_MUTEX_ERR     no mutex available
  */
 
-EXT_DECL VOS_ERR_T vos_mutexTryLock (
-    VOS_MUTEX_T pMutex);
+EXT_DECL VOS_ERR_T vos_mutexTryLock (VOS_MUTEX_T pMutex);
 
 
 /**********************************************************************************************************************/
@@ -508,8 +479,7 @@ EXT_DECL VOS_ERR_T vos_mutexTryLock (
  *  @param[in]      pMutex            mutex handle
  */
 
-EXT_DECL VOS_ERR_T vos_mutexUnlock (
-    VOS_MUTEX_T pMutex);
+EXT_DECL VOS_ERR_T vos_mutexUnlock (VOS_MUTEX_T pMutex);
 
 /**********************************************************************************************************************/
 /** Create a semaphore.
@@ -524,9 +494,7 @@ EXT_DECL VOS_ERR_T vos_mutexUnlock (
  *  @retval         VOS_SEMA_ERR    no semaphore available
  */
 
-EXT_DECL VOS_ERR_T vos_semaCreate (
-    VOS_SEMA_T          *pSema,
-    VOS_SEMA_STATE_T    initialState);
+EXT_DECL VOS_ERR_T vos_semaCreate (VOS_SEMA_T* pSema, VOS_SEMA_STATE_T initialState);
 
 /**********************************************************************************************************************/
 /** Delete a semaphore.
@@ -535,8 +503,7 @@ EXT_DECL VOS_ERR_T vos_semaCreate (
  *  @param[in]      sema            semaphore handle
  */
 
-EXT_DECL void vos_semaDelete (
-    VOS_SEMA_T sema);
+EXT_DECL void vos_semaDelete (VOS_SEMA_T sema);
 
 /**********************************************************************************************************************/
 /** Take a semaphore.
@@ -552,9 +519,7 @@ EXT_DECL void vos_semaDelete (
  *  @retval         VOS_SEMA_ERR    could not get semaphore in time
  */
 
-EXT_DECL VOS_ERR_T vos_semaTake (
-    VOS_SEMA_T  sema,
-    UINT32      timeout);
+EXT_DECL VOS_ERR_T vos_semaTake (VOS_SEMA_T sema, UINT32 timeout);
 
 
 /**********************************************************************************************************************/
@@ -564,8 +529,7 @@ EXT_DECL VOS_ERR_T vos_semaTake (
  *  @param[in]      sema            semaphore handle
  */
 
-EXT_DECL void vos_semaGive (
-    VOS_SEMA_T sema);
+EXT_DECL void vos_semaGive (VOS_SEMA_T sema);
 
 
 #ifdef __cplusplus

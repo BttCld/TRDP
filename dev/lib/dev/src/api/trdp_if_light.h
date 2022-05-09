@@ -220,7 +220,9 @@ EXT_DECL TRDP_ERR_T tlp_subscribe (      TRDP_APP_SESSION_T appHandle,
                                          TRDP_FLAGS_T       pktFlags,
                                    const TRDP_COM_PARAM_T*  pRecParams,
                                          UINT32             timeout,
-                                         TRDP_TO_BEHAVIOR_T toBehavior);
+                                         TRDP_TO_BEHAVIOR_T toBehavior,
+                                         // [BC] used for check on fixed lenght waited
+                                         UINT32             dataSize);
 
 
 EXT_DECL TRDP_ERR_T tlp_resubscribe (TRDP_APP_SESSION_T appHandle,

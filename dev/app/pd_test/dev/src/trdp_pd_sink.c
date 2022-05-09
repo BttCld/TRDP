@@ -57,7 +57,7 @@ TRDP_IP_ADDR_T srcip;
 TRDP_IP_ADDR_T dstip;
 TRDP_IP_ADDR_T mcast;
 
-int      _size[3]   = {0, 256, TRDP_MAX_PD_DATA_SIZE}; /* small/medium/big dataset */
+int      _size[3]   = {0, 80, TRDP_MAX_PD_DATA_SIZE}; /* small/medium/big dataset */
 int      _period[4] = {100, 250, 500, 1000}  ;         /* msec */
 
 Port     _vsPort[64];                                  /* array of ports          */
