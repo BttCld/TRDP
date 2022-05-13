@@ -226,19 +226,19 @@ typedef enum
 #else
 typedef enum
 {
-   TRDP_FLAGS_DEFAULT          =  0u   , /**< Default value defined in tlc_openDession will be taken     */
-   TRDP_FLAGS_NONE             =  0x01u, /**< No flags set                                               */
-   TRDP_FLAGS_MARSHALL         =  0x02u, /**< Optional marshalling/unmarshalling in TRDP stack           */
-   TRDP_FLAGS_CALLBACK         =  0x04u, /**< Use of callback function                                   */
-   TRDP_FLAGS_TCP              =  0x08u, /**< Use TCP for message data                                   */
-   TRDP_FLAGS_FORCE_CB         =  0x10u, /**< Force a callback for every received packet                 */
+   TRDP_FLAGS_DEFAULT     =  0u   , /**< Default value defined in tlc_openDession will be taken     */
+   TRDP_FLAGS_NONE        =  0x01u, /**< No flags set                                               */
+   TRDP_FLAGS_MARSHALL    =  0x02u, /**< Optional marshalling/unmarshalling in TRDP stack           */
+   TRDP_FLAGS_CALLBACK    =  0x04u, /**< Use of callback function                                   */
+   TRDP_FLAGS_TCP         =  0x08u, /**< Use TCP for message data                                   */
+   TRDP_FLAGS_FORCE_CB    =  0x10u, /**< Force a callback for every received packet                 */
 
-   TRDP_FLAGS_TSN              =  0x20u, /**< Hard Real Time PD                                          */
-   TRDP_FLAGS_TSN_SDT          =  0x40u, /**< SDT PD                                                     */
-   TRDP_FLAGS_TSN_MSDT         =  0x80u, /**< Multi SDT PD                                               */
+   TRDP_FLAGS_TSN         =  0x20u, /**< Hard Real Time PD                                          */
+   TRDP_FLAGS_TSN_SDT     =  0x40u, /**< SDT PD                                                     */
+   TRDP_FLAGS_TSN_MSDT    =  0x80u, /**< Multi SDT PD                                               */
 
-   TRDP_FLAGS_PD_SOURCE_MULTI  = 0x100u, /**< Notification, in callback, about sink port received from
-                                              different source */
+   TRDP_FLAGS_SOURCE_MONO = 0x100u, /**< Notification, in callback, about sink port received from
+                                         different source */
 } TRDP_FLAGS_T;
 #endif
 //[BC] end
@@ -292,8 +292,12 @@ typedef struct
    TRDP_IP_ADDR_T      replyIpAddr;    /**< IP address for reply (request only)                        */
    const void*         pUserRef;       /**< User reference given with the local subscribe              */
    TRDP_ERR_T          resultCode;     /**< error code                                                 */
+ // [BC] start (the comment says "unused", than ...)
+  #if 0
    TRDP_URI_HOST_T     srcHostURI;     /**< source URI host part (unused)                              */
    TRDP_URI_HOST_T     destHostURI;    /**< destination URI host part (unused)                         */
+  #endif
+ // [BC] end
    TRDP_TO_BEHAVIOR_T  toBehavior;     /**< callback can decide about handling of data on timeout      */
    UINT32              serviceId;      /**< the reserved field of the PD header                        */
 } TRDP_PD_INFO_T;

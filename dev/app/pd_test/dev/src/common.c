@@ -11,7 +11,7 @@ const char* g_PdTypes[] = {"Pd ->", "Pp ->", "Pr ->", "   <-", "   <-"};
 
 static unsigned _uiCycle = 0;
 
-static void _PortPrintData (Port* p);
+static void _PortPrintData (Port* p, UINT8* pData, UINT32 dataSize);
 static void _cbPortSink    (void* pRefCon,
                             TRDP_APP_SESSION_T    appHandle,
                             const TRDP_PD_INFO_T* pMsg,
@@ -264,14 +264,14 @@ void process_data (TRDP_APP_SESSION_T apph, Port vsPort[], unsigned int uiNports
       }
 
       /* print port data */
-      _PortPrintData(p);
+      _PortPrintData(p, NULL, 0);
    }
 
    /* increment _uiCycle counter  */
    ++_uiCycle;
 }
 
-static void _PortPrintData (Port* p)
+static void _PortPrintData (Port* p, UINT8* pData, UINT32 dataSize)
 {
    char* pszEscColor;
    char* pszEscColorDef = "[0m";
@@ -296,7 +296,8 @@ static void _PortPrintData (Port* p)
 
    if (p->err == TRDP_NO_ERR)
    {
-      printf("\033%s[%s]\n", pszEscColorDef, p->data);
+      if (pData != NULL)
+         printf("\033%s[%s]\n", pszEscColorDef, pData);
    }
    else
    {
@@ -367,7 +368,7 @@ static void _cbPortSink (      void*              pRefCon,
             break;
       }
 
-      _PortPrintData(psPort);
+      _PortPrintData(psPort, pData, dataSize);
    }
 }
 

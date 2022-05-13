@@ -1,10 +1,12 @@
-dev/lib/out/*
-dev/lib/prj/vs/.vs
 *.exe
 *.pdb
 *.VC.*
 *.suo
 *.udb
-/dev/app/MVB_TRDP_gw/cfg.bat
-dev/app/MVB_TRDP_gw/*
+*.fsy
+/_links
 /dev/app/pd_test/dev/prj/vs/PD_sink.log
+/dev/lib/out/*
+/dev/lib/prj/vs/.vs
+/link.bat
+

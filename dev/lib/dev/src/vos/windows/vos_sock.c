@@ -1564,14 +1564,14 @@ EXT_DECL VOS_ERR_T vos_sockSendTCP (SOCKET sock, const UINT8* pBuffer, UINT32* p
    /*    Keep on sending until we got rid of all data or we received an unrecoverable error    */
    do
    {
-      sendSize    = send((SOCKET)sock, (char*)pBuffer, bufferSize, 0);
-      err         = WSAGetLastError();
+      sendSize = send((SOCKET)sock, (char*)pBuffer, bufferSize, 0);
+      err      = WSAGetLastError();
 
       if (sendSize >= 0)
       {
-         bufferSize  -= sendSize;
-         pBuffer     += sendSize;
-         *pSize      += sendSize;
+         bufferSize -= sendSize;
+         pBuffer    += sendSize;
+         *pSize     += sendSize;
       }
 
       if (sendSize == -1 && err == WSAEWOULDBLOCK)
@@ -1638,9 +1638,9 @@ EXT_DECL VOS_ERR_T vos_sockReceiveTCP (SOCKET sock, UINT8* pBuffer, UINT32* pSiz
 
       if (rcvSize > 0)
       {
-         bufferSize  -= rcvSize;
-         pBuffer     += rcvSize; /*lint !e662 pointer should only be out of bounds, when loop ends */
-         *pSize      += rcvSize;
+         bufferSize -= rcvSize;
+         pBuffer    += rcvSize; /*lint !e662 pointer should only be out of bounds, when loop ends */
+         *pSize     += rcvSize;
       }
 
       if (rcvSize == -1 && err == WSAEWOULDBLOCK)
