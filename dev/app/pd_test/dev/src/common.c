@@ -7,7 +7,7 @@
 
 static const char* _get_result_string (int ret);
 
-const char* g_PdTypes[] = {"Pd ->", "Pp ->", "Pr ->", "   <-", "   <-"};
+const char* g_PdTypes[] = {"Ppush  ->", "Ppull  ->", "Preq   ->", "Psink  <-", "Psinkp <-"};
 
 static unsigned _uiCycle = 0;
 

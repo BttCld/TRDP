@@ -211,8 +211,6 @@ typedef enum
 
 
 /** Various flags for PD and MD packets    */
-//[BC] start
-#if 0
 #define TRDP_FLAGS_DEFAULT          0u    /**< Default value defined in tlc_openDession will be taken     */
 #define TRDP_FLAGS_NONE             0x01u /**< No flags set                                               */
 #define TRDP_FLAGS_MARSHALL         0x02u /**< Optional marshalling/unmarshalling in TRDP stack           */
@@ -223,24 +221,10 @@ typedef enum
 #define TRDP_FLAGS_TSN              0x20u /**< Hard Real Time PD                                          */
 #define TRDP_FLAGS_TSN_SDT          0x40u /**< SDT PD                                                     */
 #define TRDP_FLAGS_TSN_MSDT         0x80u /**< Multi SDT PD                                               */
-#else
-typedef enum
-{
-   TRDP_FLAGS_DEFAULT     =  0u   , /**< Default value defined in tlc_openDession will be taken     */
-   TRDP_FLAGS_NONE        =  0x01u, /**< No flags set                                               */
-   TRDP_FLAGS_MARSHALL    =  0x02u, /**< Optional marshalling/unmarshalling in TRDP stack           */
-   TRDP_FLAGS_CALLBACK    =  0x04u, /**< Use of callback function                                   */
-   TRDP_FLAGS_TCP         =  0x08u, /**< Use TCP for message data                                   */
-   TRDP_FLAGS_FORCE_CB    =  0x10u, /**< Force a callback for every received packet                 */
 
-   TRDP_FLAGS_TSN         =  0x20u, /**< Hard Real Time PD                                          */
-   TRDP_FLAGS_TSN_SDT     =  0x40u, /**< SDT PD                                                     */
-   TRDP_FLAGS_TSN_MSDT    =  0x80u, /**< Multi SDT PD                                               */
-
-   TRDP_FLAGS_SOURCE_MONO = 0x100u, /**< Notification, in callback, about sink port received from
-                                         different source */
-} TRDP_FLAGS_T;
-#endif
+//[BC] start
+#define TRDP_FLAGS_SOURCE_MONO     0x100u, /**< Notification, in callback, about sink port received from
+                                                different source */
 //[BC] end
 
 #define TRDP_INFINITE_TIMEOUT       0xffffffffu /**< Infinite reply timeout                               */
@@ -255,6 +239,8 @@ typedef enum
 //[BC] start
 #if 0
 typedef UINT8 TRDP_FLAGS_T;
+#else
+typedef UINT32 TRDP_FLAGS_T;
 #endif
 
 typedef UINT16 TRDP_MSG_T;
