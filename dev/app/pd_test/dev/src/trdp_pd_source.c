@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "api/trdp_if_light.h"
+#include "vos/api/vos_utils.h"
 
 #if defined (POSIX)
 #include <unistd.h>
@@ -193,7 +194,8 @@ void gen_push_ports_master (UINT32 comid, UINT32 echoid)
 
    memset(&src, 0, sizeof(src));
 
-   src.type = PORT_PUSH;
+   //src.type = PORT_PUSH;
+   src.type = PORT_PULL;
 
   #if UNICAST_EN
    /* for unicast/multicast address */

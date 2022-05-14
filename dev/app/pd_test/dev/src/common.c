@@ -264,7 +264,8 @@ void process_data (TRDP_APP_SESSION_T apph, Port vsPort[], unsigned int uiNports
       }
 
       /* print port data */
-      _PortPrintData(p, NULL, 0);
+      if (p->type != PORT_SINK)
+         _PortPrintData(p, p->data, 0);
    }
 
    /* increment _uiCycle counter  */
@@ -298,6 +299,8 @@ static void _PortPrintData (Port* p, UINT8* pData, UINT32 dataSize)
    {
       if (pData != NULL)
          printf("\033%s[%s]\n", pszEscColorDef, pData);
+      else
+         printf("\033%s[NULL]\n", pszEscColorDef);
    }
    else
    {

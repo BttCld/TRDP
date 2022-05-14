@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>192.168.1.80 192.168.1.166 239.2.24.1</LocalDebuggerCommandArguments>
-    <RemoteDebuggerCommandArguments>192.168.1.80 192.168.1.166 239.2.24.1</RemoteDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>127.0.0.1 127.0.0.1 239.2.24.1 PD_sink.log</LocalDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>127.0.0.1 127.0.0.1 239.2.24.1 PD_sink.log</RemoteDebuggerCommandArguments>
   </PropertyGroup>
 </Project>
